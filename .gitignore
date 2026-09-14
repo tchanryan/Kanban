@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/dist/
+/playwright-report/
+/test-results/
+*.backup.json
+kanban-calendar-backup-*.json
