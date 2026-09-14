@@ -1,0 +1,19 @@
+:root {
+  color-scheme: dark;
+  --bg: #101217;
+  --nav: #13151b;
+  --column: #15171e;
+  --surface: #1c1f27;
+  --input: #15171e;
+  --hover: #282c36;
+  --selected: #25243b;
+  --border: #2a2d37;
+  --border-strong: #555b6b;
+  --text: #eceef5;
+  --muted: #a0a6b6;
+  --accent: #b6b3ff;
+  --blue: #89baff;
+  --teal: #7ad4bc;
+  --amber: #e3c181;
+  --red: #f29ba8;
+}
