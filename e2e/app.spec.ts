@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { setup, task, move } from './helpers';
+import { setup, task, move, confirm, column } from './helpers';
 test('empty first run, keyboard capture, lifecycle and persistence', async ({
   page,
 }) => {
@@ -35,10 +35,17 @@ test('empty first run, keyboard capture, lifecycle and persistence', async ({
     'N / are text, not shortcuts',
   );
 });
-test('project cloning, progress and completion confirmation', async ({
+test('project defaults, progress and completion confirmation', async ({
   page,
 }) => {
   await setup(page);
+  await column(page, 'Dashboard only');
+  await expect(page.locator('.column-header h2')).toHaveText([
+    'Inbox',
+    'Working',
+    'Done',
+    'Dashboard only',
+  ]);
   await page.keyboard.press('Shift+N');
   await page.getByLabel('Title', { exact: true }).fill('Launch project');
   await page
@@ -47,16 +54,21 @@ test('project cloning, progress and completion confirmation', async ({
   await page
     .getByRole('button', { name: 'Launch project', exact: true })
     .click();
-  await task(page, 'First child');
-  await task(page, 'Second child');
-  await move(page, 'First child', 'Done');
+  await expect(page.locator('.column-header h2')).toHaveText([
+    'todo',
+    'in-progress',
+    'completed',
+  ]);
+  await task(page, 'First child', 'todo');
+  await task(page, 'Second child', 'todo');
+  await move(page, 'First child', 'completed');
   await expect(page.getByText('1/2 tasks complete')).toBeVisible();
   await page.getByRole('button', { name: 'Edit details' }).click();
-  page.once('dialog', (d) => d.accept());
   await page
     .locator('.inspector')
     .getByLabel('Move to…')
     .selectOption({ label: 'Done' });
+  await confirm(page, true);
   await expect(page.locator('.inspector dd').last()).not.toHaveText(
     'Not complete',
   );
@@ -79,13 +91,13 @@ test('archive restore and permanent delete confirmation', async ({ page }) => {
   await page.getByRole('link', { name: 'Dashboard', exact: true }).click();
   await page.getByRole('button', { name: 'Archive me', exact: true }).click();
   await page.getByText('Archive & deletion').click();
-  page.once('dialog', (d) => d.dismiss());
   await page.getByRole('button', { name: 'Delete permanently…' }).click();
+  await confirm(page, false);
   await expect(
     page.getByRole('button', { name: 'Archive me', exact: true }),
   ).toBeVisible();
-  page.once('dialog', (d) => d.accept());
   await page.getByRole('button', { name: 'Delete permanently…' }).click();
+  await confirm(page, true);
   await expect(
     page.getByRole('button', { name: 'Archive me', exact: true }),
   ).toHaveCount(0);
@@ -171,11 +183,12 @@ test('column safety, manual order, and desktop / mobile presentation', async ({
   await setup(page);
   await task(page, 'First task');
   await task(page, 'Second task');
-  const second = page.locator('article').filter({
-    has: page.getByRole('button', { name: 'Second task', exact: true }),
-  });
-  await second.locator('summary').click();
-  await second.getByRole('button', { name: 'Move up', exact: true }).click();
+  await page
+    .getByRole('button', { name: 'Drag Second task', exact: true })
+    .focus();
+  await page.keyboard.press('Space');
+  await page.keyboard.press('ArrowUp');
+  await page.keyboard.press('Space');
   await expect(page.locator('.card-title').first()).toHaveText('Second task');
   await page
     .getByRole('button', { name: 'Configure Working', exact: true })

@@ -9,7 +9,7 @@ Version 1.2.0 is present locally. This is a release candidate until the remainin
 - Replaced the existing Next.js/MUI starter instead of treating the repository as empty. The original implementation remains in Git history.
 - Used current npm stable dependencies, except TypeScript 6.0: npm's TypeScript 7.0.2 was incompatible with typescript-eslint 8.70.0's supported range (<6.1). Node 24 LTS is recorded in .nvmrc.
 - Replace import ships first. Merge is deferred under the explicit allowance in spec section 34.4. JSON IDs/revisions remain stable.
-- System fonts and CSS tokens provide the visual system. Native dialogs handle confirmations; the mobile inspector traps keyboard focus. Accessible move/reorder buttons supplement dnd-kit pointer and keyboard sensors.
+- System fonts and CSS tokens provide the visual system. Themed HTML dialogs handle confirmations through an asynchronous queue, including typed CLEAR for workspace deletion; browser confirm/prompt/alert boxes are no longer used. The mobile inspector traps keyboard focus. Cards use dnd-kit pointer/keyboard controls, with a Move to selector in the inspector and column reorder buttons.
 - Column behaviour changes affect future moves and do not rewrite timestamps. Items created directly in a workflow column remain unstarted until a workflow move, preserving the creation semantics in section 20.1.
 - Calendar month views show a bounded number of entries per day; the timeline exposes overlapping work. Planned start-only entries are point markers with an explicit no-end label. Actual incomplete work extends through today. Date arithmetic is DST-safe.
 - Persistent storage is requested explicitly in Settings. Browser permission behavior differs; denial never prevents using the app.

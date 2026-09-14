@@ -24,11 +24,21 @@ The preview normally runs at http://127.0.0.1:4173. The dev server does not inst
 
 The dashboard starts empty. Add a column, then capture a task or project. The first column is the default destination. Configure column behavior using its settings button: default creation, first work start, or completion. Names are entirely your choice.
 
-Tasks open a right inspector with autosaved title, priority, dates, tags and Markdown notes. Projects open independent boards cloned from the dashboard's current columns. Project progress is automatic; project status is manual. Completing a project with unfinished children requires confirmation and leaves the children unchanged.
+Tasks open a right inspector with autosaved title, priority, dates, tags and Markdown notes. Every new project starts with its own **todo**, **in-progress**, and **completed** columns, independently of the dashboard. These respectively capture new tasks, record work starting, and record completion. You can rename, configure or add project columns without affecting other boards. Existing projects keep their current columns, and a fresh dashboard starts with none. Project progress is automatic; project status is manual. Completing a project with unfinished children requires confirmation and leaves the children unchanged.
 
 If another tab changes text while you edit, your draft is retained and the saved version is shown. Choose **Use saved version** or explicitly **Keep my text** to resolve the conflict. Settings → **Recovery drafts** lists unsaved text and lets you download it before discarding it. Drafts live in memory: resolve or download failed edits before closing the tab.
 
-Drag cards/columns or use Move to, Move up/down and column Move left/right buttons. Keyboard shortcuts: N creates a task, Shift+N creates a dashboard project, / opens search, Escape closes details. Shortcuts do not fire while typing in editors.
+Drag cards/columns with the pointer or keyboard, or use **Move to…** in the inspector and column Move left/right buttons. Cards show assigned tags instead of move controls; untagged cards reserve no tag space. Keyboard shortcuts: N creates a task, Shift+N creates a dashboard project, / opens search, Escape closes details. Shortcuts do not fire while typing in editors.
+
+Tags are shared across all tasks and projects. In the inspector, search for a tag and select a suggestion to assign it. If the name is new, choose a colour swatch and create it. Selected tags appear as removable chips. Removing a tag from one item leaves it available on other items; Settings manages the shared tag catalogue.
+
+The board sizes columns to fit three across the available desktop space. Additional columns extend horizontally; narrow screens retain readable column widths. Columns fill the remaining page height, with task lists scrolling independently so column headings and task capture stay visible.
+
+Use the zoom-out and zoom-in icons beside **+ Column** to scale columns and cards from 50% to 150%. Click the percentage to reset to 100%. Zoom changes only the board presentation and resets when you leave that board.
+
+The trash icon on each task/project tile permanently deletes it after confirmation. Tasks and empty projects need one confirmation. Projects containing any tasks, including completed tasks, require a second confirmation before deleting the project and its tasks/history.
+
+Confirmation messages use themed in-app dialogs. Cancel or Escape keeps the data; clearing the entire workspace still requires typing CLEAR. Confirmation dialogs default keyboard focus to Cancel.
 
 The calendar offers month and timeline views, Actual/Planned/Compare, visibility toggles and project filtering. The dashboard has a compact calendar and global scratchpad. Top-level completed work archives after 14 days, including catch-up when reopening the app. Completed project tasks stay inside their project. Archive supports viewing, restoration and confirmed permanent deletion, with Previous/Next navigation through 50 results per page.
 

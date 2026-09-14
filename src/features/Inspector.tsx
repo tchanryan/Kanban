@@ -1,3 +1,5 @@
+import { TagPicker } from './TagPicker';
+import { confirmAction } from '../services/confirm';
 import { useEffect, useRef, useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { workspace } from '../repositories/workspace';
@@ -31,12 +33,7 @@ export function Inspector({
         item ? workspace.columns(item.boardId) : Promise.resolve([]),
       [item?.boardId],
     ) || [];
-  const tags = useLiveQuery(async () => workspace.tags(), []) || [];
-  const relations =
-    useLiveQuery(async () => workspace.itemTags(id), [id]) || [];
   const events = useLiveQuery(async () => workspace.history(id), [id]) || [];
-  const [query, setQuery] = useState('');
-  const [color, setColor] = useState<Tag['colorToken']>('violet');
   const [preview, setPreview] = useState(false);
   useEffect(() => {
     const media = window.matchMedia('(max-width: 950px)');
@@ -89,7 +86,7 @@ export function Inspector({
           (x) => !x.completedAt,
         ).length;
         if (n) {
-          confirmed = window.confirm(
+          confirmed = await confirmAction(
             `Complete “${item.title}” with ${n} incomplete child tasks? Their status will not change.`,
           );
           if (!confirmed) return;
@@ -212,61 +209,7 @@ export function Inspector({
           </select>
         </label>
       )}
-      <details open>
-        <summary>Tags</summary>
-        <input
-          aria-label="Find or create tag"
-          placeholder="Find or create a tag…"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <div className="tag-picker">
-          {tags
-            .filter((t) =>
-              t.name.toLocaleLowerCase().includes(query.toLocaleLowerCase()),
-            )
-            .map((t) => (
-              <label key={t.id} className={`check color-${t.colorToken}`}>
-                <input
-                  type="checkbox"
-                  checked={relations.some((r) => r.tagId === t.id)}
-                  onChange={(e) =>
-                    run(() => workspace.setTag(id, t.id, e.target.checked))
-                  }
-                />
-                {t.name}
-              </label>
-            ))}
-        </div>
-        {query.trim() &&
-          !tags.some(
-            (t) =>
-              t.name.toLocaleLowerCase() === query.trim().toLocaleLowerCase(),
-          ) && (
-            <div className="button-row">
-              <select
-                aria-label="New tag colour"
-                value={color}
-                onChange={(e) => setColor(e.target.value as Tag['colorToken'])}
-              >
-                {colors.map((c) => (
-                  <option key={c}>{c}</option>
-                ))}
-              </select>
-              <button
-                onClick={() =>
-                  run(async () => {
-                    const tag = await workspace.saveTag(query, color);
-                    await workspace.setTag(id, tag.id, true);
-                    setQuery('');
-                  })
-                }
-              >
-                + Create tag
-              </button>
-            </div>
-          )}
-      </details>
+      <TagPicker itemId={id} run={run} />
       <details>
         <summary>History · {events.length} events</summary>
         <ol className="history">
@@ -286,12 +229,12 @@ export function Inspector({
         <div className="button-row">
           {!item.parentProjectId && !item.archivedAt && (
             <button
-              onClick={() => {
+              onClick={async () => {
                 if (
                   !item.completedAt &&
-                  !window.confirm(
+                  !(await confirmAction(
                     `Archive incomplete ${item.kind} “${item.title}”? You can restore it later.`,
-                  )
+                  ))
                 )
                   return;
                 run(async () => {
@@ -317,7 +260,7 @@ export function Inspector({
                 const children =
                   item.kind === 'project' ? await workspace.children(id) : [];
                 if (
-                  window.confirm(
+                  await confirmAction(
                     `Permanently delete “${item.title}”${item.kind === 'project' ? `, its board, ${children.length} child tasks, and all child history` : ' and its history'}? This cannot be undone.`,
                   )
                 ) {

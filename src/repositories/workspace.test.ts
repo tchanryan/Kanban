@@ -60,16 +60,46 @@ describe('transactional workspace', () => {
     const direct = await repo.create(boardId, 'Direct');
     expect((await repo.move(direct.id, done.id)).firstStartedAt).toBeNull();
   });
-  it('clones project columns independently and protects manual completion', async () => {
+  it('creates independent project defaults and protects manual completion', async () => {
     const inbox = await column('Inbox');
     const done = await column('Done', { completesItemOnEntry: true });
     const project = await repo.create(boardId, 'Launch', 'project');
     const childBoard = (await repo.projectBoard(project.id))!;
     const cloned = await repo.columns(childBoard.id);
-    expect(cloned.map((x) => x.name)).toEqual(['Inbox', 'Done']);
+    expect(cloned.map((x) => x.name)).toEqual([
+      'todo',
+      'in-progress',
+      'completed',
+    ]);
+    expect(
+      cloned.map((x) => [
+        x.isDefaultNewItemColumn,
+        x.startsWorkOnFirstEntry,
+        x.completesItemOnEntry,
+      ]),
+    ).toEqual([
+      [true, false, false],
+      [false, true, false],
+      [false, false, true],
+    ]);
     expect(cloned[0]!.id).not.toBe(inbox.id);
     await repo.saveColumn(boardId, { ...inbox, name: 'Changed' }, inbox.id);
-    expect((await repo.columns(childBoard.id))[0]!.name).toBe('Inbox');
+    expect((await repo.columns(childBoard.id))[0]!.name).toBe('todo');
+    await repo.saveColumn(
+      childBoard.id,
+      { ...cloned[0]!, name: 'Project backlog' },
+      cloned[0]!.id,
+    );
+    expect((await repo.columns(boardId)).map((x) => x.name)).toEqual([
+      'Changed',
+      'Done',
+    ]);
+    const second = await repo.create(boardId, 'Second project', 'project');
+    expect(
+      (await repo.columns((await repo.projectBoard(second.id))!.id)).map(
+        (x) => x.name,
+      ),
+    ).toEqual(['todo', 'in-progress', 'completed']);
     const child = await repo.create(childBoard.id, 'Child');
     await expect(
       repo.create(childBoard.id, 'Nested', 'project'),
@@ -81,6 +111,9 @@ describe('transactional workspace', () => {
     await repo.move(project.id, done.id, null, true);
     expect((await repo.item(child.id))?.completedAt).toBeNull();
     await repo.move(child.id, cloned[1]!.id);
+    expect((await repo.item(child.id))?.firstStartedAt).not.toBeNull();
+    await repo.move(child.id, cloned[2]!.id);
+    expect((await repo.item(child.id))?.completedAt).not.toBeNull();
     expect((await repo.item(child.id))?.archiveAfter).toBeNull();
   });
   it('rejects deletion without destination and migrates cards atomically', async () => {

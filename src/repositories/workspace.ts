@@ -114,6 +114,15 @@ export class WorkspaceRepository {
       .limit(100)
       .toArray();
   }
+  async boardTagRelations(boardId: string) {
+    const ids = await this.database.items
+      .where('boardId')
+      .equals(boardId)
+      .primaryKeys();
+    return ids.length
+      ? this.database.relations.where('itemId').anyOf(ids).toArray()
+      : [];
+  }
   async archivePage(
     query = '',
     cursor: { date: string; id: string } | null = null,
@@ -319,9 +328,14 @@ export class WorkspaceRepository {
           name: item.title,
         };
         await this.database.boards.add(projectBoard);
-        await this.database.columns.bulkAdd(
-          cols.map((c) => ({ ...c, ...newMeta(), boardId: projectBoard.id })),
-        );
+        for (const name of ['todo', 'in-progress', 'completed']) {
+          await this.saveColumn(projectBoard.id, {
+            name,
+            isDefaultNewItemColumn: name === 'todo',
+            startsWorkOnFirstEntry: name === 'in-progress',
+            completesItemOnEntry: name === 'completed',
+          });
+        }
       }
       return item;
     });

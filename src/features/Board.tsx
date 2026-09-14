@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { confirmAction } from '../services/confirm';
+import { useState, type CSSProperties } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import {
   DndContext,
@@ -20,12 +21,26 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { GripVertical, Plus, Settings2 } from 'lucide-react';
+import {
+  GripVertical,
+  Plus,
+  Settings2,
+  Trash2,
+  ZoomIn,
+  ZoomOut,
+} from 'lucide-react';
 import { workspace } from '../repositories/workspace';
-import { overdue, localDate, type Column, type Item } from '../domain/model';
+import {
+  overdue,
+  localDate,
+  type Column,
+  type Item,
+  type Tag,
+} from '../domain/model';
 import { Modal } from '../components/ui';
 import { useToday } from '../components/useToday';
 import { addLocalDays } from '../domain/model';
+import { deleteWorkItem } from '../services/mutations';
 export type Run = (fn: () => Promise<unknown>, message?: string) => void;
 const boardCollision: CollisionDetection = (args) => {
   const columnDrag = args.active.data.current?.type === 'column';
@@ -49,17 +64,13 @@ const boardCollision: CollisionDetection = (args) => {
 };
 export function Card({
   item,
-  inColumn,
-  columns,
+  tags,
   onOpen,
-  move,
   run,
 }: {
   item: Item;
-  inColumn: Item[];
-  columns: Column[];
+  tags: Tag[];
   onOpen: (item: Item) => void;
-  move: (item: Item, columnId: string, before?: string | null) => void;
   run: Run;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -72,7 +83,6 @@ export function Card({
           : Promise.resolve([]),
       [item.id, item.kind],
     ) || [];
-  const index = inColumn.findIndex((x) => x.id === item.id);
   return (
     <article
       ref={setNodeRef}
@@ -90,6 +100,34 @@ export function Card({
           {...listeners}
         >
           <GripVertical size={14} />
+        </button>
+        <button
+          className="tile-delete"
+          aria-label={`Delete ${item.kind} ${item.title}`}
+          title={`Delete ${item.kind}`}
+          onClick={() =>
+            run(async () => {
+              if (
+                !(await confirmAction(
+                  `Permanently delete ${item.kind} “${item.title}” and its history? This cannot be undone.`,
+                ))
+              )
+                return;
+              if (item.kind === 'project') {
+                const tasks = await workspace.children(item.id);
+                if (
+                  tasks.length &&
+                  !(await confirmAction(
+                    `This project contains ${tasks.length} task${tasks.length === 1 ? '' : 's'}, including any completed tasks. Permanently delete the project, all these tasks, and their history? This cannot be undone.`,
+                  ))
+                )
+                  return;
+              }
+              await deleteWorkItem(item.id, true);
+            })
+          }
+        >
+          <Trash2 size={14} />
         </button>
       </div>
       <button className="card-title" onClick={() => onOpen(item)}>
@@ -115,64 +153,32 @@ export function Card({
           </small>
         </div>
       )}
-      <details className="card-actions">
-        <summary>Move to…</summary>
-        <select
-          aria-label={`Move ${item.title} to`}
-          value={item.columnId}
-          onChange={(e) => move(item, e.target.value)}
-        >
-          {columns.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
+      {tags.length > 0 && (
+        <div className="tag-chips card-tags" aria-label="Tags">
+          {tags.map((tag) => (
+            <span key={tag.id} className={`tag-chip color-${tag.colorToken}`}>
+              <span className="tag-dot" />
+              {tag.name}
+            </span>
           ))}
-        </select>
-        <div className="button-row">
-          <button
-            disabled={index <= 0}
-            onClick={() =>
-              run(() =>
-                workspace.move(item.id, item.columnId, inColumn[index - 1]!.id),
-              )
-            }
-          >
-            Move up
-          </button>
-          <button
-            disabled={index === inColumn.length - 1}
-            onClick={() =>
-              run(() =>
-                workspace.move(
-                  item.id,
-                  item.columnId,
-                  inColumn[index + 2]?.id || null,
-                ),
-              )
-            }
-          >
-            Move down
-          </button>
         </div>
-      </details>
+      )}
     </article>
   );
 }
 function ColumnView({
   column,
-  columns,
+  itemTags,
   items,
   onOpen,
   onEdit,
-  move,
   run,
 }: {
   column: Column;
-  columns: Column[];
+  itemTags: Record<string, Tag[]>;
   items: Item[];
   onOpen: (item: Item) => void;
   onEdit: () => void;
-  move: (item: Item, columnId: string, before?: string | null) => void;
   run: Run;
 }) {
   const [title, setTitle] = useState('');
@@ -213,8 +219,8 @@ function ColumnView({
           {items.map((item) => (
             <Card
               key={item.id}
-              inColumn={items}
-              {...{ item, columns, onOpen, move, run }}
+              tags={itemTags[item.id] || []}
+              {...{ item, onOpen, run }}
             />
           ))}
           {!items.length && (
@@ -436,11 +442,20 @@ export function BoardView({
   const items =
     useLiveQuery(async () => workspace.items(boardId), [boardId]) || [];
   const [editing, setEditing] = useState<Column | null | undefined>();
+  const [zoom, setZoom] = useState(100);
   const [priority, setPriority] = useState('');
   const [kind, setKind] = useState('');
   const [due, setDue] = useState('');
   const [tag, setTag] = useState('');
   const tags = useLiveQuery(async () => workspace.tags(), []) || [];
+  const relations =
+    useLiveQuery(() => workspace.boardTagRelations(boardId), [boardId]) || [];
+  const itemTags: Record<string, Tag[]> = {};
+  const tagsById = new Map(tags.map((tag) => [tag.id, tag]));
+  for (const relation of relations) {
+    const tag = tagsById.get(relation.tagId);
+    if (tag) (itemTags[relation.itemId] ||= []).push(tag);
+  }
   const tagged = useLiveQuery(async () => {
     if (!tag) return null;
     return new Set(
@@ -475,7 +490,7 @@ export function BoardView({
           (x) => !x.completedAt,
         ).length;
         if (n) {
-          confirmed = window.confirm(
+          confirmed = await confirmAction(
             `Complete “${item.title}” with ${n} incomplete child tasks? Child tasks will remain unchanged.`,
           );
           if (!confirmed) return;
@@ -530,7 +545,10 @@ export function BoardView({
       (!tag || tagged?.has(i.id)),
   );
   return (
-    <div className="board-area">
+    <div
+      className="board-area"
+      style={{ '--board-zoom': zoom / 100 } as CSSProperties}
+    >
       <div className="board-toolbar">
         <div className="button-row">
           <select
@@ -574,10 +592,38 @@ export function BoardView({
             ))}
           </select>
         </div>
-        <button onClick={() => setEditing(null)}>
-          <Plus size={16} />
-          Column
-        </button>
+        <div className="board-controls">
+          <div className="board-zoom" role="group" aria-label="Board zoom">
+            <button
+              aria-label="Zoom out board"
+              title="Zoom out to fit more columns"
+              disabled={zoom === 50}
+              onClick={() => setZoom((value) => Math.max(50, value - 10))}
+            >
+              <ZoomOut size={16} />
+            </button>
+            <button
+              className="zoom-level"
+              aria-label={`Reset board zoom (${zoom}%)`}
+              title="Reset zoom to 100%"
+              onClick={() => setZoom(100)}
+            >
+              {zoom}%
+            </button>
+            <button
+              aria-label="Zoom in board"
+              title="Zoom in for larger cards"
+              disabled={zoom === 150}
+              onClick={() => setZoom((value) => Math.min(150, value + 10))}
+            >
+              <ZoomIn size={16} />
+            </button>
+          </div>
+          <button onClick={() => setEditing(null)}>
+            <Plus size={16} />
+            Column
+          </button>
+        </div>
       </div>
       {!cols.length ? (
         <div className="empty-state">
@@ -614,11 +660,10 @@ export function BoardView({
                 <ColumnView
                   key={column.id}
                   column={column}
-                  columns={cols}
+                  itemTags={itemTags}
                   items={filtered.filter((i) => i.columnId === column.id)}
                   onOpen={onOpen}
                   onEdit={() => setEditing(column)}
-                  move={move}
                   run={run}
                 />
               ))}

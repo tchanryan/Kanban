@@ -1,3 +1,4 @@
+import { confirmAction } from '../services/confirm';
 import {
   useEffect,
   useRef,
@@ -89,7 +90,7 @@ export function Autosave({
         {draft?.status.startsWith('Save failed') && (
           <button
             type="button"
-            onClick={() => {
+            onClick={async () => {
               editDraft(draftKey, draft.text, save, value, label);
               void flushDraft(draftKey).catch(() => undefined);
             }}
@@ -106,9 +107,9 @@ export function Autosave({
           <div className="button-row">
             <button
               type="button"
-              onClick={() => {
+              onClick={async () => {
                 if (
-                  window.confirm(
+                  await confirmAction(
                     'Discard this unsaved draft and use the currently saved text?',
                   )
                 )
@@ -119,9 +120,9 @@ export function Autosave({
             </button>
             <button
               type="button"
-              onClick={() => {
+              onClick={async () => {
                 if (
-                  window.confirm(
+                  await confirmAction(
                     'Replace the currently saved text with your draft?',
                   )
                 ) {

@@ -76,3 +76,52 @@ Final reading before wrap-up: **86% used / 14% remaining in the five-hour window
 Raised the New dropdown above the inspector so its task/project actions remain clickable while details are open. Task and project history now show event and local timestamp inline, with month/day/year and 12-hour time including seconds (for example, `created - 9/14/2026 7:00:11 PM`). Numbered list markers are retained; long entries may wrap naturally on narrow screens.
 
 Formatting, lint, typecheck and the `/Kanban/` production build passed. A new focused Playwright regression passed for opening New Project over task details and inline history layout on both tasks and projects. The suite now contains 15 browser tests; this follow-up ran the new test only, while the previous 14 passed at the earlier checkpoint. Version remains 1.2.0.
+
+## Follow-up layout — full-height, three-column board
+
+Board columns now use one-third of the available board width (minus gaps), with additional columns extending the horizontal scroll area. A readable minimum width remains on small screens. Columns stretch to the bottom of the available board area and scroll vertically for overflowing cards; project headings and filter toolbars retain their own space. Version remains 1.2.0.
+
+Production build and two focused browser tests passed: measured three-column fit/four-column overflow/full-height alignment, and pointer/keyboard dragging. The suite now contains 16 tests; the full suite was not rerun for this CSS change.
+
+## Continued layout refinement — verified checkpoint
+
+The board now uses the actual remaining dynamic viewport height rather than subtracting a fixed desktop header size. This corrects the mobile height gap and accommodates update/error banners. Each column keeps its heading and task capture visible while only its task list scrolls. Project headings remain above the board.
+
+Final checks: lint, production TypeScript/PWA build, all 26 unit tests and all 17 browser tests passed at `/Kanban/` (48.1 seconds for browser tests). Inspected the mobile long-list screenshot; capture controls and column headings remain visible. README updated. Version remains 1.2.0.
+
+Repository state has advanced since the original handoff: HEAD is `a905c93` (`updated errors`). This continuation leaves changes in README, this handoff, reliability browser tests, App.tsx and app.css; earlier claims that all original implementation is uncommitted are historical. No commit or deployment was performed by this continuation.
+
+Usage for this continuation: started at 1% five-hour / 0% weekly, ended at 9% / 1% (account-wide readings; exact task tokens unavailable). No reset credit was consumed by this continuation. The remaining broader service-worker, concurrent bulk-change and manual accessibility work listed above is still pending.
+
+## Board zoom controls
+
+Added Zoom out / Zoom in icons beside + Column, a percentage display that resets to 100% when clicked, and a 50–150% range in 10-point steps. Columns and their contents scale together while column height stays fixed. Zoom is presentation-only and resets when leaving the board. Toolbar controls wrap on narrow screens.
+
+Production build and lint passed. Three focused browser tests passed: four columns fit at 70% with unchanged height and reset/enlarge behavior; existing pointer/keyboard dragging; representative automated accessibility checks. Screenshot of the zoomed board inspected. Suite now contains 18 browser tests; this change ran the three focused checks, not the full suite. Version remains 1.2.0.
+
+## Independent defaults for new projects
+
+User-requested change supersedes the original specification's cloning rule. Every newly created project gets its own todo, in-progress and completed columns with creation/start/completion semantics respectively. Dashboard initialization remains empty. Existing projects and dashboard columns are preserved, and each board can still add/rename/configure its columns independently. Creation of the project, child board and defaults remains transactional.
+
+Updated README and ADR 0004. Unit coverage checks independent edits, fresh defaults for a second project and child start/completion semantics. The browser project flow now starts with four dashboard columns and verifies exactly three default project columns. Version remains 1.2.0.
+Verification: all 26 unit tests and all 18 browser tests passed at /Kanban/ (51.6 seconds), along with lint and the production TypeScript/PWA build.
+
+## Tile deletion options
+
+Task and project tiles now show a labelled trash icon. Tile deletion requires one confirmation for a task or empty project. Projects with any child tasks require a second confirmation showing the count, regardless of completion status. Child count is queried when deleting, and the existing transactional deletion/draft cleanup path is reused. Cancelling either prompt preserves data.
+
+Lint and the production TypeScript/PWA build passed. Three focused browser tests passed (14.6 seconds): tile confirmation/cancellation behavior, including a project with only a completed child; pointer/keyboard dragging; representative automated accessibility. There are now 19 browser tests; this follow-up ran the three focused checks. README updated; version remains 1.2.0.
+
+## Shared tags and themed confirmations
+
+Cards now show only assigned tag chips beneath their dates/progress. The card Move to / Move up / Move down controls have been removed; untagged cards have no reserved tag area. Pointer/keyboard dragging and the inspector Move to selector remain available. Card tags are loaded through a board-level indexed relation query, avoiding a new tag query for every card.
+
+The inspector tag picker searches the existing global tag catalogue across all tasks/projects. Matching suggestions can be checked to assign the same tag to another item. A new name exposes create-tag controls with circular colour swatches. Selected tags can be removed through chips without deleting the shared tag. Settings also uses colour swatches. Pending selections update immediately while saving, then reflect persisted data or revert if a write fails.
+
+Browser confirm/prompt/alert calls have been replaced with queued, themed HTML dialogs. They render in the top layer, including above mobile details, default focus to Cancel, support Escape, and restore focus where possible. Workspace clearing still requires exact typed CLEAR. Tile projects with children still require two confirmations; cancellation preserves tasks, including completed children. Existing backup and column confirmation forms remain themed dialogs.
+
+Validation: all 26 unit tests and all 21 browser tests passed at /Kanban/ (about one minute), plus lint, strict TypeScript and the production PWA build. The browser suite now covers shared tags across two tasks and a project, card height shrinking/growing, theme-dialog cancellation and focus, two-stage project deletion, mobile dialog layering and typed CLEAR protection. Axe checks passed for the new tag suggestions and confirmation dialog in addition to existing representative views. Inspected tag-picker and deletion-dialog screenshots. An initial checkbox timing failure was corrected with immediate pending selection state before the final passing run.
+
+README and implementation notes are updated. Version remains 1.2.0. No deployment or commit was performed by this change. Earlier handoff references to on-card move controls and browser confirmation prompts are superseded by this section. Broader next-period service-worker update, cross-tab bulk replacement and manual screen-reader audits remain pending.
+
+Latest usage checkpoint after these changes: 82% five-hour used (18% remaining), 13% weekly used. These are account-wide percentages, not exact task token counts. No reset credit was consumed by this task. Final cleanup removes unused card-move styles; the production assets were rebuilt and focused tag/dialog checks rerun.

@@ -1,7 +1,9 @@
+import { ColorPicker } from '../components/ColorPicker';
+import { confirmAction } from '../services/confirm';
 import { useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { workspace } from '../repositories/workspace';
-import { colors, type Tag } from '../domain/model';
+import { type Tag } from '../domain/model';
 import {
   download,
   exportBackup,
@@ -151,9 +153,10 @@ export function SettingsPage({ run }: { run: Run }) {
           onClick={() =>
             run(async () => {
               if (
-                window.prompt(
+                !(await confirmAction(
                   'This clears all live tasks, projects, tags, notes and history. A local recovery snapshot will remain. Type CLEAR to continue.',
-                ) !== 'CLEAR'
+                  'CLEAR',
+                ))
               )
                 return;
               const empty = await exportBackup();
@@ -199,24 +202,14 @@ export function SettingsPage({ run }: { run: Run }) {
               maxLength={200}
             />
           </label>
-          <label className="field">
-            Colour
-            <select
-              value={color}
-              onChange={(e) => setColor(e.target.value as Tag['colorToken'])}
-            >
-              {colors.map((c) => (
-                <option key={c}>{c}</option>
-              ))}
-            </select>
-          </label>
+          <ColorPicker value={color} onChange={setColor} />
           <button className="primary">
             {editId ? 'Save tag' : 'Create tag'}
           </button>
           {editId && (
             <button
               type="button"
-              onClick={() => {
+              onClick={async () => {
                 setName('');
                 setEditId(undefined);
               }}
@@ -230,7 +223,7 @@ export function SettingsPage({ run }: { run: Run }) {
             <div key={t.id} className={`tag-row color-${t.colorToken}`}>
               <span>{t.name}</span>
               <button
-                onClick={() => {
+                onClick={async () => {
                   setEditId(t.id);
                   setName(t.name);
                   setColor(t.colorToken);
@@ -239,9 +232,9 @@ export function SettingsPage({ run }: { run: Run }) {
                 Edit
               </button>
               <button
-                onClick={() => {
+                onClick={async () => {
                   if (
-                    window.confirm(
+                    await confirmAction(
                       `Delete tag “${t.name}”? Work items will be preserved.`,
                     )
                   )

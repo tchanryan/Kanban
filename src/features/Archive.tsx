@@ -1,3 +1,4 @@
+import { confirmAction } from '../services/confirm';
 import { useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { Archive } from 'lucide-react';
@@ -71,8 +72,10 @@ export function ArchivePage({
                   run(async () => {
                     const fallback = await workspace.restore(i.id);
                     if (fallback)
-                      window.alert(
+                      await confirmAction(
                         'Restored to the default column because the previous column no longer exists.',
+                        undefined,
+                        true,
                       );
                   }, 'Item restored')
                 }
@@ -88,7 +91,7 @@ export function ArchivePage({
                         ? await workspace.children(i.id)
                         : [];
                     if (
-                      window.confirm(
+                      await confirmAction(
                         `Permanently delete “${i.title}”${i.kind === 'project' ? `, its board and ${children.length} child tasks` : ''}, including all associated history? This cannot be undone.`,
                       )
                     )
@@ -114,7 +117,7 @@ export function ArchivePage({
         </span>
         <button
           disabled={!page?.nextCursor}
-          onClick={() => {
+          onClick={async () => {
             if (page?.nextCursor) setCursors((x) => [...x, page.nextCursor]);
           }}
         >

@@ -261,6 +261,17 @@ small {
 .main-shell {
   min-width: 0;
 }
+.board-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  min-height: 0;
+}
+.board-shell > .app-header,
+.board-shell > .error-banner,
+.board-shell > .update-banner {
+  flex-shrink: 0;
+}
 .app-header {
   height: 100px;
   padding: 24px 30px;
@@ -303,13 +314,26 @@ kbd {
 }
 .workspace-layout {
   display: flex;
-  height: calc(100vh - 100px);
+  flex: 1;
+  min-height: 0;
   position: relative;
 }
 .board-content {
   min-width: 0;
   flex: 1;
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.board-area {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+.project-heading,
+.board-toolbar {
+  flex-shrink: 0;
 }
 .board-toolbar {
   padding: 22px 24px;
@@ -317,6 +341,23 @@ kbd {
   justify-content: space-between;
   gap: 12px;
   align-items: center;
+  flex-wrap: wrap;
+}
+.board-controls,
+.board-zoom {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.board-controls {
+  margin-left: auto;
+}
+.board-zoom button {
+  padding: 7px;
+}
+.zoom-level {
+  min-width: 48px;
+  font-size: 11px;
 }
 .board-toolbar select {
   font-size: 11px;
@@ -325,21 +366,29 @@ kbd {
 }
 .board {
   display: flex;
-  align-items: flex-start;
+  align-items: stretch;
+  flex: 1;
+  min-height: 0;
   gap: 18px;
   padding: 0 24px 30px;
-  overflow-x: auto;
-  min-height: calc(100vh - 180px);
+  overflow: auto;
 }
 .column {
-  width: 280px;
-  min-width: 280px;
+  flex: 0 0 calc((100% - 36px) / 3 * var(--board-zoom, 1));
+  min-width: calc(240px * var(--board-zoom, 1));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   background: var(--column);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 12px;
 }
+.column > * {
+  zoom: var(--board-zoom, 1);
+}
 .column-header {
+  flex-shrink: 0;
   display: flex;
   gap: 6px;
   align-items: center;
@@ -364,6 +413,7 @@ kbd {
   font-size: 10px;
 }
 .column-flags {
+  flex-shrink: 0;
   min-height: 24px;
   display: flex;
   gap: 6px;
@@ -373,7 +423,10 @@ kbd {
   color: var(--muted);
 }
 .card-list {
-  min-height: 60px;
+  min-height: 0;
+  flex: 1;
+  overflow-y: auto;
+  align-content: start;
   display: grid;
   gap: 10px;
 }
@@ -431,6 +484,18 @@ kbd {
   color: var(--muted);
   touch-action: none;
 }
+.card-meta .tile-delete {
+  min-width: 24px;
+  min-height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+}
+.card-meta .tile-delete:hover {
+  color: var(--red);
+  background: #392329;
+}
 .card-title {
   background: none;
   border: 0;
@@ -457,20 +522,122 @@ kbd {
 .card-dates span {
   color: var(--border-strong);
 }
-.card-actions {
+
+.tag-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.card-tags {
   margin-top: 12px;
-  font-size: 10px;
+}
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  border: 1px solid var(--border-strong);
+  border-radius: 20px;
+  background: var(--hover);
+  padding: 4px 8px;
+  font-size: 11px;
+  color: var(--text);
+}
+.tag-dot {
+  flex: 0 0 7px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--item-color);
+}
+.tag-editor {
+  border-top: 1px solid var(--border);
+  padding: 12px 0;
+}
+.tag-editor h3 {
+  margin: 0 0 10px;
+}
+.tag-editor > input {
+  width: 100%;
+  margin-top: 10px;
+}
+.tag-suggestions {
+  margin-top: 6px;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: var(--surface);
+  padding: 10px;
+  box-shadow: 0 8px 20px #0003;
+}
+.tag-suggestions-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   color: var(--muted);
 }
-.card-actions select {
+.tag-options {
+  max-height: 190px;
+  overflow-y: auto;
+}
+.tag-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 4px;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.tag-option:hover {
+  background: var(--hover);
+}
+.tag-create {
+  border-top: 1px solid var(--border);
+  margin-top: 8px;
+  padding-top: 10px;
+}
+.tag-create > button {
   width: 100%;
-  font-size: 12px;
-  margin: 8px 0;
+  margin-top: 10px;
+  overflow-wrap: anywhere;
 }
-.card-actions button {
-  font-size: 10px;
+.color-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.color-swatch {
+  width: 30px;
+  height: 30px;
   padding: 5px;
+  border-radius: 50%;
 }
+.color-swatch span {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--item-color);
+}
+.color-swatch[aria-pressed='true'] {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+.confirmation-dialog h2 {
+  margin: 12px 0;
+}
+.confirmation-dialog p {
+  line-height: 1.6;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.confirmation-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+}
+
 .progress {
   display: flex;
   gap: 8px;
@@ -493,6 +660,7 @@ kbd {
   padding: 14px 0;
 }
 .quick-add {
+  flex-shrink: 0;
   display: flex;
   margin-top: 13px;
   gap: 5px;
@@ -1183,8 +1351,7 @@ dialog > input {
     padding: 0 15px 20px;
   }
   .column {
-    min-width: 270px;
-    width: 270px;
+    min-width: calc(270px * var(--board-zoom, 1));
   }
   .board-toolbar .button-row select {
     max-width: 85px;

@@ -322,7 +322,7 @@ function Shell() {
           </button>
         </div>
       </nav>
-      <div className="main-shell">
+      <div className={`main-shell${isBoard ? ' board-shell' : ''}`}>
         <header className="app-header">
           <div>
             <span className="eyebrow">Personal workspace</span>

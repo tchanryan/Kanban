@@ -1,3 +1,4 @@
+import { confirmAction } from '../services/confirm';
 import { useSyncExternalStore } from 'react';
 import {
   getDrafts,
@@ -27,7 +28,7 @@ export function RecoveryDrafts({ run }: { run: Run }) {
           />
           <div className="button-row">
             <button
-              onClick={() => {
+              onClick={async () => {
                 const url = URL.createObjectURL(
                   new Blob([draft.text], { type: 'text/plain' }),
                 );
@@ -42,9 +43,9 @@ export function RecoveryDrafts({ run }: { run: Run }) {
             </button>
             <button
               className="danger"
-              onClick={() => {
+              onClick={async () => {
                 if (
-                  window.confirm(
+                  await confirmAction(
                     'Discard this unsaved draft? Download a copy first if you still need it.',
                   )
                 )
