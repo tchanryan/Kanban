@@ -272,8 +272,11 @@ export function Inspector({
         <ol className="history">
           {events.map((e) => (
             <li key={e.id}>
-              <strong>{e.type}</strong>
-              <time>{new Date(e.occurredAt).toLocaleString()}</time>
+              <strong>{e.type}</strong> -{' '}
+              <time dateTime={e.occurredAt}>
+                {new Date(e.occurredAt).toLocaleDateString('en-US')}{' '}
+                {new Date(e.occurredAt).toLocaleTimeString('en-US')}
+              </time>
             </li>
           ))}
         </ol>

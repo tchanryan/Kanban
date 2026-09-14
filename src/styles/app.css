@@ -299,7 +299,7 @@ kbd {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 7px;
-  z-index: 10;
+  z-index: 20;
 }
 .workspace-layout {
   display: flex;
@@ -735,10 +735,11 @@ kbd {
   max-height: 240px;
   overflow: auto;
 }
+.history li {
+  margin-bottom: 10px;
+}
 .history time {
-  display: block;
   color: var(--muted);
-  margin: 4px 0 10px;
 }
 .markdown {
   line-height: 1.7;

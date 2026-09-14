@@ -274,3 +274,42 @@ test('confirmed deletion clears a failed draft without blocking future backups',
   await page.getByRole('button', { name: 'Export JSON', exact: true }).click();
   await download;
 });
+
+test('New menu stays above task details and history is inline for tasks and projects', async ({
+  page,
+}) => {
+  await setup(page);
+  await task(page, 'History task');
+  await page.getByRole('button', { name: 'History task', exact: true }).click();
+  const checkHistory = async () => {
+    await page
+      .locator('.inspector summary')
+      .filter({ hasText: 'History' })
+      .click();
+    const entry = page.locator('.history li').first();
+    await expect(entry).toHaveText(
+      /created - \d{1,2}\/\d{1,2}\/\d{4} \d{1,2}:\d{2}:\d{2} [AP]M/,
+    );
+    const event = await entry.locator('strong').boundingBox();
+    const time = await entry.locator('time').boundingBox();
+    expect(Math.abs(event!.y - time!.y)).toBeLessThan(3);
+  };
+  await checkHistory();
+  await page.locator('.new-menu > summary').click();
+  // A real click verifies the inspector does not intercept the menu option.
+  await page.getByRole('button', { name: 'New Project' }).click();
+  await expect(page.getByRole('dialog')).toBeVisible();
+  await page
+    .getByRole('dialog')
+    .getByLabel('Title', { exact: true })
+    .fill('History project');
+  await page
+    .getByRole('button', { name: 'Create project', exact: true })
+    .click();
+  await page.getByRole('button', { name: 'Close details' }).click();
+  await page
+    .getByRole('button', { name: 'History project', exact: true })
+    .click();
+  await page.getByRole('button', { name: 'Edit details' }).click();
+  await checkHistory();
+});

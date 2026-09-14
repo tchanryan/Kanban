@@ -70,3 +70,9 @@ Exact per-task token counts are unavailable from the account usage API. Percenta
 - No reset credit was redeemed or automation created. Start the next period with a fresh usage reading and preserve headroom for verification and a handoff.
 
 Final reading before wrap-up: **86% used / 14% remaining in the five-hour window; 29% used weekly**. Observed increase this period: 86 percentage points in the five-hour window and 13 weekly. Exact task token usage is unavailable. Final formatting and Git whitespace checks passed. Work stops at this verified checkpoint with headroom remaining rather than beginning another large feature.
+
+## Follow-up fixes — New menu and history
+
+Raised the New dropdown above the inspector so its task/project actions remain clickable while details are open. Task and project history now show event and local timestamp inline, with month/day/year and 12-hour time including seconds (for example, `created - 9/14/2026 7:00:11 PM`). Numbered list markers are retained; long entries may wrap naturally on narrow screens.
+
+Formatting, lint, typecheck and the `/Kanban/` production build passed. A new focused Playwright regression passed for opening New Project over task details and inline history layout on both tasks and projects. The suite now contains 15 browser tests; this follow-up ran the new test only, while the previous 14 passed at the earlier checkpoint. Version remains 1.2.0.
