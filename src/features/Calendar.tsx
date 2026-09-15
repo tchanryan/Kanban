@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { workspace } from '../repositories/workspace';
 import { range, localDate, type Item, type Settings } from '../domain/model';
-import type { Run } from './Board';
+import type { Run } from '../services/operations';
 import { useToday } from '../components/useToday';
 export function Calendar({
   compact = false,

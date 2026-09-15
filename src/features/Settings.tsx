@@ -1,9 +1,8 @@
-import { ColorPicker } from '../components/ColorPicker';
+import { TagManager } from './TagManager';
 import { confirmAction } from '../services/confirm';
 import { useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { workspace } from '../repositories/workspace';
-import { type Tag } from '../domain/model';
 import {
   download,
   exportBackup,
@@ -13,17 +12,13 @@ import {
   type Backup,
 } from '../services/backups';
 import { Modal } from '../components/ui';
-import type { Run } from './Board';
+import type { Run } from '../services/operations';
 import { RecoveryDrafts } from './RecoveryDrafts';
 export function SettingsPage({ run }: { run: Run }) {
   const counts = useLiveQuery(async () => workspace.counts(), []);
-  const tags = useLiveQuery(async () => workspace.tags(), []) || [];
   const snapshots = useLiveQuery(async () => workspace.snapshots(), []) || [];
   const [pass, setPass] = useState('');
   const [backup, setBackup] = useState<Backup | null>(null);
-  const [name, setName] = useState('');
-  const [color, setColor] = useState<Tag['colorToken']>('violet');
-  const [editId, setEditId] = useState<string | undefined>();
   const [storage, setStorage] = useState('');
   return (
     <div className="settings-page">
@@ -181,72 +176,7 @@ export function SettingsPage({ run }: { run: Run }) {
           Clear all live data…
         </button>
       </section>
-      <section className="settings-section">
-        <h2>Tags</h2>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            run(async () => {
-              await workspace.saveTag(name, color, editId);
-              setName('');
-              setEditId(undefined);
-            });
-          }}
-        >
-          <label className="field">
-            Tag name
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              maxLength={200}
-            />
-          </label>
-          <ColorPicker value={color} onChange={setColor} />
-          <button className="primary">
-            {editId ? 'Save tag' : 'Create tag'}
-          </button>
-          {editId && (
-            <button
-              type="button"
-              onClick={async () => {
-                setName('');
-                setEditId(undefined);
-              }}
-            >
-              Cancel edit
-            </button>
-          )}
-        </form>
-        <div className="tag-management">
-          {tags.map((t) => (
-            <div key={t.id} className={`tag-row color-${t.colorToken}`}>
-              <span>{t.name}</span>
-              <button
-                onClick={async () => {
-                  setEditId(t.id);
-                  setName(t.name);
-                  setColor(t.colorToken);
-                }}
-              >
-                Edit
-              </button>
-              <button
-                onClick={async () => {
-                  if (
-                    await confirmAction(
-                      `Delete tag “${t.name}”? Work items will be preserved.`,
-                    )
-                  )
-                    run(() => workspace.deleteTag(t.id));
-                }}
-              >
-                Delete
-              </button>
-            </div>
-          ))}
-        </div>
-      </section>
+      <TagManager run={run} />
       {backup && (
         <Modal
           title="Review replacement backup"

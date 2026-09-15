@@ -5,7 +5,7 @@ import {
   subscribeDrafts,
   withDiscardedDrafts,
 } from '../services/drafts';
-import type { Run } from './Board';
+import type { Run } from '../services/operations';
 export function RecoveryDrafts({ run }: { run: Run }) {
   const drafts = useSyncExternalStore(subscribeDrafts, getDrafts);
   if (!drafts.length) return null;

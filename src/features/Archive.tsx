@@ -5,7 +5,7 @@ import { Archive } from 'lucide-react';
 import { workspace } from '../repositories/workspace';
 import { deleteWorkItem } from '../services/mutations';
 import type { Item } from '../domain/model';
-import type { Run } from './Board';
+import type { Run } from '../services/operations';
 type Cursor = { date: string; id: string } | null;
 export function ArchivePage({
   onOpen,

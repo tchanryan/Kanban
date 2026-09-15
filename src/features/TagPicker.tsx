@@ -3,7 +3,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { workspace } from '../repositories/workspace';
 import type { Tag } from '../domain/model';
 import { ColorPicker } from '../components/ColorPicker';
-import type { Run } from './Board';
+import type { Run } from '../services/operations';
 
 export function TagPicker({ itemId, run }: { itemId: string; run: Run }) {
   const tags = useLiveQuery(() => workspace.tags(), []) || [];

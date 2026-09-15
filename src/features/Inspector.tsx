@@ -1,3 +1,4 @@
+import { workItemActions } from '../services/workItemActions';
 import { TagPicker } from './TagPicker';
 import { confirmAction } from '../services/confirm';
 import { useEffect, useRef, useState } from 'react';
@@ -5,7 +6,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { workspace } from '../repositories/workspace';
 import { colors, type Item, type Tag } from '../domain/model';
 import { Autosave, Markdown } from '../components/ui';
-import type { Run } from './Board';
+import type { Run } from '../services/operations';
 import { deleteWorkItem } from '../services/mutations';
 import { Link } from 'react-router-dom';
 import { useModalIsolation } from '../components/useModalIsolation';
@@ -74,26 +75,7 @@ export function Inspector({
   const patch = (value: Parameters<typeof workspace.update>[1]) =>
     run(() => workspace.update(id, value));
   const move = (columnId: string) =>
-    run(async () => {
-      let confirmed = false;
-      const col = cols.find((c) => c.id === columnId);
-      if (
-        item.kind === 'project' &&
-        col?.completesItemOnEntry &&
-        !item.completedAt
-      ) {
-        const n = (await workspace.children(id)).filter(
-          (x) => !x.completedAt,
-        ).length;
-        if (n) {
-          confirmed = await confirmAction(
-            `Complete “${item.title}” with ${n} incomplete child tasks? Their status will not change.`,
-          );
-          if (!confirmed) return;
-        }
-      }
-      await workspace.move(id, columnId, null, confirmed);
-    });
+    run(() => workItemActions.move(item, columnId));
   return (
     <aside
       ref={panel}
