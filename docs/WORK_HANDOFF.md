@@ -125,3 +125,13 @@ Validation: all 26 unit tests and all 21 browser tests passed at /Kanban/ (about
 README and implementation notes are updated. Version remains 1.2.0. No deployment or commit was performed by this change. Earlier handoff references to on-card move controls and browser confirmation prompts are superseded by this section. Broader next-period service-worker update, cross-tab bulk replacement and manual screen-reader audits remain pending.
 
 Latest usage checkpoint after these changes: 82% five-hour used (18% remaining), 13% weekly used. These are account-wide percentages, not exact task token counts. No reset credit was consumed by this task. Final cleanup removes unused card-move styles; the production assets were rebuilt and focused tag/dialog checks rerun.
+
+## Maintainability review and refactor — 15 September 2026
+
+Extracted board cards, columns, column editing and collision targeting from the board coordinator. Search, scratchpad, sidebar, error boundary and tag management now live in dedicated modules. The shared `Run` type lives in services rather than coupling every feature to Board. Added an injected `WorkItemActions` class for shared project-completion confirmation and tile deletion, preserving repository transactions and draft cleanup. Board tag filtering now derives from the existing board relation subscription instead of issuing a relation query per active card. See [Architecture](ARCHITECTURE.md) for module responsibilities and editing conventions.
+
+The existing database/repository classes and pure domain functions remain appropriate boundaries. No schema or dependency changes were required. The original formatting check failed on this handoff; Prettier now passes across the project.
+
+Validation on Node 24.20.0: formatting, ESLint, strict TypeScript and Git whitespace checks passed. All 35 unit tests across nine files passed, including nine new tests for filtering/date boundaries, cancellation, project completion and task ordering. All 22 browser tests passed at both `/` and `/Kanban/` using installed Chrome, including a new live tag-assignment/filter regression. Production PWA builds passed for both paths. Desktop and mobile screenshots were inspected. The existing main-chunk size advisory remains (approximately 549.5 kB minified / 170.1 kB gzip).
+
+GitHub-hosted CodeQL, Linux Chromium and actual deployment were not run from this local review. Changes remain uncommitted on `codex`. The broader service-worker update, cross-tab bulk replacement and manual screen-reader acceptance items above remain follow-up work.

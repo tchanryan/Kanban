@@ -3,7 +3,8 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { workspace } from '../repositories/workspace';
 import type { Tag } from '../domain/model';
 import { ColorPicker } from '../components/ColorPicker';
-import type { Run } from './Board';
+import { AsyncCheckbox } from '../components/AsyncCheckbox';
+import type { Run } from '../services/operations';
 
 export function TagPicker({ itemId, run }: { itemId: string; run: Run }) {
   const tags = useLiveQuery(() => workspace.tags(), []) || [];
@@ -13,7 +14,6 @@ export function TagPicker({ itemId, run }: { itemId: string; run: Run }) {
   const [expanded, setExpanded] = useState(false);
   const [color, setColor] = useState<Tag['colorToken']>('violet');
   const [creating, setCreating] = useState(false);
-  const [pending, setPending] = useState<Record<string, boolean>>({});
   const normalized = query.trim().toLocaleLowerCase();
   const matches = tags.filter((tag) =>
     tag.name.toLocaleLowerCase().includes(normalized),
@@ -75,31 +75,12 @@ export function TagPicker({ itemId, run }: { itemId: string; run: Run }) {
                 key={tag.id}
                 className={`tag-option color-${tag.colorToken}`}
               >
-                <input
-                  type="checkbox"
-                  checked={
-                    pending[tag.id] ??
-                    relations.some((relation) => relation.tagId === tag.id)
-                  }
-                  disabled={tag.id in pending}
-                  onChange={(event) => {
-                    const checked = event.target.checked;
-                    setPending((current) => ({
-                      ...current,
-                      [tag.id]: checked,
-                    }));
-                    run(async () => {
-                      try {
-                        await workspace.setTag(itemId, tag.id, checked);
-                      } finally {
-                        setPending((current) => {
-                          const next = { ...current };
-                          delete next[tag.id];
-                          return next;
-                        });
-                      }
-                    });
-                  }}
+                <AsyncCheckbox
+                  checked={relations.some(
+                    (relation) => relation.tagId === tag.id,
+                  )}
+                  save={(checked) => workspace.setTag(itemId, tag.id, checked)}
+                  run={run}
                 />
                 <span className="tag-dot" />
                 <span>{tag.name}</span>

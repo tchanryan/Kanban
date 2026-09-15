@@ -1,4 +1,3 @@
-import { confirmAction } from '../services/confirm';
 import { useState, type CSSProperties } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import {
@@ -8,425 +7,23 @@ import {
   useSensor,
   useSensors,
   DragOverlay,
-  pointerWithin,
-  closestCorners,
-  type CollisionDetection,
   type DragEndEvent,
 } from '@dnd-kit/core';
 import {
   SortableContext,
-  useSortable,
   sortableKeyboardCoordinates,
   horizontalListSortingStrategy,
-  verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import {
-  GripVertical,
-  Plus,
-  Settings2,
-  Trash2,
-  ZoomIn,
-  ZoomOut,
-} from 'lucide-react';
+import { Plus, ZoomIn, ZoomOut } from 'lucide-react';
 import { workspace } from '../repositories/workspace';
-import {
-  overdue,
-  localDate,
-  type Column,
-  type Item,
-  type Tag,
-} from '../domain/model';
-import { Modal } from '../components/ui';
+import type { Column, Item } from '../domain/model';
 import { useToday } from '../components/useToday';
-import { addLocalDays } from '../domain/model';
-import { deleteWorkItem } from '../services/mutations';
-export type Run = (fn: () => Promise<unknown>, message?: string) => void;
-const boardCollision: CollisionDetection = (args) => {
-  const columnDrag = args.active.data.current?.type === 'column';
-  const droppableContainers = args.droppableContainers.filter(
-    (container) =>
-      container.id !== args.active.id &&
-      (!columnDrag || container.data.current?.type === 'column'),
-  );
-  const candidates = { ...args, droppableContainers };
-  if (columnDrag) return closestCorners(candidates);
-  if (args.pointerCoordinates) {
-    const hits = pointerWithin(candidates);
-    const cardHits = hits.filter(
-      (hit) =>
-        droppableContainers.find((c) => c.id === hit.id)?.data.current?.type ===
-        'item',
-    );
-    return cardHits.length ? cardHits : hits;
-  }
-  return closestCorners(candidates);
-};
-export function Card({
-  item,
-  tags,
-  onOpen,
-  run,
-}: {
-  item: Item;
-  tags: Tag[];
-  onOpen: (item: Item) => void;
-  run: Run;
-}) {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: item.id, data: { type: 'item', item } });
-  const children =
-    useLiveQuery(
-      async () =>
-        item.kind === 'project'
-          ? workspace.children(item.id)
-          : Promise.resolve([]),
-      [item.id, item.kind],
-    ) || [];
-  return (
-    <article
-      ref={setNodeRef}
-      style={{ transform: CSS.Transform.toString(transform), transition }}
-      className={`card ${item.kind} color-${item.projectColorToken || 'violet'}`}
-    >
-      <div className="card-meta">
-        <span>{item.kind}</span>
-        <span className={`priority ${item.priority}`}>{item.priority}</span>
-        {overdue(item) && <span className="overdue">Overdue</span>}
-        <button
-          className="drag-handle"
-          aria-label={`Drag ${item.title}`}
-          {...attributes}
-          {...listeners}
-        >
-          <GripVertical size={14} />
-        </button>
-        <button
-          className="tile-delete"
-          aria-label={`Delete ${item.kind} ${item.title}`}
-          title={`Delete ${item.kind}`}
-          onClick={() =>
-            run(async () => {
-              if (
-                !(await confirmAction(
-                  `Permanently delete ${item.kind} “${item.title}” and its history? This cannot be undone.`,
-                ))
-              )
-                return;
-              if (item.kind === 'project') {
-                const tasks = await workspace.children(item.id);
-                if (
-                  tasks.length &&
-                  !(await confirmAction(
-                    `This project contains ${tasks.length} task${tasks.length === 1 ? '' : 's'}, including any completed tasks. Permanently delete the project, all these tasks, and their history? This cannot be undone.`,
-                  ))
-                )
-                  return;
-              }
-              await deleteWorkItem(item.id, true);
-            })
-          }
-        >
-          <Trash2 size={14} />
-        </button>
-      </div>
-      <button className="card-title" onClick={() => onOpen(item)}>
-        {item.title}
-      </button>
-      <p className="card-dates">
-        {item.plannedStartDate ||
-          (item.firstStartedAt
-            ? localDate(item.firstStartedAt)
-            : 'No start')}{' '}
-        <span>→</span> {item.dueDate || 'No due date'}
-      </p>
-      {item.kind === 'project' && (
-        <div className="progress">
-          <progress
-            aria-label={`${item.title} task completion`}
-            value={children.filter((x) => x.completedAt).length}
-            max={children.length || 1}
-          />
-          <small>
-            {children.filter((x) => x.completedAt).length}/{children.length}{' '}
-            tasks
-          </small>
-        </div>
-      )}
-      {tags.length > 0 && (
-        <div className="tag-chips card-tags" aria-label="Tags">
-          {tags.map((tag) => (
-            <span key={tag.id} className={`tag-chip color-${tag.colorToken}`}>
-              <span className="tag-dot" />
-              {tag.name}
-            </span>
-          ))}
-        </div>
-      )}
-    </article>
-  );
-}
-function ColumnView({
-  column,
-  itemTags,
-  items,
-  onOpen,
-  onEdit,
-  run,
-}: {
-  column: Column;
-  itemTags: Record<string, Tag[]>;
-  items: Item[];
-  onOpen: (item: Item) => void;
-  onEdit: () => void;
-  run: Run;
-}) {
-  const [title, setTitle] = useState('');
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: column.id, data: { type: 'column', column } });
-  return (
-    <section
-      ref={setNodeRef}
-      style={{ transform: CSS.Transform.toString(transform), transition }}
-      className="column"
-      aria-label={`${column.name} column`}
-    >
-      <header className="column-header">
-        <button
-          className="drag-handle"
-          aria-label={`Drag column ${column.name}`}
-          {...attributes}
-          {...listeners}
-        >
-          <GripVertical size={16} />
-        </button>
-        <h2>{column.name}</h2>
-        <span className="count">{items.length}</span>
-        <button aria-label={`Configure ${column.name}`} onClick={onEdit}>
-          <Settings2 size={16} />
-        </button>
-      </header>
-      <div className="column-flags">
-        {column.isDefaultNewItemColumn && <span>Default</span>}
-        {column.startsWorkOnFirstEntry && <span>Starts work</span>}
-        {column.completesItemOnEntry && <span>Completion</span>}
-      </div>
-      <SortableContext
-        items={items.map((x) => x.id)}
-        strategy={verticalListSortingStrategy}
-      >
-        <div className="card-list">
-          {items.map((item) => (
-            <Card
-              key={item.id}
-              tags={itemTags[item.id] || []}
-              {...{ item, onOpen, run }}
-            />
-          ))}
-          {!items.length && (
-            <p className="column-empty">Room for what’s next.</p>
-          )}
-        </div>
-      </SortableContext>
-      <form
-        className="quick-add"
-        onSubmit={(e) => {
-          e.preventDefault();
-          run(async () => {
-            await workspace.create(column.boardId, title, 'task', column.id);
-            setTitle('');
-          });
-        }}
-      >
-        <input
-          aria-label={`New task in ${column.name}`}
-          placeholder="Add a task…"
-          value={title}
-          maxLength={200}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <button
-          aria-label={`Add task to ${column.name}`}
-          disabled={!title.trim()}
-        >
-          <Plus size={16} />
-        </button>
-      </form>
-    </section>
-  );
-}
-export function ColumnEditor({
-  boardId,
-  column,
-  columns,
-  onClose,
-  run,
-}: {
-  boardId: string;
-  column: Column | null;
-  columns: Column[];
-  onClose: () => void;
-  run: Run;
-}) {
-  const [name, setName] = useState(column?.name || '');
-  const [isDefault, setDefault] = useState(
-    column?.isDefaultNewItemColumn || !columns.length,
-  );
-  const [starts, setStarts] = useState(column?.startsWorkOnFirstEntry || false);
-  const [completes, setCompletes] = useState(
-    column?.completesItemOnEntry || false,
-  );
-  const [deleting, setDeleting] = useState(false);
-  const [destination, setDestination] = useState('');
-  const index = columns.findIndex((x) => x.id === column?.id);
-  return (
-    <Modal title={column ? 'Configure column' : 'New column'} onClose={onClose}>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          run(async () => {
-            await workspace.saveColumn(
-              boardId,
-              {
-                name,
-                isDefaultNewItemColumn: isDefault,
-                startsWorkOnFirstEntry: starts,
-                completesItemOnEntry: completes,
-              },
-              column?.id,
-            );
-            onClose();
-          });
-        }}
-      >
-        <label className="field">
-          Column name
-          <input
-            autoFocus
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            maxLength={200}
-          />
-        </label>
-        <label className="check">
-          <input
-            type="checkbox"
-            checked={isDefault}
-            onChange={(e) => setDefault(e.target.checked)}
-          />
-          Default for new items
-        </label>
-        <label className="check">
-          <input
-            type="checkbox"
-            checked={starts}
-            onChange={(e) => setStarts(e.target.checked)}
-          />
-          Start work on first entry
-        </label>
-        <label className="check">
-          <input
-            type="checkbox"
-            checked={completes}
-            onChange={(e) => setCompletes(e.target.checked)}
-          />
-          Complete items on entry
-        </label>
-        <p className="muted">
-          Behaviours apply to future moves. Changing flags preserves existing
-          timestamps and history.
-        </p>
-        {completes &&
-          columns.some(
-            (c) => c.id !== column?.id && c.completesItemOnEntry,
-          ) && (
-            <p>
-              The existing completion column will lose its completion
-              designation.
-            </p>
-          )}
-        <button className="primary">
-          {column ? 'Save column' : 'Create column'}
-        </button>
-      </form>
-      {column && (
-        <>
-          <hr />
-          <div className="button-row">
-            <button
-              disabled={index === 0}
-              onClick={() =>
-                run(() =>
-                  workspace.reorderColumn(column.id, columns[index - 1]!.id),
-                )
-              }
-            >
-              Move left
-            </button>
-            <button
-              disabled={index === columns.length - 1}
-              onClick={() =>
-                run(() =>
-                  workspace.reorderColumn(
-                    column.id,
-                    columns[index + 2]?.id || null,
-                  ),
-                )
-              }
-            >
-              Move right
-            </button>
-            <button className="danger" onClick={() => setDeleting(true)}>
-              Delete column…
-            </button>
-          </div>
-          {deleting && (
-            <div className="warning">
-              <p>
-                Delete “{column.name}”? All cards, including archived cards,
-                will move to the selected column and adopt its workflow
-                behaviour. Completion history is preserved. Projects may
-                complete without changing child tasks.
-              </p>
-              <label className="field">
-                Destination / replacement default
-                <select
-                  value={destination}
-                  onChange={(e) => setDestination(e.target.value)}
-                >
-                  <option value="">Select destination</option>
-                  {columns
-                    .filter((c) => c.id !== column.id)
-                    .map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.name}
-                      </option>
-                    ))}
-                </select>
-              </label>
-              <button
-                className="danger"
-                onClick={() =>
-                  run(async () => {
-                    await workspace.deleteColumn(
-                      column.id,
-                      destination || null,
-                      true,
-                    );
-                    onClose();
-                  }, 'Column deleted')
-                }
-              >
-                Confirm delete column
-              </button>
-            </div>
-          )}
-        </>
-      )}
-    </Modal>
-  );
-}
+import type { Run } from '../services/operations';
+import { workItemActions } from '../services/workItemActions';
+import { ColumnEditor } from './board/ColumnEditor';
+import { ColumnView } from './board/ColumnView';
+import { boardCollision } from './board/collision';
+import { indexItemTags, filterBoardItems } from './board/selectors';
 export function BoardView({
   boardId,
   onOpen,
@@ -450,26 +47,7 @@ export function BoardView({
   const tags = useLiveQuery(async () => workspace.tags(), []) || [];
   const relations =
     useLiveQuery(() => workspace.boardTagRelations(boardId), [boardId]) || [];
-  const itemTags: Record<string, Tag[]> = {};
-  const tagsById = new Map(tags.map((tag) => [tag.id, tag]));
-  for (const relation of relations) {
-    const tag = tagsById.get(relation.tagId);
-    if (tag) (itemTags[relation.itemId] ||= []).push(tag);
-  }
-  const tagged = useLiveQuery(async () => {
-    if (!tag) return null;
-    return new Set(
-      (
-        await Promise.all(
-          items.map(async (i) =>
-            (await workspace.itemTags(i.id)).some((r) => r.tagId === tag)
-              ? i.id
-              : null,
-          ),
-        )
-      ).filter(Boolean),
-    );
-  }, [tag, items]);
+  const itemTags = indexItemTags(tags, relations);
   const [drag, setDrag] = useState('');
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
@@ -478,26 +56,7 @@ export function BoardView({
     }),
   );
   const move = (item: Item, columnId: string, before: string | null = null) =>
-    run(async () => {
-      const col = cols.find((c) => c.id === columnId);
-      let confirmed = false;
-      if (
-        item.kind === 'project' &&
-        col?.completesItemOnEntry &&
-        !item.completedAt
-      ) {
-        const n = (await workspace.children(item.id)).filter(
-          (x) => !x.completedAt,
-        ).length;
-        if (n) {
-          confirmed = await confirmAction(
-            `Complete “${item.title}” with ${n} incomplete child tasks? Child tasks will remain unchanged.`,
-          );
-          if (!confirmed) return;
-        }
-      }
-      await workspace.move(item.id, columnId, before, confirmed);
-    });
+    run(() => workItemActions.move(item, columnId, before));
   const onDragEnd = (e: DragEndEvent) => {
     setDrag('');
     if (!e.over || e.active.id === e.over.id) return;
@@ -531,18 +90,11 @@ export function BoardView({
       move(item, destination, before);
     }
   };
-  const filtered = items.filter(
-    (i) =>
-      (!priority || i.priority === priority) &&
-      (!kind || i.kind === kind) &&
-      (!due ||
-        (due === 'overdue'
-          ? overdue(i, today)
-          : !!i.dueDate &&
-            !i.completedAt &&
-            i.dueDate >= today &&
-            i.dueDate <= addLocalDays(today, 2))) &&
-      (!tag || tagged?.has(i.id)),
+  const filtered = filterBoardItems(
+    items,
+    { priority, kind, due, tag },
+    itemTags,
+    today,
   );
   return (
     <div

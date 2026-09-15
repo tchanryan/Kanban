@@ -191,7 +191,18 @@ test('archived projects preserve child access and hide from active search', asyn
     .click();
   await confirm(page, true);
   await page.getByRole('link', { name: 'Archive', exact: true }).click();
-  await page.getByText('Archived project', { exact: true }).click();
+  await expect(
+    page.getByRole('heading', { name: 'Archive', exact: true }),
+  ).toBeVisible();
+  // The previous project heading can remain during the lazy route transition.
+  // Only the archive row's button can reopen the project.
+  await page
+    .locator('.archive-row')
+    .getByRole('button', {
+      name: /^project Archived project Completed:/,
+    })
+    .click();
+  await expect(page).toHaveURL(/#\/projects\//);
   await expect(
     page.getByRole('button', { name: 'Child history', exact: true }),
   ).toBeVisible();
@@ -639,4 +650,45 @@ test('themed confirmations work over mobile details and require CLEAR before cle
   await expect(
     page.getByRole('button', { name: 'Keep mobile work', exact: true }),
   ).toBeVisible();
+});
+
+test('active tag filters update when assignments change and reset without losing cards', async ({
+  page,
+}) => {
+  await setup(page);
+  await task(page, 'Filtered task');
+  await task(page, 'Untagged task');
+  await page
+    .getByRole('button', { name: 'Filtered task', exact: true })
+    .click();
+  await page.getByLabel('Find or create tag').fill('Filter label');
+  await page
+    .getByRole('button', { name: '+ Create tag “Filter label”', exact: true })
+    .click();
+  await expect(
+    page.getByRole('button', { name: 'Remove tag Filter label', exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Close details' }).click();
+  await page
+    .getByLabel('Filter tag', { exact: true })
+    .selectOption({ label: 'Filter label' });
+  await expect(page.locator('article.card')).toHaveCount(1);
+  await page
+    .getByRole('button', { name: 'Filtered task', exact: true })
+    .click();
+  await page
+    .getByRole('button', { name: 'Remove tag Filter label', exact: true })
+    .click();
+  await expect(page.locator('article.card')).toHaveCount(0);
+  await page.getByLabel('Find or create tag').fill('Filter label');
+  await page
+    .getByRole('checkbox', { name: 'Filter label', exact: true })
+    .check();
+  await expect(page.locator('article.card')).toHaveCount(1);
+  await page.getByRole('button', { name: 'Close details' }).click();
+  await page.getByLabel('Filter tag', { exact: true }).selectOption('');
+  await expect(page.locator('article.card')).toHaveCount(2);
+  await page.reload();
+  await expect(page.locator('article.card')).toHaveCount(2);
+  await expect(page.locator('.card-tags')).toHaveCount(1);
 });
