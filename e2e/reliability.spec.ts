@@ -191,7 +191,18 @@ test('archived projects preserve child access and hide from active search', asyn
     .click();
   await confirm(page, true);
   await page.getByRole('link', { name: 'Archive', exact: true }).click();
-  await page.getByText('Archived project', { exact: true }).click();
+  await expect(
+    page.getByRole('heading', { name: 'Archive', exact: true }),
+  ).toBeVisible();
+  // The previous project heading can remain during the lazy route transition.
+  // Only the archive row's button can reopen the project.
+  await page
+    .locator('.archive-row')
+    .getByRole('button', {
+      name: /^project Archived project Completed:/,
+    })
+    .click();
+  await expect(page).toHaveURL(/#\/projects\//);
   await expect(
     page.getByRole('button', { name: 'Child history', exact: true }),
   ).toBeVisible();
