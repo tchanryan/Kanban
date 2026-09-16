@@ -19,6 +19,7 @@ export class Database extends Dexie {
   relations!: Table<Relation, [string, string]>;
   scratchpads!: EntityTable<Scratchpad, 'id'>;
   settings!: EntityTable<Settings, 'id'>;
+  metadata!: EntityTable<{ id: string; value: string }, 'id'>;
   snapshots!: EntityTable<
     { id: string; createdAt: string; payload: string },
     'id'
@@ -69,6 +70,7 @@ export class Database extends Dexie {
               : '';
           });
       });
+    this.version(4).stores({ metadata: 'id' });
     this.items.hook('creating', (_key, item) => {
       Object.assign(item, {
         activeBoardId: item.archivedAt ? '' : item.boardId,
@@ -86,6 +88,10 @@ export class Database extends Dexie {
           : '',
       };
     });
+  }
+
+  async generation() {
+    return (await this.metadata.get('generation'))?.value ?? 'initial';
   }
 }
 export const db = new Database();

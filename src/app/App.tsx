@@ -377,6 +377,7 @@ function Shell() {
               Title
               <input
                 autoFocus
+                data-autofocus
                 required
                 maxLength={200}
                 value={title}

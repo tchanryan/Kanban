@@ -5,6 +5,22 @@ export default defineConfig({
   base: process.env.VITE_BASE_PATH || '/',
   plugins: [
     react(),
+    {
+      name: 'build-revision',
+      transformIndexHtml: () => [
+        {
+          tag: 'meta',
+          attrs: {
+            name: 'app-build',
+            content:
+              process.env.GITHUB_SHA ||
+              process.env.BUILD_REVISION ||
+              'development',
+          },
+          injectTo: 'head',
+        },
+      ],
+    },
     VitePWA({
       registerType: 'prompt',
       includeAssets: ['icon.svg', 'icon-192.png', 'icon-512.png'],

@@ -6,6 +6,24 @@ import { workspace } from '../../repositories/workspace';
 import { overdue, localDate, type Item, type Tag } from '../../domain/model';
 import type { Run } from '../../services/operations';
 import { workItemActions } from '../../services/workItemActions';
+function ProjectProgress({ item }: { item: Item }) {
+  const children =
+    useLiveQuery(() => workspace.children(item.id), [item.id]) || [];
+  const completedCount = children.filter((child) => child.completedAt).length;
+  return (
+    <div className="progress">
+      <progress
+        aria-label={`${item.title} task completion`}
+        value={completedCount}
+        max={children.length || 1}
+      />
+      <small>
+        {completedCount}/{children.length} tasks
+      </small>
+    </div>
+  );
+}
+
 export function Card({
   item,
   tags,
@@ -19,15 +37,6 @@ export function Card({
 }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: item.id, data: { type: 'item', item } });
-  const children =
-    useLiveQuery(
-      async () =>
-        item.kind === 'project'
-          ? workspace.children(item.id)
-          : Promise.resolve([]),
-      [item.id, item.kind],
-    ) || [];
-  const completedCount = children.filter((child) => child.completedAt).length;
   return (
     <article
       ref={setNodeRef}
@@ -65,18 +74,7 @@ export function Card({
             : 'No start')}{' '}
         <span>→</span> {item.dueDate || 'No due date'}
       </p>
-      {item.kind === 'project' && (
-        <div className="progress">
-          <progress
-            aria-label={`${item.title} task completion`}
-            value={completedCount}
-            max={children.length || 1}
-          />
-          <small>
-            {completedCount}/{children.length} tasks
-          </small>
-        </div>
-      )}
+      {item.kind === 'project' && <ProjectProgress item={item} />}
       {tags.length > 0 && (
         <div className="tag-chips card-tags" aria-label="Tags">
           {tags.map((tag) => (

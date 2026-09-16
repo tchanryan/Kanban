@@ -26,6 +26,7 @@ export function SearchDialog({
     <Modal title="Search your work" onClose={onClose}>
       <input
         autoFocus
+        data-autofocus
         aria-label="Search titles, notes and tags"
         placeholder="Search titles, notes and tags…"
         value={q}

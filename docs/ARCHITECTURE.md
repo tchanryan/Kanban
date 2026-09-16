@@ -25,4 +25,8 @@ Both quality and Pages workflows run formatting, lint, typecheck, unit tests, pr
 
 Unit tests cover domain and persistence rules, backups, drafts, UI safety, filtering and confirmed actions. Browser tests cover complete user journeys, keyboard/pointer dragging, accessibility, persistence, offline startup, layout and tag-filter updates.
 
-CodeQL analysis and actual Pages deployment run on GitHub and are separate from local CLI verification. Broader two-build service-worker updates, concurrent bulk replacement across tabs and manual screen-reader acceptance remain follow-up work documented in the handoff.
+Text editors read their value and dataset generation together. Saves check both in a transaction, so a replacement in another tab invalidates old drafts even when restored text matches. Drafts retain their original save callback until the user explicitly chooses to keep their text against the new saved version.
+
+Browser regressions cover replacement, clearing and deletion across tabs, plus a real two-build service-worker update with pending and failed drafts. Desktop and mobile keyboard journeys verify initial focus, trapping and restoration. Manual screen-reader speech-output acceptance remains a separate human check.
+
+CodeQL analysis and actual Pages deployment run on GitHub and are separate from local CLI verification. Dependency decisions and remaining acceptance work are tracked in the improvement queue.

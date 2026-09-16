@@ -13,6 +13,12 @@ export interface BoardFilters {
   tag: string;
 }
 
+export function groupItemsByColumn(items: Item[]): Record<string, Item[]> {
+  const columns: Record<string, Item[]> = {};
+  for (const item of items) (columns[item.columnId] ||= []).push(item);
+  return columns;
+}
+
 export function indexItemTags(
   tags: Tag[],
   relations: Relation[],
