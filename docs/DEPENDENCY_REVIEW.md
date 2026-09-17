@@ -13,7 +13,7 @@ Reviewed the available Dependabot branches and applied compatible workflow updat
 | codeql-action         | v3 → v4                    | Both init and analyze updated together; JavaScript/TypeScript input remains supported. [Action definition](https://github.com/github/codeql-action/blob/v4/init/action.yml).                       |
 | TypeScript            | Defer 7.0.2; retain ~6.0.0 | Installed typescript-eslint 8.70.0 parser declares TypeScript >=4.8.4 <6.1.0. Upgrade once the parser supports TypeScript 7, then run the full pipeline.                                           |
 
-The earlier Pages deployment failure was repository configuration, not an E2E failure. Updating Actions does not enable Pages for the repository. No remote dependency PRs were merged or closed during this review.
+The earlier Pages deployment failure was repository configuration, not an E2E failure. Pages source was explicitly changed to GitHub Actions on 17 September 2026. Deployment of these changes awaits merge of PR #9. No remote dependency PRs were merged or closed during this review.
 
 ## Remaining manual accessibility acceptance
 
