@@ -65,8 +65,18 @@ test('pointer and keyboard dragging preserve order and lifecycle', async ({
   ).toHaveText(['One']);
   await page.getByRole('button', { name: 'Drag Two', exact: true }).focus();
   await page.keyboard.press('Space');
+  const overlay = page.locator('.drag-overlay');
+  await expect(overlay).toBeVisible();
+  const lifted = await overlay.boundingBox();
+  expect(lifted).not.toBeNull();
   await page.keyboard.press('ArrowDown');
+  // Keyboard activation and collision updates are asynchronous. Drop only
+  // after the requested movement has rendered, rather than racing the sensor.
+  await expect
+    .poll(async () => (await overlay.boundingBox())?.y ?? lifted!.y)
+    .toBeGreaterThan(lifted!.y);
   await page.keyboard.press('Space');
+  await expect(overlay).toHaveCount(0);
   await expect(inbox.locator('.card-title')).toHaveText(['Three', 'Two']);
   await drag(
     page,
