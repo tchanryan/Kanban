@@ -1,6 +1,6 @@
 import { test, expect, type Page, type Locator } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import { setup, task, move, confirm } from './helpers';
+import { setup, task, move, confirm, keyboardDrag } from './helpers';
 async function drag(page: Page, handle: Locator, target: Locator) {
   await expect(page.locator('.drag-overlay')).toHaveCount(0);
   await handle.hover();
@@ -70,18 +70,11 @@ test('pointer and keyboard dragging preserve order and lifecycle', async ({
   await page.keyboard.press('Space');
   await expect(overlay).toHaveCount(0);
   await expect(inbox.locator('.card-title')).toHaveText(['Two', 'Three']);
-  await page.keyboard.press('Space');
-  await expect(overlay).toBeVisible();
-  const lifted = await overlay.boundingBox();
-  expect(lifted).not.toBeNull();
-  await page.keyboard.press('ArrowDown');
-  // Keyboard activation and collision updates are asynchronous. Drop only
-  // after the requested movement has rendered, rather than racing the sensor.
-  await expect
-    .poll(async () => (await overlay.boundingBox())?.y ?? lifted!.y)
-    .toBeGreaterThan(lifted!.y);
-  await page.keyboard.press('Space');
-  await expect(overlay).toHaveCount(0);
+  await keyboardDrag(
+    page,
+    page.getByRole('button', { name: 'Drag Two', exact: true }),
+    'ArrowDown',
+  );
   await expect(inbox.locator('.card-title')).toHaveText(['Three', 'Two']);
   await drag(
     page,

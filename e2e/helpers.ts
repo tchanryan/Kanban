@@ -1,4 +1,27 @@
-import { expect, type Page } from '@playwright/test';
+import { expect, type Page, type Locator } from '@playwright/test';
+export async function keyboardDrag(
+  page: Page,
+  handle: Locator,
+  direction: 'ArrowUp' | 'ArrowDown',
+) {
+  await handle.focus();
+  await page.keyboard.press('Space');
+  const overlay = page.locator('.drag-overlay');
+  await expect(overlay).toBeVisible();
+  const lifted = await overlay.boundingBox();
+  expect(lifted).not.toBeNull();
+  await page.keyboard.press(direction);
+  // Wait for the requested movement to render before sending the drop key.
+  const sign = direction === 'ArrowDown' ? 1 : -1;
+  await expect
+    .poll(
+      async () =>
+        sign * (((await overlay.boundingBox())?.y ?? lifted!.y) - lifted!.y),
+    )
+    .toBeGreaterThan(0);
+  await page.keyboard.press('Space');
+  await expect(overlay).toHaveCount(0);
+}
 export async function column(page: Page, name: string, flag?: string) {
   await page.getByRole('button', { name: 'Column', exact: true }).click();
   await page.getByLabel('Column name').fill(name);
