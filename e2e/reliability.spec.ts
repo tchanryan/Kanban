@@ -67,6 +67,11 @@ test('pointer and keyboard dragging preserve order and lifecycle', async ({
   await page.keyboard.press('Space');
   const overlay = page.locator('.drag-overlay');
   await expect(overlay).toBeVisible();
+  await page.keyboard.press('Space');
+  await expect(overlay).toHaveCount(0);
+  await expect(inbox.locator('.card-title')).toHaveText(['Two', 'Three']);
+  await page.keyboard.press('Space');
+  await expect(overlay).toBeVisible();
   const lifted = await overlay.boundingBox();
   expect(lifted).not.toBeNull();
   await page.keyboard.press('ArrowDown');
