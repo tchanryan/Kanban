@@ -45,6 +45,31 @@ export class WorkspaceRepository {
   projectBoard = (id: string) =>
     this.database.boards.where('projectId').equals(id).first();
   item = (id: string) => this.database.items.get(id);
+  editorItem = (id: string) =>
+    this.database.transaction(
+      'r',
+      [this.database.items, this.database.metadata],
+      async () => ({
+        item: await this.item(id),
+        generation: await this.database.generation(),
+      }),
+    );
+  editorScratch = () =>
+    this.database.transaction(
+      'r',
+      [this.database.scratchpads, this.database.metadata],
+      async () => ({
+        scratch: await this.scratch(),
+        generation: await this.database.generation(),
+      }),
+    );
+  private async checkGeneration(expected?: string) {
+    if (
+      expected !== undefined &&
+      expected !== (await this.database.generation())
+    )
+      throw new EditConflictError();
+  }
   columns = (boardId: string) =>
     this.database.columns.where('boardId').equals(boardId).sortBy('orderKey');
   items = (boardId: string) =>
@@ -354,8 +379,10 @@ export class WorkspaceRepository {
       >
     >,
     expected?: Partial<Pick<Item, 'title' | 'description'>>,
+    generation?: string,
   ) {
     return this.transaction(async () => {
+      await this.checkGeneration(generation);
       const old = await this.item(id);
       if (!old) throw Error('Item not found');
       for (const field of ['title', 'description'] as const) {
@@ -537,10 +564,11 @@ export class WorkspaceRepository {
       await this.database.items.put(touch(item!));
     });
   }
-  async saveScratch(content: string, expected?: string) {
+  async saveScratch(content: string, expected?: string, generation?: string) {
     if (content.length > 1000000)
       throw Error('Notes exceed the 1 MB text limit');
     return this.transaction(async () => {
+      await this.checkGeneration(generation);
       const old = await this.scratch();
       if (expected !== undefined && (old?.content || '') !== expected)
         throw new EditConflictError();

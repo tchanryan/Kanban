@@ -23,7 +23,11 @@ import { workItemActions } from '../services/workItemActions';
 import { ColumnEditor } from './board/ColumnEditor';
 import { ColumnView } from './board/ColumnView';
 import { boardCollision } from './board/collision';
-import { indexItemTags, filterBoardItems } from './board/selectors';
+import {
+  indexItemTags,
+  filterBoardItems,
+  groupItemsByColumn,
+} from './board/selectors';
 export function BoardView({
   boardId,
   onOpen,
@@ -96,6 +100,7 @@ export function BoardView({
     itemTags,
     today,
   );
+  const itemsByColumn = groupItemsByColumn(filtered);
   return (
     <div
       className="board-area"
@@ -213,7 +218,7 @@ export function BoardView({
                   key={column.id}
                   column={column}
                   itemTags={itemTags}
-                  items={filtered.filter((i) => i.columnId === column.id)}
+                  items={itemsByColumn[column.id] || []}
                   onOpen={onOpen}
                   onEdit={() => setEditing(column)}
                   run={run}

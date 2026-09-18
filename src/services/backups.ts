@@ -161,6 +161,12 @@ export async function replaceBackup(
   await flushDrafts();
   await database.transaction('rw', database.tables, async () => {
     const before = await exportBackup(database);
+    // Change the dataset identity in the same transaction as the replacement.
+    // Old editors must not overwrite restored records even if their text matches.
+    await database.metadata.put({
+      id: 'generation',
+      value: crypto.randomUUID(),
+    });
     await database.snapshots.add({
       id: crypto.randomUUID(),
       createdAt: new Date().toISOString(),

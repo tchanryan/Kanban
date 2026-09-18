@@ -29,6 +29,8 @@ export function Modal({
   useEffect(() => {
     const previous = document.activeElement;
     ref.current?.showModal();
+    // React's autoFocus runs before a native dialog becomes visible.
+    ref.current?.querySelector<HTMLElement>('[data-autofocus]')?.focus();
     return () => {
       if (previous instanceof HTMLElement) previous.focus();
     };

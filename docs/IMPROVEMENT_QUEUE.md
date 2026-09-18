@@ -1,0 +1,17 @@
+# Improvement queue
+
+Work in this order. Finish implementation and relevant verification before starting the next item.
+
+1. **Complete — Cross-tab data protection.** Transactional dataset identity prevents stale writes after replacement, even when restored text is identical. Drafts keep their original save guard until deliberately rebased. Three two-tab browser regressions pass (replacement, clear and deletion); all 39 unit tests pass, including rollback and cross-connection identity tests.
+2. **Complete — App updates while editing.** New integration test builds and serves two production versions. It verifies failed-draft restart blocking, flushing a still-focused pending edit, restart into the new build, offline reload, Markdown, Archive and Settings. Passed against real service workers.
+3. **Complete — Large-board responsiveness.** Removed per-task progress subscriptions and grouped column items in one pass. Three-run local medians: board render 605 → 522 ms, filter 466 → 427 ms. These are modest local improvements, not cross-device guarantees. Scale, pointer/keyboard dragging and project-progress regressions pass.
+4. **Automated audit complete — Keyboard and screen-reader usability.** Fixed initial dialog field focus. New desktop/mobile keyboard journeys verify capture, search, details, focus restoration, modal focus trapping and nested confirmation. Existing axe checks pass. A human NVDA/VoiceOver speech-output audit is still required; this environment's automated checks cannot certify that experience.
+5. **Review complete; hosted verification pending — Dependency updates.** Applied compatible GitHub Actions updates locally, including matching Pages and CodeQL action versions. Deferred TypeScript 7 because the installed lint parser supports versions below 6.1. See [dependency decisions and manual accessibility checklist](DEPENDENCY_REVIEW.md). Remote dependency PRs have not been merged or closed.
+
+Baseline: commit `80b189f`; 37 unit tests and 22 browser tests. GitHub Quality and CodeQL passed on this commit and the subsequent merge into main. Pages tests passed; deployment was blocked by Pages configuration.
+
+Final local verification (16 September 2026): lint, strict typecheck, all 39 unit tests, production builds at `/` and `/Kanban/`, and all 28 browser tests at each path passed. Browser runs used installed Chrome on Windows and took about 1.3 minutes each. Formatting and whitespace checks pass. Existing build size advisory remains (~550.5 kB main JavaScript, ~170.3 kB gzip).
+
+Publication (17 September 2026): changes are pushed to `codex` in [PR #9](https://github.com/tchanryan/Kanban/pull/9). The first hosted run passed 27 browser tests and exposed a keyboard-drag timing race. Commit `e21bf4b` waits for visible drag movement before dropping; five repeated local runs passed. See the PR checks for current hosted results. Pages source is now GitHub Actions; deployment of this change awaits merge. Manual speech-output acceptance remains outstanding.
+
+A subsequent run exposed the underlying keyboard collision issue: the active card was excluded even at keyboard lift, selecting a neighbour before navigation. Keyboard collision detection now retains the active target; pointer targeting still excludes it. The regression also checks that lifting and dropping without navigation preserves order.

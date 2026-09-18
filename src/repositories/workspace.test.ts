@@ -36,7 +36,7 @@ describe('transactional workspace', () => {
     db.close();
     await db.open();
     expect((await repo.item(item.id))?.title).toBe('Capture');
-    expect(db.verno).toBe(3);
+    expect(db.verno).toBe(4);
   });
   it('tracks first start, completion, reopen and recompletion without fabricated starts', async () => {
     const inbox = await column('Inbox');

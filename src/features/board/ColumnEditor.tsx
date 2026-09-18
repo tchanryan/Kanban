@@ -51,6 +51,7 @@ export function ColumnEditor({
           Column name
           <input
             autoFocus
+            data-autofocus
             value={name}
             onChange={(e) => setName(e.target.value)}
             required

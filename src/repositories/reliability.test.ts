@@ -81,6 +81,42 @@ it('rolls back replacement and its snapshot when a write fails', async () => {
   db.items.hook('creating').unsubscribe(fail);
   expect((await repo.item(item.id))?.title).toBe('Original');
   expect(await db.snapshots.count()).toBe(0);
+  expect(await db.generation()).toBe('initial');
+});
+
+it('rejects edits from another connection after replacement even when original text is unchanged', async () => {
+  const item = await repo.create(boardId, 'Same title');
+  await repo.saveScratch('Same notes');
+  const otherDatabase = new Database(db.name);
+  const other = new WorkspaceRepository(otherDatabase);
+  try {
+    const editor = await other.editorItem(item.id);
+    const notes = await other.editorScratch();
+    await replaceBackup(await exportBackup(db), true, db);
+    await expect(
+      other.update(
+        item.id,
+        { description: 'Old draft' },
+        { description: '' },
+        editor.generation,
+      ),
+    ).rejects.toThrow('restore');
+    await expect(
+      other.saveScratch('Old notes', 'Same notes', notes.generation),
+    ).rejects.toThrow('restore');
+    expect((await repo.item(item.id))?.description).toBe('');
+    expect((await repo.scratch())?.content).toBe('Same notes');
+    const current = await other.editorItem(item.id);
+    await other.update(
+      item.id,
+      { description: 'Reviewed draft' },
+      { description: '' },
+      current.generation,
+    );
+    expect((await repo.item(item.id))?.description).toBe('Reviewed draft');
+  } finally {
+    otherDatabase.close();
+  }
 });
 it('caps snapshots and rejects malformed references without partial changes', async () => {
   await repo.create(boardId, 'Keep');

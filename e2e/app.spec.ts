@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { setup, task, move, confirm, column } from './helpers';
+import { setup, task, move, confirm, column, keyboardDrag } from './helpers';
 test('empty first run, keyboard capture, lifecycle and persistence', async ({
   page,
 }) => {
@@ -183,12 +183,11 @@ test('column safety, manual order, and desktop / mobile presentation', async ({
   await setup(page);
   await task(page, 'First task');
   await task(page, 'Second task');
-  await page
-    .getByRole('button', { name: 'Drag Second task', exact: true })
-    .focus();
-  await page.keyboard.press('Space');
-  await page.keyboard.press('ArrowUp');
-  await page.keyboard.press('Space');
+  await keyboardDrag(
+    page,
+    page.getByRole('button', { name: 'Drag Second task', exact: true }),
+    'ArrowUp',
+  );
   await expect(page.locator('.card-title').first()).toHaveText('Second task');
   await page
     .getByRole('button', { name: 'Configure Working', exact: true })

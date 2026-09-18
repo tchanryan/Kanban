@@ -14,6 +14,20 @@ const deferred = () => {
   return { promise, resolve };
 };
 describe('draft concurrency', () => {
+  it('retains the original save guard across replacement rerenders until explicitly rebased', async () => {
+    const original = vi.fn().mockResolvedValue(undefined);
+    const replacement = vi.fn().mockResolvedValue(undefined);
+    editDraft('test-generation', 'First edit', original, 'Same stored text');
+    editDraft(
+      'test-generation',
+      'Continued edit',
+      replacement,
+      'Same stored text',
+    );
+    await flushDraft('test-generation');
+    expect(original).toHaveBeenCalledWith('Continued edit', 'Same stored text');
+    expect(replacement).not.toHaveBeenCalled();
+  });
   it('retains the original baseline across edits and external rerenders', async () => {
     const save = vi.fn().mockResolvedValue(undefined);
     editDraft('test-conflict', 'My first edit', save, 'Original');

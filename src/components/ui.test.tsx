@@ -85,9 +85,14 @@ describe('safe editable content', () => {
     );
     expect(screen.getByLabelText('Retained')).toHaveValue('Recovery text');
     await screen.findByRole('button', { name: 'Retry' });
+    // Storage recovers, but retry must keep the original dataset guard rather
+    // than silently adopting the callback from a newly mounted editor.
+    fail.mockResolvedValue(undefined);
     fireEvent.click(screen.getByRole('button', { name: 'Retry' }));
     await waitFor(() =>
-      expect(success).toHaveBeenCalledWith('Recovery text', 'Original'),
+      expect(screen.getByRole('status')).toHaveTextContent('Saved'),
     );
+    expect(fail).toHaveBeenLastCalledWith('Recovery text', 'Original');
+    expect(success).not.toHaveBeenCalled();
   });
 });

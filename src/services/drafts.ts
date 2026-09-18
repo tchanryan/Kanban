@@ -49,7 +49,7 @@ export function editDraft(
   const old = drafts.get(id);
   drafts.set(id, {
     text,
-    save,
+    save: old?.save ?? save,
     baseValue: old?.baseValue ?? baseValue,
     label,
     status: 'Saving…',

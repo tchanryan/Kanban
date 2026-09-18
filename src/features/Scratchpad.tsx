@@ -3,8 +3,10 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { workspace } from '../repositories/workspace';
 import { Autosave, Markdown } from '../components/ui';
 export function Scratchpad() {
-  const scratch = useLiveQuery(async () => workspace.scratch(), []);
+  const result = useLiveQuery(() => workspace.editorScratch(), []);
+  const scratch = result?.scratch;
   const [notesPreview, setNotesPreview] = useState(false);
+  if (!result) return <p role="status">Loading notes…</p>;
   return (
     <section className="scratchpad">
       <div className="section-heading">
@@ -21,7 +23,9 @@ export function Scratchpad() {
           label="Scratchpad"
           draftKey="scratchpad-global"
           value={scratch?.content || ''}
-          save={(text, expected) => workspace.saveScratch(text, expected)}
+          save={(text, expected) =>
+            workspace.saveScratch(text, expected, result.generation)
+          }
           multiline
         />
       )}

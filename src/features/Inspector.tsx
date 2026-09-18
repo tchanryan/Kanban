@@ -23,10 +23,7 @@ export function Inspector({
   const [narrow, setNarrow] = useState(
     () => window.matchMedia('(max-width: 950px)').matches,
   );
-  const result = useLiveQuery(
-    async () => ({ item: await workspace.item(id) }),
-    [id],
-  );
+  const result = useLiveQuery(() => workspace.editorItem(id), [id]);
   const item = result?.item;
   const cols =
     useLiveQuery(
@@ -114,7 +111,7 @@ export function Inspector({
         value={item.title}
         save={(title, expected) =>
           workspace
-            .update(id, { title }, { title: expected })
+            .update(id, { title }, { title: expected }, result?.generation)
             .then((item) => item.title)
         }
       />
@@ -271,7 +268,12 @@ export function Inspector({
           label="Description"
           value={item.description}
           save={(description, expected) =>
-            workspace.update(id, { description }, { description: expected })
+            workspace.update(
+              id,
+              { description },
+              { description: expected },
+              result?.generation,
+            )
           }
           multiline
         />
