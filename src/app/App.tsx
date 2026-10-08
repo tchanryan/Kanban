@@ -1,10 +1,11 @@
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { HashRouter, Link, useLocation, useNavigate } from 'react-router-dom';
-import { useLiveQuery } from 'dexie-react-hooks';
+import { useWorkspaceQuery } from '../components/useWorkspaceQuery';
+import { QueryStatus } from '../components/QueryStatus';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import { Search, PanelRightClose, Plus } from 'lucide-react';
-import { workspace } from '../repositories/workspace';
+import { workspace, services } from '../app/services';
 import { BoardView } from '../features/Board';
 import type { Run } from '../services/operations';
 import { SearchDialog } from '../features/SearchDialog';
@@ -29,34 +30,23 @@ import { Sidebar } from './Sidebar';
 function Shell() {
   const location = useLocation();
   const navigate = useNavigate();
-  const root = useLiveQuery(async () => workspace.root(), []);
+  const rootQuery = useWorkspaceQuery('root');
+  const root = rootQuery.data;
   const projectId = location.pathname.startsWith('/projects/')
     ? location.pathname.split('/')[2]
     : undefined;
-  const project = useLiveQuery(
-    async () =>
-      projectId ? workspace.item(projectId) : Promise.resolve(undefined),
-    [projectId],
-  );
-  const projectBoard = useLiveQuery(
-    async () =>
-      projectId
-        ? workspace.projectBoard(projectId)
-        : Promise.resolve(undefined),
-    [projectId],
-  );
+  const projectQuery = useWorkspaceQuery('item', projectId ?? '');
+  const projectBoardQuery = useWorkspaceQuery('projectBoard', projectId ?? '');
+  const project = projectId ? projectQuery.data : undefined;
+  const projectBoard = projectBoardQuery.data;
   const board = projectId ? projectBoard : root;
-  const columns =
-    useLiveQuery(
-      async () => (board ? workspace.columns(board.id) : Promise.resolve([])),
-      [board?.id],
-    ) || [];
-  const children =
-    useLiveQuery(
-      async () =>
-        projectId ? workspace.children(projectId) : Promise.resolve([]),
-      [projectId],
-    ) || [];
+  const columnsQuery = useWorkspaceQuery('columns', board?.id ?? '');
+  const childrenQuery = useWorkspaceQuery('children', projectId ?? '');
+  const columns = columnsQuery.status === 'ready' ? columnsQuery.data : [];
+  const children = childrenQuery.data ?? [];
+  const shellQueries = projectId
+    ? [projectQuery, projectBoardQuery, columnsQuery, childrenQuery]
+    : [rootQuery, columnsQuery];
   const [selected, setSelected] = useState<string | null>(null);
   const [search, setSearch] = useState(false);
   const [creating, setCreating] = useState<Item['kind'] | null>(null);
@@ -253,11 +243,22 @@ function Shell() {
             {notice}
           </div>
         )}
+        {services.platform.recovery &&
+          location.pathname === '/' &&
+          columnsQuery.status === 'ready' &&
+          columns.length === 0 && (
+            <p className="notice">
+              Moving from the website? Export a backup there, then{' '}
+              <Link to="/settings">review it in Settings</Link>. Your browser
+              workspace stays unchanged.
+            </p>
+          )}
         <main className={isBoard ? 'workspace-layout' : 'route-layout'}>
           {isBoard ? (
             <>
               <div className="board-content">
-                {project && (
+                <QueryStatus queries={shellQueries} label="workspace" />
+                {project && childrenQuery.status === 'ready' && (
                   <div
                     className={`project-heading color-${project.projectColorToken || 'violet'}`}
                   >
@@ -297,7 +298,9 @@ function Shell() {
                     )}
                   </div>
                 )}
-                {board ? (
+                {shellQueries.some(
+                  (query) => query.status !== 'ready',
+                ) ? null : board ? (
                   <BoardView
                     key={board.id}
                     boardId={board.id}

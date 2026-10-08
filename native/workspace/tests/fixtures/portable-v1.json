@@ -1,0 +1,244 @@
+{
+  "format": "kanban-calendar",
+  "version": 1,
+  "exportedAt": "2026-01-01T12:00:00.000Z",
+  "boards": [
+    {
+      "id": "10000000-0000-4000-8000-000000000001",
+      "createdAt": "2026-01-01T12:00:00.000Z",
+      "updatedAt": "2026-01-01T12:00:00.000Z",
+      "revision": 1,
+      "kind": "root",
+      "projectId": null,
+      "name": "Dashboard"
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000006",
+      "createdAt": "2026-01-01T12:00:00.000Z",
+      "updatedAt": "2026-01-01T12:00:00.000Z",
+      "revision": 1,
+      "kind": "project",
+      "projectId": "10000000-0000-4000-8000-000000000004",
+      "name": "Migration project"
+    }
+  ],
+  "columns": [
+    {
+      "id": "10000000-0000-4000-8000-000000000002",
+      "createdAt": "2026-01-01T12:00:00.000Z",
+      "updatedAt": "2026-01-01T12:00:00.000Z",
+      "revision": 1,
+      "boardId": "10000000-0000-4000-8000-000000000001",
+      "name": "Inbox",
+      "orderKey": "a0",
+      "isDefaultNewItemColumn": true,
+      "startsWorkOnFirstEntry": false,
+      "completesItemOnEntry": false
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000007",
+      "createdAt": "2026-01-01T12:00:00.000Z",
+      "updatedAt": "2026-01-01T12:00:00.000Z",
+      "revision": 1,
+      "boardId": "10000000-0000-4000-8000-000000000006",
+      "name": "todo",
+      "orderKey": "a0",
+      "isDefaultNewItemColumn": true,
+      "startsWorkOnFirstEntry": false,
+      "completesItemOnEntry": false
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000008",
+      "createdAt": "2026-01-01T12:00:00.000Z",
+      "updatedAt": "2026-01-01T12:00:00.000Z",
+      "revision": 1,
+      "boardId": "10000000-0000-4000-8000-000000000006",
+      "name": "in-progress",
+      "orderKey": "a1",
+      "isDefaultNewItemColumn": false,
+      "startsWorkOnFirstEntry": true,
+      "completesItemOnEntry": false
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000009",
+      "createdAt": "2026-01-01T12:00:00.000Z",
+      "updatedAt": "2026-01-01T12:00:00.000Z",
+      "revision": 1,
+      "boardId": "10000000-0000-4000-8000-000000000006",
+      "name": "completed",
+      "orderKey": "a2",
+      "isDefaultNewItemColumn": false,
+      "startsWorkOnFirstEntry": false,
+      "completesItemOnEntry": true
+    }
+  ],
+  "items": [
+    {
+      "id": "10000000-0000-4000-8000-000000000004",
+      "createdAt": "2026-01-01T12:00:00.000Z",
+      "updatedAt": "2026-01-01T12:00:00.000Z",
+      "revision": 2,
+      "kind": "project",
+      "boardId": "10000000-0000-4000-8000-000000000001",
+      "columnId": "10000000-0000-4000-8000-000000000002",
+      "parentProjectId": null,
+      "title": "Migration project",
+      "description": "",
+      "priority": "medium",
+      "plannedStartDate": null,
+      "dueDate": null,
+      "firstStartedAt": null,
+      "completedAt": null,
+      "archivedAt": null,
+      "archiveAfter": null,
+      "orderKey": "a0",
+      "projectColorToken": "violet"
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000010",
+      "createdAt": "2026-01-01T12:00:00.000Z",
+      "updatedAt": "2026-01-01T12:00:00.000Z",
+      "revision": 3,
+      "kind": "task",
+      "boardId": "10000000-0000-4000-8000-000000000006",
+      "columnId": "10000000-0000-4000-8000-000000000007",
+      "parentProjectId": "10000000-0000-4000-8000-000000000004",
+      "title": "Child task",
+      "description": "Preserve 😀 café 東京\nsecond line",
+      "priority": "medium",
+      "plannedStartDate": "2026-01-02",
+      "dueDate": "2026-02-03",
+      "firstStartedAt": null,
+      "completedAt": null,
+      "archivedAt": null,
+      "archiveAfter": null,
+      "orderKey": "a0",
+      "projectColorToken": null
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000012",
+      "createdAt": "2026-01-01T12:00:00.000Z",
+      "updatedAt": "2026-01-01T12:00:00.000Z",
+      "revision": 4,
+      "kind": "task",
+      "boardId": "10000000-0000-4000-8000-000000000001",
+      "columnId": "10000000-0000-4000-8000-000000000003",
+      "parentProjectId": null,
+      "title": "Archived former column",
+      "description": "",
+      "priority": "medium",
+      "plannedStartDate": null,
+      "dueDate": null,
+      "firstStartedAt": "2026-01-01T12:00:00.000Z",
+      "completedAt": null,
+      "archivedAt": "2026-01-01T12:00:00.000Z",
+      "archiveAfter": null,
+      "orderKey": "a1",
+      "projectColorToken": null
+    }
+  ],
+  "events": [
+    {
+      "id": "10000000-0000-4000-8000-000000000005",
+      "itemId": "10000000-0000-4000-8000-000000000004",
+      "type": "created",
+      "fromColumnId": null,
+      "toColumnId": "10000000-0000-4000-8000-000000000002",
+      "occurredAt": "2026-01-01T12:00:00.000Z"
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000011",
+      "itemId": "10000000-0000-4000-8000-000000000010",
+      "type": "created",
+      "fromColumnId": null,
+      "toColumnId": "10000000-0000-4000-8000-000000000007",
+      "occurredAt": "2026-01-01T12:00:00.000Z"
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000013",
+      "itemId": "10000000-0000-4000-8000-000000000012",
+      "type": "created",
+      "fromColumnId": null,
+      "toColumnId": "10000000-0000-4000-8000-000000000002",
+      "occurredAt": "2026-01-01T12:00:00.000Z"
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000014",
+      "itemId": "10000000-0000-4000-8000-000000000012",
+      "type": "moved",
+      "fromColumnId": "10000000-0000-4000-8000-000000000002",
+      "toColumnId": "10000000-0000-4000-8000-000000000003",
+      "occurredAt": "2026-01-01T12:00:00.000Z"
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000015",
+      "itemId": "10000000-0000-4000-8000-000000000012",
+      "type": "completed",
+      "fromColumnId": "10000000-0000-4000-8000-000000000002",
+      "toColumnId": "10000000-0000-4000-8000-000000000003",
+      "occurredAt": "2026-01-01T12:00:00.000Z"
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000016",
+      "itemId": "10000000-0000-4000-8000-000000000012",
+      "type": "archived",
+      "fromColumnId": "10000000-0000-4000-8000-000000000003",
+      "toColumnId": "10000000-0000-4000-8000-000000000003",
+      "occurredAt": "2026-01-01T12:00:00.000Z"
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000017",
+      "itemId": "10000000-0000-4000-8000-000000000012",
+      "type": "moved",
+      "fromColumnId": "10000000-0000-4000-8000-000000000003",
+      "toColumnId": "10000000-0000-4000-8000-000000000002",
+      "occurredAt": "2026-01-01T12:00:00.000Z"
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000018",
+      "itemId": "10000000-0000-4000-8000-000000000012",
+      "type": "reopened",
+      "fromColumnId": "10000000-0000-4000-8000-000000000003",
+      "toColumnId": "10000000-0000-4000-8000-000000000002",
+      "occurredAt": "2026-01-01T12:00:00.000Z"
+    }
+  ],
+  "tags": [
+    {
+      "id": "10000000-0000-4000-8000-000000000019",
+      "createdAt": "2026-01-01T12:00:00.000Z",
+      "updatedAt": "2026-01-01T12:00:00.000Z",
+      "revision": 1,
+      "name": "Shared tag",
+      "colorToken": "teal"
+    }
+  ],
+  "relations": [
+    {
+      "itemId": "10000000-0000-4000-8000-000000000004",
+      "tagId": "10000000-0000-4000-8000-000000000019"
+    },
+    {
+      "itemId": "10000000-0000-4000-8000-000000000010",
+      "tagId": "10000000-0000-4000-8000-000000000019"
+    }
+  ],
+  "scratchpads": [
+    {
+      "id": "global",
+      "content": "Browser original notes\nDo not modify source",
+      "createdAt": "2026-01-01T12:00:00.000Z",
+      "updatedAt": "2026-01-01T12:00:00.000Z",
+      "revision": 1
+    }
+  ],
+  "settings": [
+    {
+      "id": "app",
+      "calendarShowProjects": true,
+      "calendarShowTopLevelTasks": false,
+      "calendarShowProjectTasks": true,
+      "calendarMode": "compare"
+    }
+  ]
+}

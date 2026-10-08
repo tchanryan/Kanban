@@ -1057,6 +1057,9 @@ kbd {
 .settings-section p {
   line-height: 1.7;
 }
+.storage-path {
+  overflow-wrap: anywhere;
+}
 .stats {
   display: flex;
   gap: 30px;

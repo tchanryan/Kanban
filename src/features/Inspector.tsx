@@ -1,13 +1,14 @@
-import { workItemActions } from '../services/workItemActions';
+import { workItemActions } from '../app/services';
 import { TagPicker } from './TagPicker';
 import { confirmAction } from '../services/confirm';
 import { useEffect, useRef, useState } from 'react';
-import { useLiveQuery } from 'dexie-react-hooks';
-import { workspace } from '../repositories/workspace';
+import { useWorkspaceQuery } from '../components/useWorkspaceQuery';
+import { QueryStatus } from '../components/QueryStatus';
+import { workspace } from '../app/services';
 import { colors, type Item, type Tag } from '../domain/model';
 import { Autosave, Markdown } from '../components/ui';
 import type { Run } from '../services/operations';
-import { deleteWorkItem } from '../services/mutations';
+import { deleteWorkItem } from '../app/services';
 import { Link } from 'react-router-dom';
 import { useModalIsolation } from '../components/useModalIsolation';
 export function Inspector({
@@ -23,15 +24,13 @@ export function Inspector({
   const [narrow, setNarrow] = useState(
     () => window.matchMedia('(max-width: 950px)').matches,
   );
-  const result = useLiveQuery(() => workspace.editorItem(id), [id]);
+  const itemQuery = useWorkspaceQuery('editorItem', id);
+  const result = itemQuery.data;
   const item = result?.item;
-  const cols =
-    useLiveQuery(
-      async () =>
-        item ? workspace.columns(item.boardId) : Promise.resolve([]),
-      [item?.boardId],
-    ) || [];
-  const events = useLiveQuery(async () => workspace.history(id), [id]) || [];
+  const columnsQuery = useWorkspaceQuery('columns', item?.boardId ?? '');
+  const historyQuery = useWorkspaceQuery('history', id);
+  const cols = columnsQuery.data ?? [];
+  const events = historyQuery.data ?? [];
   const [preview, setPreview] = useState(false);
   useEffect(() => {
     const media = window.matchMedia('(max-width: 950px)');
@@ -39,7 +38,7 @@ export function Inspector({
     media.addEventListener('change', change);
     return () => media.removeEventListener('change', change);
   }, []);
-  const loadedId = item?.id;
+  const loadedId = itemQuery.status === 'ready' ? item?.id : undefined;
   useModalIsolation(panel, narrow && !!loadedId);
   useEffect(() => {
     const previous = document.activeElement;
@@ -49,10 +48,10 @@ export function Inspector({
         previous.focus();
     };
   }, [loadedId]);
-  if (!item)
+  if (!item || itemQuery.status !== 'ready')
     return (
       <aside className="inspector">
-        {result ? (
+        {itemQuery.status === 'ready' ? (
           <>
             <h2>Item unavailable</h2>
             <p>
@@ -64,7 +63,7 @@ export function Inspector({
             </p>
           </>
         ) : (
-          'Loading details…'
+          <QueryStatus queries={[itemQuery]} label="details" />
         )}
         <button onClick={onClose}>Close</button>
       </aside>
@@ -99,6 +98,10 @@ export function Inspector({
       }}
     >
       <header>
+        <QueryStatus
+          queries={[columnsQuery, historyQuery]}
+          label="item context"
+        />
         <span className="eyebrow">{item.kind} details</span>
         <button aria-label="Close details" onClick={onClose}>
           ×
@@ -107,6 +110,7 @@ export function Inspector({
       <Autosave
         key={`${id}-title`}
         draftKey={`${id}-title`}
+        generation={result?.generation}
         label="Title"
         value={item.title}
         save={(title, expected) =>
@@ -131,7 +135,11 @@ export function Inspector({
       </label>
       <label className="field">
         Move to…
-        <select value={item.columnId} onChange={(e) => move(e.target.value)}>
+        <select
+          disabled={columnsQuery.status !== 'ready'}
+          value={item.columnId}
+          onChange={(e) => move(e.target.value)}
+        >
           {cols.map((c) => (
             <option key={c.id} value={c.id}>
               {c.name}
@@ -190,7 +198,12 @@ export function Inspector({
       )}
       <TagPicker itemId={id} run={run} />
       <details>
-        <summary>History · {events.length} events</summary>
+        <summary>
+          History
+          {historyQuery.status === 'ready'
+            ? ` · ${events.length} events`
+            : ' · unavailable'}
+        </summary>
         <ol className="history">
           {events.map((e) => (
             <li key={e.id}>
@@ -265,6 +278,7 @@ export function Inspector({
         <Autosave
           key={`${id}-description`}
           draftKey={`${id}-description`}
+          generation={result?.generation}
           label="Description"
           value={item.description}
           save={(description, expected) =>

@@ -1,15 +1,19 @@
 import { useState } from 'react';
-import { useLiveQuery } from 'dexie-react-hooks';
+import { useWorkspaceQuery } from '../components/useWorkspaceQuery';
+import { QueryStatus } from '../components/QueryStatus';
 import { ColorPicker } from '../components/ColorPicker';
 import { confirmAction } from '../services/confirm';
-import { workspace } from '../repositories/workspace';
+import { workspace } from '../app/services';
 import type { Tag } from '../domain/model';
 import type { Run } from '../services/operations';
 export function TagManager({ run }: { run: Run }) {
-  const tags = useLiveQuery(async () => workspace.tags(), []) || [];
+  const tagsQuery = useWorkspaceQuery('tags');
+  const tags = tagsQuery.data ?? [];
   const [name, setName] = useState('');
   const [color, setColor] = useState<Tag['colorToken']>('violet');
   const [editId, setEditId] = useState<string | undefined>();
+  if (tagsQuery.status !== 'ready')
+    return <QueryStatus queries={[tagsQuery]} label="tags" />;
   return (
     <section className="settings-section">
       <h2>Tags</h2>

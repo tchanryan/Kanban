@@ -1,6 +1,7 @@
 // In-memory drafts outlive editors. The original field value is retained until
 // a successful write, so another tab's edit cannot silently become our baseline.
 export interface Draft {
+  recoveryState?: string;
   text: string;
   baseValue: string;
   label: string;
@@ -45,7 +46,9 @@ export function editDraft(
   save: Draft['save'],
   baseValue = '',
   label = id,
+  generation?: string,
 ) {
+  void generation;
   const old = drafts.get(id);
   drafts.set(id, {
     text,
@@ -64,7 +67,13 @@ export function editDraft(
     }, 550),
   );
 }
-export function rebaseDraft(id: string, value: string, save: Draft['save']) {
+export function rebaseDraft(
+  id: string,
+  value: string,
+  save: Draft['save'],
+  generation?: string,
+) {
+  void generation;
   const old = drafts.get(id);
   if (old) {
     drafts.set(id, {
@@ -77,6 +86,8 @@ export function rebaseDraft(id: string, value: string, save: Draft['save']) {
     emit(id);
   }
 }
+export const recoveryDescription =
+  'These edits have not been saved. They are retained in this tab until you save or discard them. Download the text before closing the browser if you cannot resolve a save error.';
 export async function flushDraft(id: string): Promise<void> {
   clearTimeout(timers.get(id));
   timers.delete(id);

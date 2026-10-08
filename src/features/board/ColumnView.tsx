@@ -6,7 +6,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical, Settings2, Plus } from 'lucide-react';
-import { workspace } from '../../repositories/workspace';
+import { workspace } from '../../app/services';
 import type { Column, Item, Tag } from '../../domain/model';
 import type { Run } from '../../services/operations';
 import { Card } from './Card';

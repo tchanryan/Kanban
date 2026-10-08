@@ -52,12 +52,14 @@ export function Autosave({
   save,
   label,
   draftKey,
+  generation,
   multiline = false,
 }: {
   value: string;
   save: (value: string, expected: string) => Promise<unknown>;
   label: string;
   draftKey: string;
+  generation?: string | undefined;
   multiline?: boolean;
 }) {
   const draft = useSyncExternalStore(
@@ -74,7 +76,7 @@ export function Autosave({
     'aria-label': label,
     value: draft?.text ?? value,
     onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-      editDraft(draftKey, e.target.value, save, value, label),
+      editDraft(draftKey, e.target.value, save, value, label, generation),
     onBlur: () => {
       void flushDraft(draftKey).catch(() => undefined);
     },
@@ -93,7 +95,7 @@ export function Autosave({
           <button
             type="button"
             onClick={async () => {
-              editDraft(draftKey, draft.text, save, value, label);
+              editDraft(draftKey, draft.text, save, value, label, generation);
               void flushDraft(draftKey).catch(() => undefined);
             }}
           >
@@ -101,6 +103,9 @@ export function Autosave({
           </button>
         )}
       </span>
+      {draft?.recoveryState && (
+        <small role="status">{draft.recoveryState}</small>
+      )}
       {draft?.status.startsWith('Save failed') && (
         <div className="draft-recovery">
           <p role="alert">{draft.error}</p>
@@ -115,7 +120,7 @@ export function Autosave({
                     'Discard this unsaved draft and use the currently saved text?',
                   )
                 )
-                  discardDrafts(draftKey);
+                  await discardDrafts(draftKey);
               }}
             >
               Use saved version
@@ -128,7 +133,7 @@ export function Autosave({
                     'Replace the currently saved text with your draft?',
                   )
                 ) {
-                  rebaseDraft(draftKey, value, save);
+                  rebaseDraft(draftKey, value, save, generation);
                   void flushDraft(draftKey).catch(() => undefined);
                 }
               }}

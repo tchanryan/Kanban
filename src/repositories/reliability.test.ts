@@ -5,7 +5,7 @@ import {
   exportBackup,
   replaceBackup,
   validateBackup,
-} from '../services/backups';
+} from '../test/backupHelpers';
 import { generateNKeysBetween } from 'fractional-indexing';
 let db: Database, repo: WorkspaceRepository, boardId: string;
 beforeEach(async () => {
@@ -20,6 +20,27 @@ beforeEach(async () => {
   });
 });
 afterEach(async () => db.delete());
+it('restores to a missing-column fallback without colliding with existing order keys', async () => {
+  const archived = await repo.create(boardId, 'Archived');
+  const existing = await repo.create(boardId, 'Existing');
+  await db.items.update(archived.id, {
+    columnId: crypto.randomUUID(),
+    orderKey: existing.orderKey,
+    archivedAt: new Date().toISOString(),
+  });
+  expect(await repo.restore(archived.id)).toBe(true);
+  const restored = (await repo.item(archived.id))!;
+  expect(restored.columnId).toBe(existing.columnId);
+  expect(restored.orderKey > existing.orderKey).toBe(true);
+  validateBackup(await exportBackup(db));
+});
+it('rejects independent child restoration without changing lifecycle or revision', async () => {
+  const project = await repo.create(boardId, 'Project', 'project');
+  const childBoard = (await repo.projectBoard(project.id))!;
+  const child = await repo.create(childBoard.id, 'Child');
+  await expect(repo.restore(child.id)).rejects.toThrow('top-level');
+  expect((await repo.item(child.id))?.revision).toBe(child.revision);
+});
 it('rejects stale field edits while allowing unrelated metadata changes', async () => {
   const item = await repo.create(boardId, 'Original');
   await repo.update(item.id, { priority: 'high' });

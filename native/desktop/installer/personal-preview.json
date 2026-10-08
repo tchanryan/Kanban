@@ -1,0 +1,14 @@
+{
+  "productName": "Kanban Calendar Preview",
+  "identifier": "io.github.tchanryan.kanban.preview",
+  "bundle": {
+    "active": true,
+    "targets": ["nsis"],
+    "useLocalToolsDir": true,
+    "windows": {
+      "allowDowngrades": false,
+      "webviewInstallMode": { "type": "downloadBootstrapper", "silent": true },
+      "nsis": { "installMode": "currentUser", "languages": ["English"] }
+    }
+  }
+}

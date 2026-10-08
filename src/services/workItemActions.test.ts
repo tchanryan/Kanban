@@ -2,6 +2,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Database } from '../db/database';
 import { WorkspaceRepository } from '../repositories/workspace';
 import { WorkItemActions } from './workItemActions';
+import { WorkItemMutations } from './workItemMutations';
+import { webDrafts } from '../platform/web/drafts';
 
 let database: Database;
 let repository: WorkspaceRepository;
@@ -24,7 +26,11 @@ beforeEach(async () => {
     if (name === 'Done') doneId = column.id;
   }
   confirm.mockReset();
-  actions = new WorkItemActions(repository, confirm);
+  actions = new WorkItemActions(
+    repository,
+    confirm,
+    new WorkItemMutations(repository, webDrafts),
+  );
 });
 afterEach(async () => database.delete());
 

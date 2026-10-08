@@ -1,5 +1,13 @@
+import type {
+  Workspace,
+  ArchivePage,
+  EditorItem,
+  EditorScratch,
+  WorkspaceCounts,
+} from '../contracts/workspace';
+import type { Board, Relation, ItemEvent, Scratchpad } from '../domain/model';
 import { generateKeyBetween } from 'fractional-indexing';
-import { db, Database } from '../db/database';
+import type { Database } from '../db/database';
 import { EditConflictError } from '../domain/errors';
 import {
   newMeta,
@@ -15,12 +23,12 @@ import {
   type Tag,
   type Settings,
 } from '../domain/model';
-export class WorkspaceRepository {
-  constructor(public readonly database: Database) {}
-  private transaction<T>(fn: () => Promise<T>) {
+export class WorkspaceRepository implements Workspace {
+  public constructor(private readonly database: Database) {}
+  private transaction<T>(fn: () => Promise<T>): Promise<T> {
     return this.database.transaction('rw', this.database.tables, fn);
   }
-  async initialize() {
+  public async initialize(): Promise<Board> {
     return this.transaction(async () => {
       let root = await this.database.boards
         .where('kind')
@@ -40,12 +48,15 @@ export class WorkspaceRepository {
       return root;
     });
   }
-  root = () => this.database.boards.where('kind').equals('root').first();
-  board = (id: string) => this.database.boards.get(id);
-  projectBoard = (id: string) =>
+  public root = (): Promise<Board | undefined> =>
+    this.database.boards.where('kind').equals('root').first();
+  public board = (id: string): Promise<Board | undefined> =>
+    this.database.boards.get(id);
+  public projectBoard = (id: string): Promise<Board | undefined> =>
     this.database.boards.where('projectId').equals(id).first();
-  item = (id: string) => this.database.items.get(id);
-  editorItem = (id: string) =>
+  public item = (id: string): Promise<Item | undefined> =>
+    this.database.items.get(id);
+  public editorItem = (id: string): Promise<EditorItem> =>
     this.database.transaction(
       'r',
       [this.database.items, this.database.metadata],
@@ -54,7 +65,7 @@ export class WorkspaceRepository {
         generation: await this.database.generation(),
       }),
     );
-  editorScratch = () =>
+  public editorScratch = (): Promise<EditorScratch> =>
     this.database.transaction(
       'r',
       [this.database.scratchpads, this.database.metadata],
@@ -63,33 +74,33 @@ export class WorkspaceRepository {
         generation: await this.database.generation(),
       }),
     );
-  private async checkGeneration(expected?: string) {
+  private async checkGeneration(expected?: string): Promise<void> {
     if (
       expected !== undefined &&
       expected !== (await this.database.generation())
     )
       throw new EditConflictError();
   }
-  columns = (boardId: string) =>
+  public columns = (boardId: string): Promise<Column[]> =>
     this.database.columns.where('boardId').equals(boardId).sortBy('orderKey');
-  items = (boardId: string) =>
+  public items = (boardId: string): Promise<Item[]> =>
     this.database.items
       .where('activeBoardId')
       .equals(boardId)
       .sortBy('orderKey');
-  children = (id: string) =>
+  public children = (id: string): Promise<Item[]> =>
     this.database.items.where('parentProjectId').equals(id).toArray();
-  tags = () => this.database.tags.orderBy('name').toArray();
-  itemTags = (id: string) =>
+  public tags = (): Promise<Tag[]> =>
+    this.database.tags.orderBy('name').toArray();
+  public itemTags = (id: string): Promise<Relation[]> =>
     this.database.relations.where('itemId').equals(id).toArray();
-  history = (id: string) =>
+  public history = (id: string): Promise<ItemEvent[]> =>
     this.database.events.where('itemId').equals(id).sortBy('occurredAt');
-  scratch = () => this.database.scratchpads.get('global');
-  settings = async () =>
+  public scratch = (): Promise<Scratchpad | undefined> =>
+    this.database.scratchpads.get('global');
+  public settings = async (): Promise<Settings> =>
     (await this.database.settings.get('app')) || defaultSettings;
-  snapshots = () =>
-    this.database.snapshots.orderBy('createdAt').reverse().toArray();
-  async calendarItems(includeStandaloneTasks = false) {
+  public async calendarItems(includeStandaloneTasks = false): Promise<Item[]> {
     if (includeStandaloneTasks) return this.database.items.toArray();
     const projects = await this.database.items
       .where('kind')
@@ -103,7 +114,7 @@ export class WorkspaceRepository {
       : [];
     return [...projects, ...children];
   }
-  async search(query: string, archived = false) {
+  public async search(query: string, archived = false): Promise<Item[]> {
     const q = query.trim().toLocaleLowerCase();
     if (!q) return [];
     const tags = (await this.tags()).filter((t) =>
@@ -139,7 +150,7 @@ export class WorkspaceRepository {
       .limit(100)
       .toArray();
   }
-  async boardTagRelations(boardId: string) {
+  public async boardTagRelations(boardId: string): Promise<Relation[]> {
     const ids = await this.database.items
       .where('boardId')
       .equals(boardId)
@@ -148,11 +159,11 @@ export class WorkspaceRepository {
       ? this.database.relations.where('itemId').anyOf(ids).toArray()
       : [];
   }
-  async archivePage(
+  public async archivePage(
     query = '',
     cursor: { date: string; id: string } | null = null,
     limit = 50,
-  ) {
+  ): Promise<ArchivePage> {
     const pageSize = Math.max(1, Math.min(200, limit));
     const records = await this.database.items
       .where('[archiveSortAt+id]')
@@ -185,7 +196,7 @@ export class WorkspaceRepository {
     type:
       'created' | 'moved' | 'completed' | 'reopened' | 'archived' | 'restored',
     from: string | null,
-  ) {
+  ): Promise<void> {
     await this.database.events.add({
       id: crypto.randomUUID(),
       itemId: item.id,
@@ -195,7 +206,7 @@ export class WorkspaceRepository {
       occurredAt: new Date().toISOString(),
     });
   }
-  async saveColumn(
+  public async saveColumn(
     boardId: string,
     input: Pick<
       Column,
@@ -205,7 +216,7 @@ export class WorkspaceRepository {
       | 'completesItemOnEntry'
     >,
     id?: string,
-  ) {
+  ): Promise<Column> {
     return this.transaction(async () => {
       if (!(await this.board(boardId))) throw Error('Board not found');
       const cols = await this.columns(boardId);
@@ -258,7 +269,10 @@ export class WorkspaceRepository {
       return col;
     });
   }
-  async reorderColumn(id: string, beforeId: string | null) {
+  public async reorderColumn(
+    id: string,
+    beforeId: string | null,
+  ): Promise<void> {
     return this.transaction(async () => {
       const col = await this.database.columns.get(id);
       if (!col) throw Error('Column not found');
@@ -276,11 +290,11 @@ export class WorkspaceRepository {
       });
     });
   }
-  async deleteColumn(
+  public async deleteColumn(
     id: string,
     destinationId: string | null,
     confirmed = false,
-  ) {
+  ): Promise<void> {
     if (!confirmed) throw Error('Confirm column deletion');
     return this.transaction(async () => {
       const col = await this.database.columns.get(id);
@@ -305,12 +319,12 @@ export class WorkspaceRepository {
       await this.database.columns.delete(id);
     });
   }
-  async create(
+  public async create(
     boardId: string,
     title: string,
     kind: Item['kind'] = 'task',
     columnId?: string,
-  ) {
+  ): Promise<Item> {
     return this.transaction(async () => {
       const board = await this.board(boardId);
       if (!board) throw Error('Board not found');
@@ -365,7 +379,7 @@ export class WorkspaceRepository {
       return item;
     });
   }
-  async update(
+  public async update(
     id: string,
     patch: Partial<
       Pick<
@@ -380,7 +394,7 @@ export class WorkspaceRepository {
     >,
     expected?: Partial<Pick<Item, 'title' | 'description'>>,
     generation?: string,
-  ) {
+  ): Promise<Item> {
     return this.transaction(async () => {
       await this.checkGeneration(generation);
       const old = await this.item(id);
@@ -394,12 +408,12 @@ export class WorkspaceRepository {
       return item;
     });
   }
-  async move(
+  public async move(
     id: string,
     columnId: string,
     beforeId: string | null = null,
     confirmed = false,
-  ) {
+  ): Promise<Item> {
     return this.transaction(() =>
       this.moveInternal(id, columnId, beforeId, confirmed),
     );
@@ -409,7 +423,7 @@ export class WorkspaceRepository {
     columnId: string,
     beforeId: string | null,
     confirmed: boolean,
-  ) {
+  ): Promise<Item> {
     const old = await this.item(id);
     const col = await this.database.columns.get(columnId);
     if (!old || !col || old.boardId !== col.boardId)
@@ -458,7 +472,7 @@ export class WorkspaceRepository {
     }
     return item;
   }
-  async archive(id: string, confirmed = false) {
+  public async archive(id: string, confirmed = false): Promise<void> {
     return this.transaction(async () => {
       const item = await this.item(id);
       if (!item || item.parentProjectId)
@@ -471,7 +485,7 @@ export class WorkspaceRepository {
       await this.event(next, 'archived', item.columnId);
     });
   }
-  async maintain() {
+  public async maintain(): Promise<void> {
     return this.transaction(async () => {
       const eligible = await this.database.items
         .where('archiveAfter')
@@ -481,20 +495,31 @@ export class WorkspaceRepository {
       for (const x of eligible) await this.archive(x.id);
     });
   }
-  async restore(id: string) {
+  public async restore(id: string): Promise<boolean> {
     return this.transaction(async () => {
       const old = await this.item(id);
       if (!old) throw Error('Item not found');
+      if (old.parentProjectId)
+        throw Error('Only top-level items can be restored');
       const cols = await this.columns(old.boardId);
       const col =
         cols.find((c) => c.id === old.columnId) ||
         cols.find((c) => c.isDefaultNewItemColumn);
       if (!col) throw Error('Create a dashboard column before restoring');
       const fallback = old.columnId !== col.id;
+      const siblings = fallback
+        ? await this.database.items
+            .where('columnId')
+            .equals(col.id)
+            .sortBy('orderKey')
+        : [];
       const now = new Date().toISOString();
       const next = {
         ...(fallback ? transition(old, col, now) : touch(old)),
         columnId: col.id,
+        orderKey: fallback
+          ? generateKeyBetween(siblings.at(-1)?.orderKey || null, null)
+          : old.orderKey,
         archivedAt: null,
         archiveAfter:
           col.completesItemOnEntry && old.completedAt ? archiveTime(now) : null,
@@ -504,7 +529,7 @@ export class WorkspaceRepository {
       return fallback;
     });
   }
-  async deleteItem(id: string, confirmed = false) {
+  public async deleteItem(id: string, confirmed = false): Promise<void> {
     if (!confirmed) throw Error('Confirm permanent deletion');
     return this.transaction(async () => {
       const item = await this.item(id);
@@ -526,7 +551,11 @@ export class WorkspaceRepository {
       await this.database.items.bulkDelete(ids);
     });
   }
-  async saveTag(name: string, colorToken: Tag['colorToken'], id?: string) {
+  public async saveTag(
+    name: string,
+    colorToken: Tag['colorToken'],
+    id?: string,
+  ): Promise<Tag> {
     return this.transaction(async () => {
       const tags = await this.tags();
       if (
@@ -548,13 +577,17 @@ export class WorkspaceRepository {
       return tag;
     });
   }
-  async deleteTag(id: string) {
+  public async deleteTag(id: string): Promise<void> {
     return this.transaction(async () => {
       await this.database.relations.where('tagId').equals(id).delete();
       await this.database.tags.delete(id);
     });
   }
-  async setTag(itemId: string, tagId: string, selected: boolean) {
+  public async setTag(
+    itemId: string,
+    tagId: string,
+    selected: boolean,
+  ): Promise<void> {
     return this.transaction(async () => {
       if (!(await this.item(itemId)) || !(await this.database.tags.get(tagId)))
         throw Error('Item or tag no longer exists');
@@ -564,7 +597,11 @@ export class WorkspaceRepository {
       await this.database.items.put(touch(item!));
     });
   }
-  async saveScratch(content: string, expected?: string, generation?: string) {
+  public async saveScratch(
+    content: string,
+    expected?: string,
+    generation?: string,
+  ): Promise<void> {
     if (content.length > 1000000)
       throw Error('Notes exceed the 1 MB text limit');
     return this.transaction(async () => {
@@ -582,12 +619,17 @@ export class WorkspaceRepository {
       });
     });
   }
-  async saveSettings(patch: Partial<Omit<Settings, 'id'>>) {
-    return this.transaction(async () =>
-      this.database.settings.put({ ...(await this.settings()), ...patch }),
-    );
+  public async saveSettings(
+    patch: Partial<Omit<Settings, 'id'>>,
+  ): Promise<void> {
+    await this.transaction(async () => {
+      await this.database.settings.put({
+        ...(await this.settings()),
+        ...patch,
+      });
+    });
   }
-  async counts() {
+  public async counts(): Promise<WorkspaceCounts> {
     return {
       items: await this.database.items.count(),
       boards: await this.database.boards.count(),
@@ -596,4 +638,3 @@ export class WorkspaceRepository {
     };
   }
 }
-export const workspace = new WorkspaceRepository(db);

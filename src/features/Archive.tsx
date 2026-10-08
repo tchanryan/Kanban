@@ -1,9 +1,10 @@
 import { confirmAction } from '../services/confirm';
 import { useState } from 'react';
-import { useLiveQuery } from 'dexie-react-hooks';
+import { useWorkspaceQuery } from '../components/useWorkspaceQuery';
+import { QueryStatus } from '../components/QueryStatus';
 import { Archive } from 'lucide-react';
-import { workspace } from '../repositories/workspace';
-import { deleteWorkItem } from '../services/mutations';
+import { workspace } from '../app/services';
+import { deleteWorkItem } from '../app/services';
 import type { Item } from '../domain/model';
 import type { Run } from '../services/operations';
 type Cursor = { date: string; id: string } | null;
@@ -17,10 +18,8 @@ export function ArchivePage({
   const [q, setQ] = useState('');
   const [cursors, setCursors] = useState<Cursor[]>([null]);
   const cursor = cursors.at(-1) || null;
-  const page = useLiveQuery(
-    () => workspace.archivePage(q, cursor),
-    [q, cursor],
-  );
+  const pageQuery = useWorkspaceQuery('archivePage', q, cursor);
+  const page = pageQuery.data;
   const items = page?.items || [];
   return (
     <section className="archive-page">
@@ -38,8 +37,8 @@ export function ArchivePage({
         }}
         placeholder="Search archive…"
       />
-      {!page ? (
-        <p role="status">Loading archive…</p>
+      {pageQuery.status !== 'ready' ? (
+        <QueryStatus queries={[pageQuery]} label="archive" />
       ) : !items.length ? (
         <div className="empty-state">
           <Archive size={32} />

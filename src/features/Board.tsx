@@ -1,5 +1,7 @@
 import { useState, type CSSProperties } from 'react';
-import { useLiveQuery } from 'dexie-react-hooks';
+import { useWorkspaceQuery } from '../components/useWorkspaceQuery';
+import { QueryStatus } from '../components/QueryStatus';
+import { useViewReadiness } from '../components/useViewReadiness';
 import {
   DndContext,
   PointerSensor,
@@ -15,11 +17,11 @@ import {
   horizontalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { Plus, ZoomIn, ZoomOut } from 'lucide-react';
-import { workspace } from '../repositories/workspace';
+import { workspace } from '../app/services';
 import type { Column, Item } from '../domain/model';
 import { useToday } from '../components/useToday';
 import type { Run } from '../services/operations';
-import { workItemActions } from '../services/workItemActions';
+import { workItemActions } from '../app/services';
 import { ColumnEditor } from './board/ColumnEditor';
 import { ColumnView } from './board/ColumnView';
 import { boardCollision } from './board/collision';
@@ -38,19 +40,28 @@ export function BoardView({
   run: Run;
 }) {
   const today = useToday();
-  const cols =
-    useLiveQuery(async () => workspace.columns(boardId), [boardId]) || [];
-  const items =
-    useLiveQuery(async () => workspace.items(boardId), [boardId]) || [];
+  const columnsQuery = useWorkspaceQuery('columns', boardId);
+  const itemsQuery = useWorkspaceQuery('items', boardId);
+  const cols = columnsQuery.data ?? [];
+  const items = itemsQuery.data ?? [];
   const [editing, setEditing] = useState<Column | null | undefined>();
   const [zoom, setZoom] = useState(100);
   const [priority, setPriority] = useState('');
   const [kind, setKind] = useState('');
   const [due, setDue] = useState('');
   const [tag, setTag] = useState('');
-  const tags = useLiveQuery(async () => workspace.tags(), []) || [];
-  const relations =
-    useLiveQuery(() => workspace.boardTagRelations(boardId), [boardId]) || [];
+  const tagsQuery = useWorkspaceQuery('tags');
+  const relationsQuery = useWorkspaceQuery('boardTagRelations', boardId);
+  const tags = tagsQuery.data ?? [];
+  const relations = relationsQuery.data ?? [];
+  useViewReadiness({
+    name: 'kanban:board-ready',
+    key: boardId,
+    itemCount: items.length,
+    ready: [columnsQuery, itemsQuery, tagsQuery, relationsQuery].every(
+      (query) => query.status === 'ready',
+    ),
+  });
   const itemTags = indexItemTags(tags, relations);
   const [drag, setDrag] = useState('');
   const sensors = useSensors(
@@ -101,6 +112,9 @@ export function BoardView({
     today,
   );
   const itemsByColumn = groupItemsByColumn(filtered);
+  const queries = [columnsQuery, itemsQuery, tagsQuery, relationsQuery];
+  if (queries.some((query) => query.status !== 'ready'))
+    return <QueryStatus queries={queries} label="board" />;
   return (
     <div
       className="board-area"

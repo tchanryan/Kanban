@@ -1,14 +1,16 @@
-import { useLiveQuery } from 'dexie-react-hooks';
+import { useWorkspaceQuery } from '../../components/useWorkspaceQuery';
+import { QueryStatus } from '../../components/QueryStatus';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical, Trash2 } from 'lucide-react';
-import { workspace } from '../../repositories/workspace';
 import { overdue, localDate, type Item, type Tag } from '../../domain/model';
 import type { Run } from '../../services/operations';
-import { workItemActions } from '../../services/workItemActions';
+import { workItemActions } from '../../app/services';
 function ProjectProgress({ item }: { item: Item }) {
-  const children =
-    useLiveQuery(() => workspace.children(item.id), [item.id]) || [];
+  const childrenQuery = useWorkspaceQuery('children', item.id);
+  if (childrenQuery.status !== 'ready')
+    return <QueryStatus queries={[childrenQuery]} label="project progress" />;
+  const children = childrenQuery.data;
   const completedCount = children.filter((child) => child.completedAt).length;
   return (
     <div className="progress">

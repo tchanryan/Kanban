@@ -1,16 +1,20 @@
 import type { Item } from '../domain/model';
-import { workspace, type WorkspaceRepository } from '../repositories/workspace';
-import { confirmAction } from './confirm';
-import { deleteWorkItem } from './mutations';
+import type { WorkItemRepository } from '../contracts/workspace';
+import type { ItemDeletion } from './workItemMutations';
 
 /** Coordinates user confirmation; the repository owns transactional data rules. */
 export class WorkItemActions {
-  constructor(
-    private readonly repository: WorkspaceRepository,
+  public constructor(
+    private readonly repository: WorkItemRepository,
     private readonly confirm: (message: string) => Promise<boolean>,
+    private readonly deletion: ItemDeletion,
   ) {}
 
-  async move(item: Item, columnId: string, beforeId: string | null = null) {
+  public async move(
+    item: Item,
+    columnId: string,
+    beforeId: string | null = null,
+  ): Promise<void> {
     const columns = await this.repository.columns(item.boardId);
     const destination = columns.find((column) => column.id === columnId);
     let confirmed = false;
@@ -32,7 +36,7 @@ export class WorkItemActions {
     await this.repository.move(item.id, columnId, beforeId, confirmed);
   }
 
-  async deleteFromTile(item: Item) {
+  public async deleteFromTile(item: Item): Promise<void> {
     if (
       !(await this.confirm(
         `Permanently delete ${item.kind} “${item.title}” and its history? This cannot be undone.`,
@@ -49,8 +53,6 @@ export class WorkItemActions {
       )
         return;
     }
-    await deleteWorkItem(item.id, true, this.repository);
+    await this.deletion.delete(item.id, true);
   }
 }
-
-export const workItemActions = new WorkItemActions(workspace, confirmAction);

@@ -1,0 +1,3017 @@
+{
+  "steps": [
+    {
+      "kind": "command",
+      "name": "initialize",
+      "idCounter": 0,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000001",
+        "createdAt": "2026-01-01T12:00:00.000Z",
+        "updatedAt": "2026-01-01T12:00:00.000Z",
+        "revision": 1,
+        "kind": "root",
+        "projectId": null,
+        "name": "Dashboard"
+      }
+    },
+    {
+      "kind": "command",
+      "name": "initialize",
+      "idCounter": 1,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000001",
+        "createdAt": "2026-01-01T12:00:00.000Z",
+        "updatedAt": "2026-01-01T12:00:00.000Z",
+        "revision": 1,
+        "kind": "root",
+        "projectId": null,
+        "name": "Dashboard"
+      }
+    },
+    {
+      "kind": "query",
+      "name": "root",
+      "idCounter": 1,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000001",
+        "createdAt": "2026-01-01T12:00:00.000Z",
+        "updatedAt": "2026-01-01T12:00:00.000Z",
+        "revision": 1,
+        "kind": "root",
+        "projectId": null,
+        "name": "Dashboard"
+      }
+    },
+    {
+      "kind": "query",
+      "name": "board",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000001"
+      },
+      "idCounter": 1,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000001",
+        "createdAt": "2026-01-01T12:00:00.000Z",
+        "updatedAt": "2026-01-01T12:00:00.000Z",
+        "revision": 1,
+        "kind": "root",
+        "projectId": null,
+        "name": "Dashboard"
+      }
+    },
+    {
+      "kind": "command",
+      "name": "saveColumn",
+      "args": {
+        "boardId": "00000000-0000-4000-8000-000000000001",
+        "input": {
+          "name": " Inbox ",
+          "isDefaultNewItemColumn": true,
+          "startsWorkOnFirstEntry": false,
+          "completesItemOnEntry": false
+        }
+      },
+      "idCounter": 1,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000002",
+        "createdAt": "2026-01-01T12:00:00.000Z",
+        "updatedAt": "2026-01-01T12:00:00.000Z",
+        "revision": 1,
+        "boardId": "00000000-0000-4000-8000-000000000001",
+        "name": "Inbox",
+        "orderKey": "a0",
+        "isDefaultNewItemColumn": true,
+        "startsWorkOnFirstEntry": false,
+        "completesItemOnEntry": false
+      }
+    },
+    {
+      "kind": "command",
+      "name": "saveColumn",
+      "args": {
+        "boardId": "00000000-0000-4000-8000-000000000001",
+        "input": {
+          "name": "Doing",
+          "isDefaultNewItemColumn": false,
+          "startsWorkOnFirstEntry": true,
+          "completesItemOnEntry": false
+        }
+      },
+      "idCounter": 2,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000003",
+        "createdAt": "2026-01-01T12:00:00.000Z",
+        "updatedAt": "2026-01-01T12:00:00.000Z",
+        "revision": 1,
+        "boardId": "00000000-0000-4000-8000-000000000001",
+        "name": "Doing",
+        "orderKey": "a1",
+        "isDefaultNewItemColumn": false,
+        "startsWorkOnFirstEntry": true,
+        "completesItemOnEntry": false
+      }
+    },
+    {
+      "kind": "command",
+      "name": "saveColumn",
+      "args": {
+        "boardId": "00000000-0000-4000-8000-000000000001",
+        "input": {
+          "name": "Done",
+          "isDefaultNewItemColumn": false,
+          "startsWorkOnFirstEntry": false,
+          "completesItemOnEntry": true
+        }
+      },
+      "idCounter": 3,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000004",
+        "createdAt": "2026-01-01T12:00:00.000Z",
+        "updatedAt": "2026-01-01T12:00:00.000Z",
+        "revision": 1,
+        "boardId": "00000000-0000-4000-8000-000000000001",
+        "name": "Done",
+        "orderKey": "a2",
+        "isDefaultNewItemColumn": false,
+        "startsWorkOnFirstEntry": false,
+        "completesItemOnEntry": true
+      }
+    },
+    {
+      "kind": "command",
+      "name": "saveColumn",
+      "args": {
+        "boardId": "00000000-0000-4000-8000-000000000001",
+        "input": {
+          "name": "inbox",
+          "isDefaultNewItemColumn": false,
+          "startsWorkOnFirstEntry": false,
+          "completesItemOnEntry": false
+        }
+      },
+      "idCounter": 4,
+      "now": "2026-01-01T12:00:00.000Z",
+      "error": true
+    },
+    {
+      "kind": "command",
+      "name": "reorderColumn",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000004",
+        "beforeId": "00000000-0000-4000-8000-000000000003"
+      },
+      "idCounter": 4,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": null
+    },
+    {
+      "kind": "query",
+      "name": "columns",
+      "args": {
+        "boardId": "00000000-0000-4000-8000-000000000001"
+      },
+      "idCounter": 4,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": [
+        {
+          "id": "00000000-0000-4000-8000-000000000002",
+          "createdAt": "2026-01-01T12:00:00.000Z",
+          "updatedAt": "2026-01-01T12:00:00.000Z",
+          "revision": 1,
+          "boardId": "00000000-0000-4000-8000-000000000001",
+          "name": "Inbox",
+          "orderKey": "a0",
+          "isDefaultNewItemColumn": true,
+          "startsWorkOnFirstEntry": false,
+          "completesItemOnEntry": false
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000004",
+          "createdAt": "2026-01-01T12:00:00.000Z",
+          "updatedAt": "2026-01-01T12:00:00.000Z",
+          "revision": 2,
+          "boardId": "00000000-0000-4000-8000-000000000001",
+          "name": "Done",
+          "orderKey": "a0V",
+          "isDefaultNewItemColumn": false,
+          "startsWorkOnFirstEntry": false,
+          "completesItemOnEntry": true
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000003",
+          "createdAt": "2026-01-01T12:00:00.000Z",
+          "updatedAt": "2026-01-01T12:00:00.000Z",
+          "revision": 1,
+          "boardId": "00000000-0000-4000-8000-000000000001",
+          "name": "Doing",
+          "orderKey": "a1",
+          "isDefaultNewItemColumn": false,
+          "startsWorkOnFirstEntry": true,
+          "completesItemOnEntry": false
+        }
+      ]
+    },
+    {
+      "kind": "command",
+      "name": "create",
+      "args": {
+        "boardId": "00000000-0000-4000-8000-000000000001",
+        "title": "Project",
+        "kind": "project"
+      },
+      "idCounter": 4,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000005",
+        "createdAt": "2026-01-01T12:00:00.000Z",
+        "updatedAt": "2026-01-01T12:00:00.000Z",
+        "revision": 1,
+        "kind": "project",
+        "boardId": "00000000-0000-4000-8000-000000000001",
+        "columnId": "00000000-0000-4000-8000-000000000002",
+        "parentProjectId": null,
+        "title": "Project",
+        "description": "",
+        "priority": "medium",
+        "plannedStartDate": null,
+        "dueDate": null,
+        "firstStartedAt": null,
+        "completedAt": null,
+        "archivedAt": null,
+        "archiveAfter": null,
+        "orderKey": "a0",
+        "projectColorToken": "violet"
+      }
+    },
+    {
+      "kind": "query",
+      "name": "projectBoard",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000005"
+      },
+      "idCounter": 10,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000007",
+        "createdAt": "2026-01-01T12:00:00.000Z",
+        "updatedAt": "2026-01-01T12:00:00.000Z",
+        "revision": 1,
+        "kind": "project",
+        "projectId": "00000000-0000-4000-8000-000000000005",
+        "name": "Project"
+      }
+    },
+    {
+      "kind": "query",
+      "name": "columns",
+      "args": {
+        "boardId": "00000000-0000-4000-8000-000000000007"
+      },
+      "idCounter": 10,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": [
+        {
+          "id": "00000000-0000-4000-8000-000000000008",
+          "createdAt": "2026-01-01T12:00:00.000Z",
+          "updatedAt": "2026-01-01T12:00:00.000Z",
+          "revision": 1,
+          "boardId": "00000000-0000-4000-8000-000000000007",
+          "name": "todo",
+          "orderKey": "a0",
+          "isDefaultNewItemColumn": true,
+          "startsWorkOnFirstEntry": false,
+          "completesItemOnEntry": false
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000009",
+          "createdAt": "2026-01-01T12:00:00.000Z",
+          "updatedAt": "2026-01-01T12:00:00.000Z",
+          "revision": 1,
+          "boardId": "00000000-0000-4000-8000-000000000007",
+          "name": "in-progress",
+          "orderKey": "a1",
+          "isDefaultNewItemColumn": false,
+          "startsWorkOnFirstEntry": true,
+          "completesItemOnEntry": false
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000010",
+          "createdAt": "2026-01-01T12:00:00.000Z",
+          "updatedAt": "2026-01-01T12:00:00.000Z",
+          "revision": 1,
+          "boardId": "00000000-0000-4000-8000-000000000007",
+          "name": "completed",
+          "orderKey": "a2",
+          "isDefaultNewItemColumn": false,
+          "startsWorkOnFirstEntry": false,
+          "completesItemOnEntry": true
+        }
+      ]
+    },
+    {
+      "kind": "command",
+      "name": "create",
+      "args": {
+        "boardId": "00000000-0000-4000-8000-000000000007",
+        "title": "Child",
+        "kind": "task"
+      },
+      "idCounter": 10,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000011",
+        "createdAt": "2026-01-01T12:00:00.000Z",
+        "updatedAt": "2026-01-01T12:00:00.000Z",
+        "revision": 1,
+        "kind": "task",
+        "boardId": "00000000-0000-4000-8000-000000000007",
+        "columnId": "00000000-0000-4000-8000-000000000008",
+        "parentProjectId": "00000000-0000-4000-8000-000000000005",
+        "title": "Child",
+        "description": "",
+        "priority": "medium",
+        "plannedStartDate": null,
+        "dueDate": null,
+        "firstStartedAt": null,
+        "completedAt": null,
+        "archivedAt": null,
+        "archiveAfter": null,
+        "orderKey": "a0",
+        "projectColorToken": null
+      }
+    },
+    {
+      "kind": "command",
+      "name": "create",
+      "args": {
+        "boardId": "00000000-0000-4000-8000-000000000007",
+        "title": "Nested",
+        "kind": "project"
+      },
+      "idCounter": 12,
+      "now": "2026-01-01T12:00:00.000Z",
+      "error": true
+    },
+    {
+      "kind": "command",
+      "name": "create",
+      "args": {
+        "boardId": "00000000-0000-4000-8000-000000000001",
+        "title": " Task ",
+        "kind": "task",
+        "columnId": "00000000-0000-4000-8000-000000000002"
+      },
+      "idCounter": 12,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000013",
+        "createdAt": "2026-01-01T12:00:00.000Z",
+        "updatedAt": "2026-01-01T12:00:00.000Z",
+        "revision": 1,
+        "kind": "task",
+        "boardId": "00000000-0000-4000-8000-000000000001",
+        "columnId": "00000000-0000-4000-8000-000000000002",
+        "parentProjectId": null,
+        "title": "Task",
+        "description": "",
+        "priority": "medium",
+        "plannedStartDate": null,
+        "dueDate": null,
+        "firstStartedAt": null,
+        "completedAt": null,
+        "archivedAt": null,
+        "archiveAfter": null,
+        "orderKey": "a1",
+        "projectColorToken": null
+      }
+    },
+    {
+      "kind": "query",
+      "name": "item",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000013"
+      },
+      "idCounter": 14,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000013",
+        "createdAt": "2026-01-01T12:00:00.000Z",
+        "updatedAt": "2026-01-01T12:00:00.000Z",
+        "revision": 1,
+        "kind": "task",
+        "boardId": "00000000-0000-4000-8000-000000000001",
+        "columnId": "00000000-0000-4000-8000-000000000002",
+        "parentProjectId": null,
+        "title": "Task",
+        "description": "",
+        "priority": "medium",
+        "plannedStartDate": null,
+        "dueDate": null,
+        "firstStartedAt": null,
+        "completedAt": null,
+        "archivedAt": null,
+        "archiveAfter": null,
+        "orderKey": "a1",
+        "projectColorToken": null
+      }
+    },
+    {
+      "kind": "query",
+      "name": "items",
+      "args": {
+        "boardId": "00000000-0000-4000-8000-000000000001"
+      },
+      "idCounter": 14,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": [
+        {
+          "id": "00000000-0000-4000-8000-000000000005",
+          "createdAt": "2026-01-01T12:00:00.000Z",
+          "updatedAt": "2026-01-01T12:00:00.000Z",
+          "revision": 1,
+          "kind": "project",
+          "boardId": "00000000-0000-4000-8000-000000000001",
+          "columnId": "00000000-0000-4000-8000-000000000002",
+          "parentProjectId": null,
+          "title": "Project",
+          "description": "",
+          "priority": "medium",
+          "plannedStartDate": null,
+          "dueDate": null,
+          "firstStartedAt": null,
+          "completedAt": null,
+          "archivedAt": null,
+          "archiveAfter": null,
+          "orderKey": "a0",
+          "projectColorToken": "violet"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000013",
+          "createdAt": "2026-01-01T12:00:00.000Z",
+          "updatedAt": "2026-01-01T12:00:00.000Z",
+          "revision": 1,
+          "kind": "task",
+          "boardId": "00000000-0000-4000-8000-000000000001",
+          "columnId": "00000000-0000-4000-8000-000000000002",
+          "parentProjectId": null,
+          "title": "Task",
+          "description": "",
+          "priority": "medium",
+          "plannedStartDate": null,
+          "dueDate": null,
+          "firstStartedAt": null,
+          "completedAt": null,
+          "archivedAt": null,
+          "archiveAfter": null,
+          "orderKey": "a1",
+          "projectColorToken": null
+        }
+      ]
+    },
+    {
+      "kind": "query",
+      "name": "children",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000005"
+      },
+      "idCounter": 14,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": [
+        {
+          "id": "00000000-0000-4000-8000-000000000011",
+          "createdAt": "2026-01-01T12:00:00.000Z",
+          "updatedAt": "2026-01-01T12:00:00.000Z",
+          "revision": 1,
+          "kind": "task",
+          "boardId": "00000000-0000-4000-8000-000000000007",
+          "columnId": "00000000-0000-4000-8000-000000000008",
+          "parentProjectId": "00000000-0000-4000-8000-000000000005",
+          "title": "Child",
+          "description": "",
+          "priority": "medium",
+          "plannedStartDate": null,
+          "dueDate": null,
+          "firstStartedAt": null,
+          "completedAt": null,
+          "archivedAt": null,
+          "archiveAfter": null,
+          "orderKey": "a0",
+          "projectColorToken": null
+        }
+      ]
+    },
+    {
+      "kind": "command",
+      "name": "restore",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000011"
+      },
+      "idCounter": 14,
+      "now": "2026-01-01T12:00:00.000Z",
+      "error": true
+    },
+    {
+      "kind": "query",
+      "name": "editorItem",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000013"
+      },
+      "idCounter": 14,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": {
+        "item": {
+          "id": "00000000-0000-4000-8000-000000000013",
+          "createdAt": "2026-01-01T12:00:00.000Z",
+          "updatedAt": "2026-01-01T12:00:00.000Z",
+          "revision": 1,
+          "kind": "task",
+          "boardId": "00000000-0000-4000-8000-000000000001",
+          "columnId": "00000000-0000-4000-8000-000000000002",
+          "parentProjectId": null,
+          "title": "Task",
+          "description": "",
+          "priority": "medium",
+          "plannedStartDate": null,
+          "dueDate": null,
+          "firstStartedAt": null,
+          "completedAt": null,
+          "archivedAt": null,
+          "archiveAfter": null,
+          "orderKey": "a1",
+          "projectColorToken": null
+        },
+        "generation": "initial"
+      }
+    },
+    {
+      "kind": "command",
+      "name": "update",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000013",
+        "patch": {
+          "title": "Updated",
+          "description": "Some notes",
+          "priority": "high",
+          "plannedStartDate": "2026-01-01",
+          "dueDate": "2026-01-02",
+          "projectColorToken": null
+        },
+        "expected": {
+          "title": "Task"
+        },
+        "generation": "initial"
+      },
+      "idCounter": 14,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000013",
+        "createdAt": "2026-01-01T12:00:00.000Z",
+        "updatedAt": "2026-01-01T12:00:00.000Z",
+        "revision": 2,
+        "kind": "task",
+        "boardId": "00000000-0000-4000-8000-000000000001",
+        "columnId": "00000000-0000-4000-8000-000000000002",
+        "parentProjectId": null,
+        "title": "Updated",
+        "description": "Some notes",
+        "priority": "high",
+        "plannedStartDate": "2026-01-01",
+        "dueDate": "2026-01-02",
+        "firstStartedAt": null,
+        "completedAt": null,
+        "archivedAt": null,
+        "archiveAfter": null,
+        "orderKey": "a1",
+        "projectColorToken": null
+      }
+    },
+    {
+      "kind": "command",
+      "name": "update",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000013",
+        "patch": {
+          "title": "Stale"
+        },
+        "expected": {
+          "title": "Task"
+        }
+      },
+      "idCounter": 14,
+      "now": "2026-01-01T12:00:00.000Z",
+      "error": true
+    },
+    {
+      "kind": "command",
+      "name": "update",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000013",
+        "patch": {
+          "dueDate": "2025-01-01"
+        }
+      },
+      "idCounter": 14,
+      "now": "2026-01-01T12:00:00.000Z",
+      "error": true
+    },
+    {
+      "kind": "command",
+      "name": "update",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000013",
+        "patch": {
+          "plannedStartDate": null,
+          "dueDate": null
+        }
+      },
+      "idCounter": 14,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000013",
+        "createdAt": "2026-01-01T12:00:00.000Z",
+        "updatedAt": "2026-01-01T12:00:00.000Z",
+        "revision": 3,
+        "kind": "task",
+        "boardId": "00000000-0000-4000-8000-000000000001",
+        "columnId": "00000000-0000-4000-8000-000000000002",
+        "parentProjectId": null,
+        "title": "Updated",
+        "description": "Some notes",
+        "priority": "high",
+        "plannedStartDate": null,
+        "dueDate": null,
+        "firstStartedAt": null,
+        "completedAt": null,
+        "archivedAt": null,
+        "archiveAfter": null,
+        "orderKey": "a1",
+        "projectColorToken": null
+      }
+    },
+    {
+      "kind": "command",
+      "name": "move",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000013",
+        "columnId": "00000000-0000-4000-8000-000000000003",
+        "beforeId": null,
+        "confirmed": false
+      },
+      "idCounter": 14,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000013",
+        "createdAt": "2026-01-01T12:00:00.000Z",
+        "updatedAt": "2026-01-01T12:00:00.000Z",
+        "revision": 4,
+        "kind": "task",
+        "boardId": "00000000-0000-4000-8000-000000000001",
+        "columnId": "00000000-0000-4000-8000-000000000003",
+        "parentProjectId": null,
+        "title": "Updated",
+        "description": "Some notes",
+        "priority": "high",
+        "plannedStartDate": null,
+        "dueDate": null,
+        "firstStartedAt": "2026-01-01T12:00:00.000Z",
+        "completedAt": null,
+        "archivedAt": null,
+        "archiveAfter": null,
+        "orderKey": "a0",
+        "projectColorToken": null
+      }
+    },
+    {
+      "kind": "command",
+      "name": "move",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000013",
+        "columnId": "00000000-0000-4000-8000-000000000004",
+        "beforeId": null,
+        "confirmed": false
+      },
+      "idCounter": 15,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000013",
+        "createdAt": "2026-01-01T12:00:00.000Z",
+        "updatedAt": "2026-01-01T12:00:00.000Z",
+        "revision": 5,
+        "kind": "task",
+        "boardId": "00000000-0000-4000-8000-000000000001",
+        "columnId": "00000000-0000-4000-8000-000000000004",
+        "parentProjectId": null,
+        "title": "Updated",
+        "description": "Some notes",
+        "priority": "high",
+        "plannedStartDate": null,
+        "dueDate": null,
+        "firstStartedAt": "2026-01-01T12:00:00.000Z",
+        "completedAt": "2026-01-01T12:00:00.000Z",
+        "archivedAt": null,
+        "archiveAfter": "2026-01-15T12:00:00.000Z",
+        "orderKey": "a0",
+        "projectColorToken": null
+      }
+    },
+    {
+      "kind": "command",
+      "name": "move",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000013",
+        "columnId": "00000000-0000-4000-8000-000000000002",
+        "beforeId": null,
+        "confirmed": false
+      },
+      "idCounter": 17,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000013",
+        "createdAt": "2026-01-01T12:00:00.000Z",
+        "updatedAt": "2026-01-01T12:00:00.000Z",
+        "revision": 6,
+        "kind": "task",
+        "boardId": "00000000-0000-4000-8000-000000000001",
+        "columnId": "00000000-0000-4000-8000-000000000002",
+        "parentProjectId": null,
+        "title": "Updated",
+        "description": "Some notes",
+        "priority": "high",
+        "plannedStartDate": null,
+        "dueDate": null,
+        "firstStartedAt": "2026-01-01T12:00:00.000Z",
+        "completedAt": null,
+        "archivedAt": null,
+        "archiveAfter": null,
+        "orderKey": "a1",
+        "projectColorToken": null
+      }
+    },
+    {
+      "kind": "command",
+      "name": "move",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000013",
+        "columnId": "00000000-0000-4000-8000-000000000002",
+        "beforeId": "00000000-0000-4000-8000-000000000005",
+        "confirmed": false
+      },
+      "idCounter": 19,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000013",
+        "createdAt": "2026-01-01T12:00:00.000Z",
+        "updatedAt": "2026-01-01T12:00:00.000Z",
+        "revision": 7,
+        "kind": "task",
+        "boardId": "00000000-0000-4000-8000-000000000001",
+        "columnId": "00000000-0000-4000-8000-000000000002",
+        "parentProjectId": null,
+        "title": "Updated",
+        "description": "Some notes",
+        "priority": "high",
+        "plannedStartDate": null,
+        "dueDate": null,
+        "firstStartedAt": "2026-01-01T12:00:00.000Z",
+        "completedAt": null,
+        "archivedAt": null,
+        "archiveAfter": null,
+        "orderKey": "Zz",
+        "projectColorToken": null
+      }
+    },
+    {
+      "kind": "query",
+      "name": "history",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000013"
+      },
+      "idCounter": 19,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": [
+        {
+          "id": "00000000-0000-4000-8000-000000000014",
+          "itemId": "00000000-0000-4000-8000-000000000013",
+          "type": "created",
+          "fromColumnId": null,
+          "toColumnId": "00000000-0000-4000-8000-000000000002",
+          "occurredAt": "2026-01-01T12:00:00.000Z"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000015",
+          "itemId": "00000000-0000-4000-8000-000000000013",
+          "type": "moved",
+          "fromColumnId": "00000000-0000-4000-8000-000000000002",
+          "toColumnId": "00000000-0000-4000-8000-000000000003",
+          "occurredAt": "2026-01-01T12:00:00.000Z"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000016",
+          "itemId": "00000000-0000-4000-8000-000000000013",
+          "type": "moved",
+          "fromColumnId": "00000000-0000-4000-8000-000000000003",
+          "toColumnId": "00000000-0000-4000-8000-000000000004",
+          "occurredAt": "2026-01-01T12:00:00.000Z"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000017",
+          "itemId": "00000000-0000-4000-8000-000000000013",
+          "type": "completed",
+          "fromColumnId": "00000000-0000-4000-8000-000000000003",
+          "toColumnId": "00000000-0000-4000-8000-000000000004",
+          "occurredAt": "2026-01-01T12:00:00.000Z"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000018",
+          "itemId": "00000000-0000-4000-8000-000000000013",
+          "type": "moved",
+          "fromColumnId": "00000000-0000-4000-8000-000000000004",
+          "toColumnId": "00000000-0000-4000-8000-000000000002",
+          "occurredAt": "2026-01-01T12:00:00.000Z"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000019",
+          "itemId": "00000000-0000-4000-8000-000000000013",
+          "type": "reopened",
+          "fromColumnId": "00000000-0000-4000-8000-000000000004",
+          "toColumnId": "00000000-0000-4000-8000-000000000002",
+          "occurredAt": "2026-01-01T12:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "kind": "command",
+      "name": "move",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000005",
+        "columnId": "00000000-0000-4000-8000-000000000004",
+        "beforeId": null,
+        "confirmed": false
+      },
+      "idCounter": 19,
+      "now": "2026-01-01T12:00:00.000Z",
+      "error": true
+    },
+    {
+      "kind": "command",
+      "name": "move",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000011",
+        "columnId": "00000000-0000-4000-8000-000000000010",
+        "beforeId": null,
+        "confirmed": false
+      },
+      "idCounter": 19,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000011",
+        "createdAt": "2026-01-01T12:00:00.000Z",
+        "updatedAt": "2026-01-01T12:00:00.000Z",
+        "revision": 2,
+        "kind": "task",
+        "boardId": "00000000-0000-4000-8000-000000000007",
+        "columnId": "00000000-0000-4000-8000-000000000010",
+        "parentProjectId": "00000000-0000-4000-8000-000000000005",
+        "title": "Child",
+        "description": "",
+        "priority": "medium",
+        "plannedStartDate": null,
+        "dueDate": null,
+        "firstStartedAt": null,
+        "completedAt": "2026-01-01T12:00:00.000Z",
+        "archivedAt": null,
+        "archiveAfter": null,
+        "orderKey": "a0",
+        "projectColorToken": null
+      }
+    },
+    {
+      "kind": "command",
+      "name": "move",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000005",
+        "columnId": "00000000-0000-4000-8000-000000000004",
+        "beforeId": null,
+        "confirmed": false
+      },
+      "idCounter": 21,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000005",
+        "createdAt": "2026-01-01T12:00:00.000Z",
+        "updatedAt": "2026-01-01T12:00:00.000Z",
+        "revision": 2,
+        "kind": "project",
+        "boardId": "00000000-0000-4000-8000-000000000001",
+        "columnId": "00000000-0000-4000-8000-000000000004",
+        "parentProjectId": null,
+        "title": "Project",
+        "description": "",
+        "priority": "medium",
+        "plannedStartDate": null,
+        "dueDate": null,
+        "firstStartedAt": null,
+        "completedAt": "2026-01-01T12:00:00.000Z",
+        "archivedAt": null,
+        "archiveAfter": "2026-01-15T12:00:00.000Z",
+        "orderKey": "a0",
+        "projectColorToken": "violet"
+      }
+    },
+    {
+      "kind": "command",
+      "name": "saveTag",
+      "args": {
+        "name": " ÉCOLE ",
+        "colorToken": "teal"
+      },
+      "idCounter": 23,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000024",
+        "createdAt": "2026-01-01T12:00:00.000Z",
+        "updatedAt": "2026-01-01T12:00:00.000Z",
+        "revision": 1,
+        "name": "ÉCOLE",
+        "colorToken": "teal"
+      }
+    },
+    {
+      "kind": "command",
+      "name": "saveTag",
+      "args": {
+        "name": "école",
+        "colorToken": "blue"
+      },
+      "idCounter": 24,
+      "now": "2026-01-01T12:00:00.000Z",
+      "error": true
+    },
+    {
+      "kind": "command",
+      "name": "setTag",
+      "args": {
+        "itemId": "00000000-0000-4000-8000-000000000013",
+        "tagId": "00000000-0000-4000-8000-000000000024",
+        "selected": true
+      },
+      "idCounter": 24,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": null
+    },
+    {
+      "kind": "query",
+      "name": "tags",
+      "idCounter": 24,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": [
+        {
+          "id": "00000000-0000-4000-8000-000000000024",
+          "createdAt": "2026-01-01T12:00:00.000Z",
+          "updatedAt": "2026-01-01T12:00:00.000Z",
+          "revision": 1,
+          "name": "ÉCOLE",
+          "colorToken": "teal"
+        }
+      ]
+    },
+    {
+      "kind": "query",
+      "name": "itemTags",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000013"
+      },
+      "idCounter": 24,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": [
+        {
+          "itemId": "00000000-0000-4000-8000-000000000013",
+          "tagId": "00000000-0000-4000-8000-000000000024"
+        }
+      ]
+    },
+    {
+      "kind": "query",
+      "name": "boardTagRelations",
+      "args": {
+        "boardId": "00000000-0000-4000-8000-000000000001"
+      },
+      "idCounter": 24,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": [
+        {
+          "itemId": "00000000-0000-4000-8000-000000000013",
+          "tagId": "00000000-0000-4000-8000-000000000024"
+        }
+      ]
+    },
+    {
+      "kind": "query",
+      "name": "search",
+      "args": {
+        "query": "école",
+        "archived": false
+      },
+      "idCounter": 24,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": [
+        {
+          "id": "00000000-0000-4000-8000-000000000013",
+          "createdAt": "2026-01-01T12:00:00.000Z",
+          "updatedAt": "2026-01-01T12:00:00.000Z",
+          "revision": 8,
+          "kind": "task",
+          "boardId": "00000000-0000-4000-8000-000000000001",
+          "columnId": "00000000-0000-4000-8000-000000000002",
+          "parentProjectId": null,
+          "title": "Updated",
+          "description": "Some notes",
+          "priority": "high",
+          "plannedStartDate": null,
+          "dueDate": null,
+          "firstStartedAt": "2026-01-01T12:00:00.000Z",
+          "completedAt": null,
+          "archivedAt": null,
+          "archiveAfter": null,
+          "orderKey": "Zz",
+          "projectColorToken": null
+        }
+      ]
+    },
+    {
+      "kind": "query",
+      "name": "search",
+      "args": {
+        "query": "notes",
+        "archived": false
+      },
+      "idCounter": 24,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": [
+        {
+          "id": "00000000-0000-4000-8000-000000000013",
+          "createdAt": "2026-01-01T12:00:00.000Z",
+          "updatedAt": "2026-01-01T12:00:00.000Z",
+          "revision": 8,
+          "kind": "task",
+          "boardId": "00000000-0000-4000-8000-000000000001",
+          "columnId": "00000000-0000-4000-8000-000000000002",
+          "parentProjectId": null,
+          "title": "Updated",
+          "description": "Some notes",
+          "priority": "high",
+          "plannedStartDate": null,
+          "dueDate": null,
+          "firstStartedAt": "2026-01-01T12:00:00.000Z",
+          "completedAt": null,
+          "archivedAt": null,
+          "archiveAfter": null,
+          "orderKey": "Zz",
+          "projectColorToken": null
+        }
+      ]
+    },
+    {
+      "kind": "query",
+      "name": "search",
+      "args": {
+        "query": "",
+        "archived": false
+      },
+      "idCounter": 24,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": []
+    },
+    {
+      "kind": "query",
+      "name": "calendarItems",
+      "args": {
+        "includeStandaloneTasks": false
+      },
+      "idCounter": 24,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": [
+        {
+          "id": "00000000-0000-4000-8000-000000000005",
+          "createdAt": "2026-01-01T12:00:00.000Z",
+          "updatedAt": "2026-01-01T12:00:00.000Z",
+          "revision": 2,
+          "kind": "project",
+          "boardId": "00000000-0000-4000-8000-000000000001",
+          "columnId": "00000000-0000-4000-8000-000000000004",
+          "parentProjectId": null,
+          "title": "Project",
+          "description": "",
+          "priority": "medium",
+          "plannedStartDate": null,
+          "dueDate": null,
+          "firstStartedAt": null,
+          "completedAt": "2026-01-01T12:00:00.000Z",
+          "archivedAt": null,
+          "archiveAfter": "2026-01-15T12:00:00.000Z",
+          "orderKey": "a0",
+          "projectColorToken": "violet"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000011",
+          "createdAt": "2026-01-01T12:00:00.000Z",
+          "updatedAt": "2026-01-01T12:00:00.000Z",
+          "revision": 2,
+          "kind": "task",
+          "boardId": "00000000-0000-4000-8000-000000000007",
+          "columnId": "00000000-0000-4000-8000-000000000010",
+          "parentProjectId": "00000000-0000-4000-8000-000000000005",
+          "title": "Child",
+          "description": "",
+          "priority": "medium",
+          "plannedStartDate": null,
+          "dueDate": null,
+          "firstStartedAt": null,
+          "completedAt": "2026-01-01T12:00:00.000Z",
+          "archivedAt": null,
+          "archiveAfter": null,
+          "orderKey": "a0",
+          "projectColorToken": null
+        }
+      ]
+    },
+    {
+      "kind": "query",
+      "name": "calendarItems",
+      "args": {
+        "includeStandaloneTasks": true
+      },
+      "idCounter": 24,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": [
+        {
+          "id": "00000000-0000-4000-8000-000000000005",
+          "createdAt": "2026-01-01T12:00:00.000Z",
+          "updatedAt": "2026-01-01T12:00:00.000Z",
+          "revision": 2,
+          "kind": "project",
+          "boardId": "00000000-0000-4000-8000-000000000001",
+          "columnId": "00000000-0000-4000-8000-000000000004",
+          "parentProjectId": null,
+          "title": "Project",
+          "description": "",
+          "priority": "medium",
+          "plannedStartDate": null,
+          "dueDate": null,
+          "firstStartedAt": null,
+          "completedAt": "2026-01-01T12:00:00.000Z",
+          "archivedAt": null,
+          "archiveAfter": "2026-01-15T12:00:00.000Z",
+          "orderKey": "a0",
+          "projectColorToken": "violet"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000011",
+          "createdAt": "2026-01-01T12:00:00.000Z",
+          "updatedAt": "2026-01-01T12:00:00.000Z",
+          "revision": 2,
+          "kind": "task",
+          "boardId": "00000000-0000-4000-8000-000000000007",
+          "columnId": "00000000-0000-4000-8000-000000000010",
+          "parentProjectId": "00000000-0000-4000-8000-000000000005",
+          "title": "Child",
+          "description": "",
+          "priority": "medium",
+          "plannedStartDate": null,
+          "dueDate": null,
+          "firstStartedAt": null,
+          "completedAt": "2026-01-01T12:00:00.000Z",
+          "archivedAt": null,
+          "archiveAfter": null,
+          "orderKey": "a0",
+          "projectColorToken": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000013",
+          "createdAt": "2026-01-01T12:00:00.000Z",
+          "updatedAt": "2026-01-01T12:00:00.000Z",
+          "revision": 8,
+          "kind": "task",
+          "boardId": "00000000-0000-4000-8000-000000000001",
+          "columnId": "00000000-0000-4000-8000-000000000002",
+          "parentProjectId": null,
+          "title": "Updated",
+          "description": "Some notes",
+          "priority": "high",
+          "plannedStartDate": null,
+          "dueDate": null,
+          "firstStartedAt": "2026-01-01T12:00:00.000Z",
+          "completedAt": null,
+          "archivedAt": null,
+          "archiveAfter": null,
+          "orderKey": "Zz",
+          "projectColorToken": null
+        }
+      ]
+    },
+    {
+      "kind": "query",
+      "name": "scratch",
+      "idCounter": 24,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": null
+    },
+    {
+      "kind": "command",
+      "name": "saveScratch",
+      "args": {
+        "content": "Notes",
+        "expected": "",
+        "generation": "initial"
+      },
+      "idCounter": 24,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": null
+    },
+    {
+      "kind": "command",
+      "name": "saveScratch",
+      "args": {
+        "content": "Conflict",
+        "expected": ""
+      },
+      "idCounter": 24,
+      "now": "2026-01-01T12:00:00.000Z",
+      "error": true
+    },
+    {
+      "kind": "query",
+      "name": "editorScratch",
+      "idCounter": 24,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": {
+        "scratch": {
+          "id": "global",
+          "content": "Notes",
+          "createdAt": "2026-01-01T12:00:00.000Z",
+          "updatedAt": "2026-01-01T12:00:00.000Z",
+          "revision": 1
+        },
+        "generation": "initial"
+      }
+    },
+    {
+      "kind": "query",
+      "name": "settings",
+      "idCounter": 24,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": {
+        "id": "app",
+        "calendarShowProjects": true,
+        "calendarShowTopLevelTasks": false,
+        "calendarShowProjectTasks": false,
+        "calendarMode": "actual"
+      }
+    },
+    {
+      "kind": "command",
+      "name": "saveSettings",
+      "args": {
+        "patch": {
+          "calendarShowTopLevelTasks": true,
+          "calendarMode": "compare"
+        }
+      },
+      "idCounter": 24,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": null
+    },
+    {
+      "kind": "query",
+      "name": "settings",
+      "idCounter": 24,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": {
+        "id": "app",
+        "calendarShowProjects": true,
+        "calendarShowTopLevelTasks": true,
+        "calendarShowProjectTasks": false,
+        "calendarMode": "compare"
+      }
+    },
+    {
+      "kind": "command",
+      "name": "archive",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000011",
+        "confirmed": true
+      },
+      "idCounter": 24,
+      "now": "2026-01-01T12:00:00.000Z",
+      "error": true
+    },
+    {
+      "kind": "command",
+      "name": "archive",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000013",
+        "confirmed": false
+      },
+      "idCounter": 24,
+      "now": "2026-01-01T12:00:00.000Z",
+      "error": true
+    },
+    {
+      "kind": "command",
+      "name": "archive",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000013",
+        "confirmed": true
+      },
+      "idCounter": 24,
+      "now": "2026-01-01T12:00:00.000Z",
+      "value": null
+    },
+    {
+      "kind": "command",
+      "name": "maintain",
+      "idCounter": 25,
+      "now": "2026-01-16T12:00:00.000Z",
+      "value": null
+    },
+    {
+      "kind": "query",
+      "name": "search",
+      "args": {
+        "query": "child",
+        "archived": false
+      },
+      "idCounter": 26,
+      "now": "2026-01-16T12:00:00.000Z",
+      "value": []
+    },
+    {
+      "kind": "query",
+      "name": "search",
+      "args": {
+        "query": "child",
+        "archived": true
+      },
+      "idCounter": 26,
+      "now": "2026-01-16T12:00:00.000Z",
+      "value": [
+        {
+          "id": "00000000-0000-4000-8000-000000000011",
+          "createdAt": "2026-01-01T12:00:00.000Z",
+          "updatedAt": "2026-01-01T12:00:00.000Z",
+          "revision": 2,
+          "kind": "task",
+          "boardId": "00000000-0000-4000-8000-000000000007",
+          "columnId": "00000000-0000-4000-8000-000000000010",
+          "parentProjectId": "00000000-0000-4000-8000-000000000005",
+          "title": "Child",
+          "description": "",
+          "priority": "medium",
+          "plannedStartDate": null,
+          "dueDate": null,
+          "firstStartedAt": null,
+          "completedAt": "2026-01-01T12:00:00.000Z",
+          "archivedAt": null,
+          "archiveAfter": null,
+          "orderKey": "a0",
+          "projectColorToken": null
+        }
+      ]
+    },
+    {
+      "kind": "query",
+      "name": "archivePage",
+      "args": {
+        "query": "",
+        "cursor": null,
+        "limit": 1
+      },
+      "idCounter": 26,
+      "now": "2026-01-16T12:00:00.000Z",
+      "value": {
+        "items": [
+          {
+            "id": "00000000-0000-4000-8000-000000000013",
+            "createdAt": "2026-01-01T12:00:00.000Z",
+            "updatedAt": "2026-01-01T12:00:00.000Z",
+            "revision": 9,
+            "kind": "task",
+            "boardId": "00000000-0000-4000-8000-000000000001",
+            "columnId": "00000000-0000-4000-8000-000000000002",
+            "parentProjectId": null,
+            "title": "Updated",
+            "description": "Some notes",
+            "priority": "high",
+            "plannedStartDate": null,
+            "dueDate": null,
+            "firstStartedAt": "2026-01-01T12:00:00.000Z",
+            "completedAt": null,
+            "archivedAt": "2026-01-01T12:00:00.000Z",
+            "archiveAfter": null,
+            "orderKey": "Zz",
+            "projectColorToken": null
+          }
+        ],
+        "nextCursor": {
+          "date": "2026-01-01T12:00:00.000Z",
+          "id": "00000000-0000-4000-8000-000000000013"
+        }
+      }
+    },
+    {
+      "kind": "query",
+      "name": "archivePage",
+      "args": {
+        "query": "",
+        "cursor": {
+          "date": "2026-01-01T12:00:00.000Z",
+          "id": "00000000-0000-4000-8000-000000000013"
+        },
+        "limit": 1
+      },
+      "idCounter": 26,
+      "now": "2026-01-16T12:00:00.000Z",
+      "value": {
+        "items": [
+          {
+            "id": "00000000-0000-4000-8000-000000000005",
+            "createdAt": "2026-01-01T12:00:00.000Z",
+            "updatedAt": "2026-01-16T12:00:00.000Z",
+            "revision": 3,
+            "kind": "project",
+            "boardId": "00000000-0000-4000-8000-000000000001",
+            "columnId": "00000000-0000-4000-8000-000000000004",
+            "parentProjectId": null,
+            "title": "Project",
+            "description": "",
+            "priority": "medium",
+            "plannedStartDate": null,
+            "dueDate": null,
+            "firstStartedAt": null,
+            "completedAt": "2026-01-01T12:00:00.000Z",
+            "archivedAt": "2026-01-16T12:00:00.000Z",
+            "archiveAfter": "2026-01-15T12:00:00.000Z",
+            "orderKey": "a0",
+            "projectColorToken": "violet"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "kind": "command",
+      "name": "restore",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000013"
+      },
+      "idCounter": 26,
+      "now": "2026-01-16T12:00:00.000Z",
+      "value": false
+    },
+    {
+      "kind": "command",
+      "name": "deleteColumn",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000003",
+        "destinationId": "00000000-0000-4000-8000-000000000002",
+        "confirmed": true
+      },
+      "idCounter": 27,
+      "now": "2026-01-16T12:00:00.000Z",
+      "value": null
+    },
+    {
+      "kind": "query",
+      "name": "history",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000013"
+      },
+      "idCounter": 27,
+      "now": "2026-01-16T12:00:00.000Z",
+      "value": [
+        {
+          "id": "00000000-0000-4000-8000-000000000014",
+          "itemId": "00000000-0000-4000-8000-000000000013",
+          "type": "created",
+          "fromColumnId": null,
+          "toColumnId": "00000000-0000-4000-8000-000000000002",
+          "occurredAt": "2026-01-01T12:00:00.000Z"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000015",
+          "itemId": "00000000-0000-4000-8000-000000000013",
+          "type": "moved",
+          "fromColumnId": "00000000-0000-4000-8000-000000000002",
+          "toColumnId": "00000000-0000-4000-8000-000000000003",
+          "occurredAt": "2026-01-01T12:00:00.000Z"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000016",
+          "itemId": "00000000-0000-4000-8000-000000000013",
+          "type": "moved",
+          "fromColumnId": "00000000-0000-4000-8000-000000000003",
+          "toColumnId": "00000000-0000-4000-8000-000000000004",
+          "occurredAt": "2026-01-01T12:00:00.000Z"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000017",
+          "itemId": "00000000-0000-4000-8000-000000000013",
+          "type": "completed",
+          "fromColumnId": "00000000-0000-4000-8000-000000000003",
+          "toColumnId": "00000000-0000-4000-8000-000000000004",
+          "occurredAt": "2026-01-01T12:00:00.000Z"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000018",
+          "itemId": "00000000-0000-4000-8000-000000000013",
+          "type": "moved",
+          "fromColumnId": "00000000-0000-4000-8000-000000000004",
+          "toColumnId": "00000000-0000-4000-8000-000000000002",
+          "occurredAt": "2026-01-01T12:00:00.000Z"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000019",
+          "itemId": "00000000-0000-4000-8000-000000000013",
+          "type": "reopened",
+          "fromColumnId": "00000000-0000-4000-8000-000000000004",
+          "toColumnId": "00000000-0000-4000-8000-000000000002",
+          "occurredAt": "2026-01-01T12:00:00.000Z"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000025",
+          "itemId": "00000000-0000-4000-8000-000000000013",
+          "type": "archived",
+          "fromColumnId": "00000000-0000-4000-8000-000000000002",
+          "toColumnId": "00000000-0000-4000-8000-000000000002",
+          "occurredAt": "2026-01-01T12:00:00.000Z"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000027",
+          "itemId": "00000000-0000-4000-8000-000000000013",
+          "type": "restored",
+          "fromColumnId": "00000000-0000-4000-8000-000000000002",
+          "toColumnId": "00000000-0000-4000-8000-000000000002",
+          "occurredAt": "2026-01-16T12:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "kind": "command",
+      "name": "setTag",
+      "args": {
+        "itemId": "00000000-0000-4000-8000-000000000013",
+        "tagId": "00000000-0000-4000-8000-000000000024",
+        "selected": false
+      },
+      "idCounter": 27,
+      "now": "2026-01-16T12:00:00.000Z",
+      "value": null
+    },
+    {
+      "kind": "command",
+      "name": "saveTag",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000024",
+        "name": "Renamed",
+        "colorToken": "rose"
+      },
+      "idCounter": 27,
+      "now": "2026-01-16T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000024",
+        "createdAt": "2026-01-01T12:00:00.000Z",
+        "updatedAt": "2026-01-16T12:00:00.000Z",
+        "revision": 2,
+        "name": "Renamed",
+        "colorToken": "rose"
+      }
+    },
+    {
+      "kind": "command",
+      "name": "deleteTag",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000024"
+      },
+      "idCounter": 27,
+      "now": "2026-01-16T12:00:00.000Z",
+      "value": null
+    },
+    {
+      "kind": "command",
+      "name": "deleteItem",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000005",
+        "confirmed": true
+      },
+      "idCounter": 27,
+      "now": "2026-01-16T12:00:00.000Z",
+      "value": null
+    },
+    {
+      "kind": "query",
+      "name": "counts",
+      "idCounter": 27,
+      "now": "2026-01-16T12:00:00.000Z",
+      "value": {
+        "items": 1,
+        "boards": 1,
+        "events": 8,
+        "tags": 0
+      }
+    },
+    {
+      "kind": "query",
+      "name": "item",
+      "args": {
+        "id": "00000000-0000-4000-8000-000000000011"
+      },
+      "idCounter": 27,
+      "now": "2026-01-16T12:00:00.000Z",
+      "value": null
+    },
+    {
+      "kind": "command",
+      "name": "saveTag",
+      "args": {
+        "name": "﻿BOM﻿",
+        "colorToken": "blue"
+      },
+      "idCounter": 27,
+      "now": "2026-01-16T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000028",
+        "createdAt": "2026-01-16T12:00:00.000Z",
+        "updatedAt": "2026-01-16T12:00:00.000Z",
+        "revision": 1,
+        "name": "BOM",
+        "colorToken": "blue"
+      }
+    },
+    {
+      "kind": "command",
+      "name": "saveTag",
+      "args": {
+        "name": "NEL",
+        "colorToken": "blue"
+      },
+      "idCounter": 28,
+      "now": "2026-01-16T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000029",
+        "createdAt": "2026-01-16T12:00:00.000Z",
+        "updatedAt": "2026-01-16T12:00:00.000Z",
+        "revision": 1,
+        "name": "NEL",
+        "colorToken": "blue"
+      }
+    },
+    {
+      "kind": "command",
+      "name": "saveTag",
+      "args": {
+        "name": "ΟΣ",
+        "colorToken": "blue"
+      },
+      "idCounter": 29,
+      "now": "2026-01-16T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000030",
+        "createdAt": "2026-01-16T12:00:00.000Z",
+        "updatedAt": "2026-01-16T12:00:00.000Z",
+        "revision": 1,
+        "name": "ΟΣ",
+        "colorToken": "blue"
+      }
+    },
+    {
+      "kind": "command",
+      "name": "saveTag",
+      "args": {
+        "name": "İ",
+        "colorToken": "blue"
+      },
+      "idCounter": 30,
+      "now": "2026-01-16T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000031",
+        "createdAt": "2026-01-16T12:00:00.000Z",
+        "updatedAt": "2026-01-16T12:00:00.000Z",
+        "revision": 1,
+        "name": "İ",
+        "colorToken": "blue"
+      }
+    },
+    {
+      "kind": "command",
+      "name": "saveTag",
+      "args": {
+        "name": "😀",
+        "colorToken": "blue"
+      },
+      "idCounter": 31,
+      "now": "2026-01-16T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000032",
+        "createdAt": "2026-01-16T12:00:00.000Z",
+        "updatedAt": "2026-01-16T12:00:00.000Z",
+        "revision": 1,
+        "name": "😀",
+        "colorToken": "blue"
+      }
+    },
+    {
+      "kind": "command",
+      "name": "saveTag",
+      "args": {
+        "name": "",
+        "colorToken": "blue"
+      },
+      "idCounter": 32,
+      "now": "2026-01-16T12:00:00.000Z",
+      "value": {
+        "id": "00000000-0000-4000-8000-000000000033",
+        "createdAt": "2026-01-16T12:00:00.000Z",
+        "updatedAt": "2026-01-16T12:00:00.000Z",
+        "revision": 1,
+        "name": "",
+        "colorToken": "blue"
+      }
+    },
+    {
+      "kind": "command",
+      "name": "saveTag",
+      "args": {
+        "name": "ος",
+        "colorToken": "blue"
+      },
+      "idCounter": 33,
+      "now": "2026-01-16T12:00:00.000Z",
+      "error": true
+    },
+    {
+      "kind": "query",
+      "name": "tags",
+      "idCounter": 33,
+      "now": "2026-01-16T12:00:00.000Z",
+      "value": [
+        {
+          "id": "00000000-0000-4000-8000-000000000028",
+          "createdAt": "2026-01-16T12:00:00.000Z",
+          "updatedAt": "2026-01-16T12:00:00.000Z",
+          "revision": 1,
+          "name": "BOM",
+          "colorToken": "blue"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000029",
+          "createdAt": "2026-01-16T12:00:00.000Z",
+          "updatedAt": "2026-01-16T12:00:00.000Z",
+          "revision": 1,
+          "name": "NEL",
+          "colorToken": "blue"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000031",
+          "createdAt": "2026-01-16T12:00:00.000Z",
+          "updatedAt": "2026-01-16T12:00:00.000Z",
+          "revision": 1,
+          "name": "İ",
+          "colorToken": "blue"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000030",
+          "createdAt": "2026-01-16T12:00:00.000Z",
+          "updatedAt": "2026-01-16T12:00:00.000Z",
+          "revision": 1,
+          "name": "ΟΣ",
+          "colorToken": "blue"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000032",
+          "createdAt": "2026-01-16T12:00:00.000Z",
+          "updatedAt": "2026-01-16T12:00:00.000Z",
+          "revision": 1,
+          "name": "😀",
+          "colorToken": "blue"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000033",
+          "createdAt": "2026-01-16T12:00:00.000Z",
+          "updatedAt": "2026-01-16T12:00:00.000Z",
+          "revision": 1,
+          "name": "",
+          "colorToken": "blue"
+        }
+      ]
+    }
+  ],
+  "ordering": [
+    {
+      "a": null,
+      "b": null,
+      "result": "a0"
+    },
+    {
+      "a": "a0",
+      "b": null,
+      "result": "a1"
+    },
+    {
+      "a": "a1",
+      "b": null,
+      "result": "a2"
+    },
+    {
+      "a": "a2",
+      "b": null,
+      "result": "a3"
+    },
+    {
+      "a": "a3",
+      "b": null,
+      "result": "a4"
+    },
+    {
+      "a": "a4",
+      "b": null,
+      "result": "a5"
+    },
+    {
+      "a": "a5",
+      "b": null,
+      "result": "a6"
+    },
+    {
+      "a": "a6",
+      "b": null,
+      "result": "a7"
+    },
+    {
+      "a": "a7",
+      "b": null,
+      "result": "a8"
+    },
+    {
+      "a": "a8",
+      "b": null,
+      "result": "a9"
+    },
+    {
+      "a": "a9",
+      "b": null,
+      "result": "aA"
+    },
+    {
+      "a": "aA",
+      "b": null,
+      "result": "aB"
+    },
+    {
+      "a": "aB",
+      "b": null,
+      "result": "aC"
+    },
+    {
+      "a": "aC",
+      "b": null,
+      "result": "aD"
+    },
+    {
+      "a": "aD",
+      "b": null,
+      "result": "aE"
+    },
+    {
+      "a": "aE",
+      "b": null,
+      "result": "aF"
+    },
+    {
+      "a": "aF",
+      "b": null,
+      "result": "aG"
+    },
+    {
+      "a": "aG",
+      "b": null,
+      "result": "aH"
+    },
+    {
+      "a": "aH",
+      "b": null,
+      "result": "aI"
+    },
+    {
+      "a": "aI",
+      "b": null,
+      "result": "aJ"
+    },
+    {
+      "a": "aJ",
+      "b": null,
+      "result": "aK"
+    },
+    {
+      "a": "aK",
+      "b": null,
+      "result": "aL"
+    },
+    {
+      "a": "aL",
+      "b": null,
+      "result": "aM"
+    },
+    {
+      "a": "aM",
+      "b": null,
+      "result": "aN"
+    },
+    {
+      "a": "aN",
+      "b": null,
+      "result": "aO"
+    },
+    {
+      "a": "aO",
+      "b": null,
+      "result": "aP"
+    },
+    {
+      "a": "aP",
+      "b": null,
+      "result": "aQ"
+    },
+    {
+      "a": "aQ",
+      "b": null,
+      "result": "aR"
+    },
+    {
+      "a": "aR",
+      "b": null,
+      "result": "aS"
+    },
+    {
+      "a": "aS",
+      "b": null,
+      "result": "aT"
+    },
+    {
+      "a": "aT",
+      "b": null,
+      "result": "aU"
+    },
+    {
+      "a": "aU",
+      "b": null,
+      "result": "aV"
+    },
+    {
+      "a": "aV",
+      "b": null,
+      "result": "aW"
+    },
+    {
+      "a": "aW",
+      "b": null,
+      "result": "aX"
+    },
+    {
+      "a": "aX",
+      "b": null,
+      "result": "aY"
+    },
+    {
+      "a": "aY",
+      "b": null,
+      "result": "aZ"
+    },
+    {
+      "a": "aZ",
+      "b": null,
+      "result": "aa"
+    },
+    {
+      "a": "aa",
+      "b": null,
+      "result": "ab"
+    },
+    {
+      "a": "ab",
+      "b": null,
+      "result": "ac"
+    },
+    {
+      "a": "ac",
+      "b": null,
+      "result": "ad"
+    },
+    {
+      "a": "ad",
+      "b": null,
+      "result": "ae"
+    },
+    {
+      "a": "ae",
+      "b": null,
+      "result": "af"
+    },
+    {
+      "a": "af",
+      "b": null,
+      "result": "ag"
+    },
+    {
+      "a": "ag",
+      "b": null,
+      "result": "ah"
+    },
+    {
+      "a": "ah",
+      "b": null,
+      "result": "ai"
+    },
+    {
+      "a": "ai",
+      "b": null,
+      "result": "aj"
+    },
+    {
+      "a": "aj",
+      "b": null,
+      "result": "ak"
+    },
+    {
+      "a": "ak",
+      "b": null,
+      "result": "al"
+    },
+    {
+      "a": "al",
+      "b": null,
+      "result": "am"
+    },
+    {
+      "a": "am",
+      "b": null,
+      "result": "an"
+    },
+    {
+      "a": "an",
+      "b": null,
+      "result": "ao"
+    },
+    {
+      "a": "ao",
+      "b": null,
+      "result": "ap"
+    },
+    {
+      "a": "ap",
+      "b": null,
+      "result": "aq"
+    },
+    {
+      "a": "aq",
+      "b": null,
+      "result": "ar"
+    },
+    {
+      "a": "ar",
+      "b": null,
+      "result": "as"
+    },
+    {
+      "a": "as",
+      "b": null,
+      "result": "at"
+    },
+    {
+      "a": "at",
+      "b": null,
+      "result": "au"
+    },
+    {
+      "a": "au",
+      "b": null,
+      "result": "av"
+    },
+    {
+      "a": "av",
+      "b": null,
+      "result": "aw"
+    },
+    {
+      "a": "aw",
+      "b": null,
+      "result": "ax"
+    },
+    {
+      "a": "ax",
+      "b": null,
+      "result": "ay"
+    },
+    {
+      "a": "ay",
+      "b": null,
+      "result": "az"
+    },
+    {
+      "a": "az",
+      "b": null,
+      "result": "b00"
+    },
+    {
+      "a": "b00",
+      "b": null,
+      "result": "b01"
+    },
+    {
+      "a": "b01",
+      "b": null,
+      "result": "b02"
+    },
+    {
+      "a": "b02",
+      "b": null,
+      "result": "b03"
+    },
+    {
+      "a": "b03",
+      "b": null,
+      "result": "b04"
+    },
+    {
+      "a": "b04",
+      "b": null,
+      "result": "b05"
+    },
+    {
+      "a": "b05",
+      "b": null,
+      "result": "b06"
+    },
+    {
+      "a": "b06",
+      "b": null,
+      "result": "b07"
+    },
+    {
+      "a": "b07",
+      "b": null,
+      "result": "b08"
+    },
+    {
+      "a": "b08",
+      "b": null,
+      "result": "b09"
+    },
+    {
+      "a": "b09",
+      "b": null,
+      "result": "b0A"
+    },
+    {
+      "a": "b0A",
+      "b": null,
+      "result": "b0B"
+    },
+    {
+      "a": "b0B",
+      "b": null,
+      "result": "b0C"
+    },
+    {
+      "a": "b0C",
+      "b": null,
+      "result": "b0D"
+    },
+    {
+      "a": "b0D",
+      "b": null,
+      "result": "b0E"
+    },
+    {
+      "a": "b0E",
+      "b": null,
+      "result": "b0F"
+    },
+    {
+      "a": "b0F",
+      "b": null,
+      "result": "b0G"
+    },
+    {
+      "a": "b0G",
+      "b": null,
+      "result": "b0H"
+    },
+    {
+      "a": "b0H",
+      "b": null,
+      "result": "b0I"
+    },
+    {
+      "a": "b0I",
+      "b": null,
+      "result": "b0J"
+    },
+    {
+      "a": "b0J",
+      "b": null,
+      "result": "b0K"
+    },
+    {
+      "a": "b0K",
+      "b": null,
+      "result": "b0L"
+    },
+    {
+      "a": "b0L",
+      "b": null,
+      "result": "b0M"
+    },
+    {
+      "a": "b0M",
+      "b": null,
+      "result": "b0N"
+    },
+    {
+      "a": "b0N",
+      "b": null,
+      "result": "b0O"
+    },
+    {
+      "a": "b0O",
+      "b": null,
+      "result": "b0P"
+    },
+    {
+      "a": "b0P",
+      "b": null,
+      "result": "b0Q"
+    },
+    {
+      "a": "b0Q",
+      "b": null,
+      "result": "b0R"
+    },
+    {
+      "a": null,
+      "b": "a0",
+      "result": "Zz"
+    },
+    {
+      "a": null,
+      "b": "Zz",
+      "result": "Zy"
+    },
+    {
+      "a": null,
+      "b": "Zy",
+      "result": "Zx"
+    },
+    {
+      "a": null,
+      "b": "Zx",
+      "result": "Zw"
+    },
+    {
+      "a": null,
+      "b": "Zw",
+      "result": "Zv"
+    },
+    {
+      "a": null,
+      "b": "Zv",
+      "result": "Zu"
+    },
+    {
+      "a": null,
+      "b": "Zu",
+      "result": "Zt"
+    },
+    {
+      "a": null,
+      "b": "Zt",
+      "result": "Zs"
+    },
+    {
+      "a": null,
+      "b": "Zs",
+      "result": "Zr"
+    },
+    {
+      "a": null,
+      "b": "Zr",
+      "result": "Zq"
+    },
+    {
+      "a": null,
+      "b": "Zq",
+      "result": "Zp"
+    },
+    {
+      "a": null,
+      "b": "Zp",
+      "result": "Zo"
+    },
+    {
+      "a": null,
+      "b": "Zo",
+      "result": "Zn"
+    },
+    {
+      "a": null,
+      "b": "Zn",
+      "result": "Zm"
+    },
+    {
+      "a": null,
+      "b": "Zm",
+      "result": "Zl"
+    },
+    {
+      "a": null,
+      "b": "Zl",
+      "result": "Zk"
+    },
+    {
+      "a": null,
+      "b": "Zk",
+      "result": "Zj"
+    },
+    {
+      "a": null,
+      "b": "Zj",
+      "result": "Zi"
+    },
+    {
+      "a": null,
+      "b": "Zi",
+      "result": "Zh"
+    },
+    {
+      "a": null,
+      "b": "Zh",
+      "result": "Zg"
+    },
+    {
+      "a": null,
+      "b": "Zg",
+      "result": "Zf"
+    },
+    {
+      "a": null,
+      "b": "Zf",
+      "result": "Ze"
+    },
+    {
+      "a": null,
+      "b": "Ze",
+      "result": "Zd"
+    },
+    {
+      "a": null,
+      "b": "Zd",
+      "result": "Zc"
+    },
+    {
+      "a": null,
+      "b": "Zc",
+      "result": "Zb"
+    },
+    {
+      "a": null,
+      "b": "Zb",
+      "result": "Za"
+    },
+    {
+      "a": null,
+      "b": "Za",
+      "result": "ZZ"
+    },
+    {
+      "a": null,
+      "b": "ZZ",
+      "result": "ZY"
+    },
+    {
+      "a": null,
+      "b": "ZY",
+      "result": "ZX"
+    },
+    {
+      "a": null,
+      "b": "ZX",
+      "result": "ZW"
+    },
+    {
+      "a": null,
+      "b": "ZW",
+      "result": "ZV"
+    },
+    {
+      "a": null,
+      "b": "ZV",
+      "result": "ZU"
+    },
+    {
+      "a": null,
+      "b": "ZU",
+      "result": "ZT"
+    },
+    {
+      "a": null,
+      "b": "ZT",
+      "result": "ZS"
+    },
+    {
+      "a": null,
+      "b": "ZS",
+      "result": "ZR"
+    },
+    {
+      "a": null,
+      "b": "ZR",
+      "result": "ZQ"
+    },
+    {
+      "a": null,
+      "b": "ZQ",
+      "result": "ZP"
+    },
+    {
+      "a": null,
+      "b": "ZP",
+      "result": "ZO"
+    },
+    {
+      "a": null,
+      "b": "ZO",
+      "result": "ZN"
+    },
+    {
+      "a": null,
+      "b": "ZN",
+      "result": "ZM"
+    },
+    {
+      "a": null,
+      "b": "ZM",
+      "result": "ZL"
+    },
+    {
+      "a": null,
+      "b": "ZL",
+      "result": "ZK"
+    },
+    {
+      "a": null,
+      "b": "ZK",
+      "result": "ZJ"
+    },
+    {
+      "a": null,
+      "b": "ZJ",
+      "result": "ZI"
+    },
+    {
+      "a": null,
+      "b": "ZI",
+      "result": "ZH"
+    },
+    {
+      "a": null,
+      "b": "ZH",
+      "result": "ZG"
+    },
+    {
+      "a": null,
+      "b": "ZG",
+      "result": "ZF"
+    },
+    {
+      "a": null,
+      "b": "ZF",
+      "result": "ZE"
+    },
+    {
+      "a": null,
+      "b": "ZE",
+      "result": "ZD"
+    },
+    {
+      "a": null,
+      "b": "ZD",
+      "result": "ZC"
+    },
+    {
+      "a": null,
+      "b": "ZC",
+      "result": "ZB"
+    },
+    {
+      "a": null,
+      "b": "ZB",
+      "result": "ZA"
+    },
+    {
+      "a": null,
+      "b": "ZA",
+      "result": "Z9"
+    },
+    {
+      "a": null,
+      "b": "Z9",
+      "result": "Z8"
+    },
+    {
+      "a": null,
+      "b": "Z8",
+      "result": "Z7"
+    },
+    {
+      "a": null,
+      "b": "Z7",
+      "result": "Z6"
+    },
+    {
+      "a": null,
+      "b": "Z6",
+      "result": "Z5"
+    },
+    {
+      "a": null,
+      "b": "Z5",
+      "result": "Z4"
+    },
+    {
+      "a": null,
+      "b": "Z4",
+      "result": "Z3"
+    },
+    {
+      "a": null,
+      "b": "Z3",
+      "result": "Z2"
+    },
+    {
+      "a": null,
+      "b": "Z2",
+      "result": "Z1"
+    },
+    {
+      "a": null,
+      "b": "Z1",
+      "result": "Z0"
+    },
+    {
+      "a": null,
+      "b": "Z0",
+      "result": "Yzz"
+    },
+    {
+      "a": null,
+      "b": "Yzz",
+      "result": "Yzy"
+    },
+    {
+      "a": null,
+      "b": "Yzy",
+      "result": "Yzx"
+    },
+    {
+      "a": null,
+      "b": "Yzx",
+      "result": "Yzw"
+    },
+    {
+      "a": null,
+      "b": "Yzw",
+      "result": "Yzv"
+    },
+    {
+      "a": null,
+      "b": "Yzv",
+      "result": "Yzu"
+    },
+    {
+      "a": null,
+      "b": "Yzu",
+      "result": "Yzt"
+    },
+    {
+      "a": null,
+      "b": "Yzt",
+      "result": "Yzs"
+    },
+    {
+      "a": "a0",
+      "b": "a1",
+      "result": "a0V"
+    },
+    {
+      "a": "a0",
+      "b": "a0V",
+      "result": "a0G"
+    },
+    {
+      "a": "a0",
+      "b": "a0G",
+      "result": "a08"
+    },
+    {
+      "a": "a0",
+      "b": "a08",
+      "result": "a04"
+    },
+    {
+      "a": "a0",
+      "b": "a04",
+      "result": "a02"
+    },
+    {
+      "a": "a0",
+      "b": "a02",
+      "result": "a01"
+    },
+    {
+      "a": "a0",
+      "b": "a01",
+      "result": "a00V"
+    },
+    {
+      "a": "a0",
+      "b": "a00V",
+      "result": "a00G"
+    },
+    {
+      "a": "a0",
+      "b": "a00G",
+      "result": "a008"
+    },
+    {
+      "a": "a0",
+      "b": "a008",
+      "result": "a004"
+    },
+    {
+      "a": "a0",
+      "b": "a004",
+      "result": "a002"
+    },
+    {
+      "a": "a0",
+      "b": "a002",
+      "result": "a001"
+    },
+    {
+      "a": "a0",
+      "b": "a001",
+      "result": "a000V"
+    },
+    {
+      "a": "a0",
+      "b": "a000V",
+      "result": "a000G"
+    },
+    {
+      "a": "a0",
+      "b": "a000G",
+      "result": "a0008"
+    },
+    {
+      "a": "a0",
+      "b": "a0008",
+      "result": "a0004"
+    },
+    {
+      "a": "a0",
+      "b": "a0004",
+      "result": "a0002"
+    },
+    {
+      "a": "a0",
+      "b": "a0002",
+      "result": "a0001"
+    },
+    {
+      "a": "a0",
+      "b": "a0001",
+      "result": "a0000V"
+    },
+    {
+      "a": "a0",
+      "b": "a0000V",
+      "result": "a0000G"
+    },
+    {
+      "a": "a0",
+      "b": "a0000G",
+      "result": "a00008"
+    },
+    {
+      "a": "a0",
+      "b": "a00008",
+      "result": "a00004"
+    },
+    {
+      "a": "a0",
+      "b": "a00004",
+      "result": "a00002"
+    },
+    {
+      "a": "a0",
+      "b": "a00002",
+      "result": "a00001"
+    },
+    {
+      "a": "a0",
+      "b": "a00001",
+      "result": "a00000V"
+    },
+    {
+      "a": "a0",
+      "b": "a00000V",
+      "result": "a00000G"
+    },
+    {
+      "a": "a0",
+      "b": "a00000G",
+      "result": "a000008"
+    },
+    {
+      "a": "a0",
+      "b": "a000008",
+      "result": "a000004"
+    },
+    {
+      "a": "a0",
+      "b": "a000004",
+      "result": "a000002"
+    },
+    {
+      "a": "a0",
+      "b": "a000002",
+      "result": "a000001"
+    },
+    {
+      "a": "a0",
+      "b": "a000001",
+      "result": "a000000V"
+    },
+    {
+      "a": "a0",
+      "b": "a000000V",
+      "result": "a000000G"
+    },
+    {
+      "a": "a0",
+      "b": "a000000G",
+      "result": "a0000008"
+    },
+    {
+      "a": "a0",
+      "b": "a0000008",
+      "result": "a0000004"
+    },
+    {
+      "a": "a0",
+      "b": "a0000004",
+      "result": "a0000002"
+    },
+    {
+      "a": "a0",
+      "b": "a0000002",
+      "result": "a0000001"
+    },
+    {
+      "a": "a0",
+      "b": "a0000001",
+      "result": "a0000000V"
+    },
+    {
+      "a": "a0",
+      "b": "a0000000V",
+      "result": "a0000000G"
+    },
+    {
+      "a": "a0",
+      "b": "a0000000G",
+      "result": "a00000008"
+    },
+    {
+      "a": "a0",
+      "b": "a00000008",
+      "result": "a00000004"
+    },
+    {
+      "a": "a0",
+      "b": "a00000004",
+      "result": "a00000002"
+    },
+    {
+      "a": "a0",
+      "b": "a00000002",
+      "result": "a00000001"
+    },
+    {
+      "a": "a0",
+      "b": "a00000001",
+      "result": "a00000000V"
+    },
+    {
+      "a": "a0",
+      "b": "a00000000V",
+      "result": "a00000000G"
+    },
+    {
+      "a": "a0",
+      "b": "a00000000G",
+      "result": "a000000008"
+    },
+    {
+      "a": "a0",
+      "b": "a000000008",
+      "result": "a000000004"
+    },
+    {
+      "a": "a0",
+      "b": "a000000004",
+      "result": "a000000002"
+    },
+    {
+      "a": "a0",
+      "b": "a000000002",
+      "result": "a000000001"
+    },
+    {
+      "a": "a0",
+      "b": "a000000001",
+      "result": "a000000000V"
+    },
+    {
+      "a": "a0",
+      "b": "a000000000V",
+      "result": "a000000000G"
+    },
+    {
+      "a": "a0",
+      "b": "a000000000G",
+      "result": "a0000000008"
+    },
+    {
+      "a": "a0",
+      "b": "a0000000008",
+      "result": "a0000000004"
+    },
+    {
+      "a": "a0",
+      "b": "a0000000004",
+      "result": "a0000000002"
+    },
+    {
+      "a": "a0",
+      "b": "a0000000002",
+      "result": "a0000000001"
+    },
+    {
+      "a": "a0",
+      "b": "a0000000001",
+      "result": "a0000000000V"
+    },
+    {
+      "a": "a0",
+      "b": "a0000000000V",
+      "result": "a0000000000G"
+    },
+    {
+      "a": "a0",
+      "b": "a0000000000G",
+      "result": "a00000000008"
+    },
+    {
+      "a": "a0",
+      "b": "a00000000008",
+      "result": "a00000000004"
+    },
+    {
+      "a": "a0",
+      "b": "a00000000004",
+      "result": "a00000000002"
+    },
+    {
+      "a": "a0",
+      "b": "a00000000002",
+      "result": "a00000000001"
+    },
+    {
+      "a": "a0",
+      "b": "a00000000001",
+      "result": "a00000000000V"
+    },
+    {
+      "a": "a0",
+      "b": "a00000000000V",
+      "result": "a00000000000G"
+    },
+    {
+      "a": "a0",
+      "b": "a00000000000G",
+      "result": "a000000000008"
+    },
+    {
+      "a": "a0",
+      "b": "a000000000008",
+      "result": "a000000000004"
+    },
+    {
+      "a": "a0",
+      "b": "a000000000004",
+      "result": "a000000000002"
+    },
+    {
+      "a": "a0",
+      "b": "a000000000002",
+      "result": "a000000000001"
+    },
+    {
+      "a": "a0",
+      "b": "a000000000001",
+      "result": "a000000000000V"
+    },
+    {
+      "a": "a0",
+      "b": "a000000000000V",
+      "result": "a000000000000G"
+    },
+    {
+      "a": "a0",
+      "b": "a000000000000G",
+      "result": "a0000000000008"
+    },
+    {
+      "a": "a0",
+      "b": "a0000000000008",
+      "result": "a0000000000004"
+    },
+    {
+      "a": "a0",
+      "b": "a0000000000004",
+      "result": "a0000000000002"
+    },
+    {
+      "a": "a0",
+      "b": "a0000000000002",
+      "result": "a0000000000001"
+    },
+    {
+      "a": "a0",
+      "b": "a0000000000001",
+      "result": "a0000000000000V"
+    },
+    {
+      "a": "a0",
+      "b": "a0000000000000V",
+      "result": "a0000000000000G"
+    },
+    {
+      "a": "a0",
+      "b": "a0000000000000G",
+      "result": "a00000000000008"
+    },
+    {
+      "a": "a0",
+      "b": "a00000000000008",
+      "result": "a00000000000004"
+    },
+    {
+      "a": "a0",
+      "b": "a00000000000004",
+      "result": "a00000000000002"
+    },
+    {
+      "a": "a0",
+      "b": "a00000000000002",
+      "result": "a00000000000001"
+    },
+    {
+      "a": "a0",
+      "b": "a00000000000001",
+      "result": "a00000000000000V"
+    },
+    {
+      "a": "a0",
+      "b": "a00000000000000V",
+      "result": "a00000000000000G"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 import { expect, it } from 'vitest';
 import { Database } from '../db/database';
 import { WorkspaceRepository } from '../repositories/workspace';
-import { exportBackup, encryptBackup, readBackup } from './backups';
+import { exportBackup, encryptBackup, readBackup } from '../test/backupHelpers';
 it('authenticates encryption, rejects wrong keys/corruption and uses unique randomness', async () => {
   const db = new Database(`encryption-${crypto.randomUUID()}`);
   try {

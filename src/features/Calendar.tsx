@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { useLiveQuery } from 'dexie-react-hooks';
+import { useWorkspaceQuery } from '../components/useWorkspaceQuery';
+import { QueryStatus } from '../components/QueryStatus';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { workspace } from '../repositories/workspace';
+import { workspace } from '../app/services';
 import { range, localDate, type Item, type Settings } from '../domain/model';
 import type { Run } from '../services/operations';
 import { useToday } from '../components/useToday';
@@ -16,19 +17,27 @@ export function Calendar({
   run: Run;
 }) {
   const todayDate = useToday();
-  const settings = useLiveQuery(async () => workspace.settings(), []);
-  const items =
-    useLiveQuery(
-      async () => workspace.calendarItems(settings?.calendarShowTopLevelTasks),
-      [settings?.calendarShowTopLevelTasks],
-    ) || [];
+  const settingsQuery = useWorkspaceQuery('settings');
+  const settings = settingsQuery.data;
+  const itemsQuery = useWorkspaceQuery(
+    'calendarItems',
+    settings?.calendarShowTopLevelTasks,
+  );
+  const items = itemsQuery.data ?? [];
   const [month, setMonth] = useState(
     () => new Date(new Date().getFullYear(), new Date().getMonth(), 1),
   );
   const [view, setView] = useState('month');
   const [project, setProject] = useState('');
   const [zoom, setZoom] = useState(1);
-  if (!settings) return null;
+  if (
+    !settings ||
+    settingsQuery.status !== 'ready' ||
+    itemsQuery.status !== 'ready'
+  )
+    return (
+      <QueryStatus queries={[settingsQuery, itemsQuery]} label="calendar" />
+    );
   const start = new Date(month.getFullYear(), month.getMonth(), 1);
   const end = new Date(month.getFullYear(), month.getMonth() + zoom, 0);
   const first = new Date(start);

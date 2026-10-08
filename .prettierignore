@@ -1,6 +1,11 @@
 node_modules
 dist
+dist-desktop
+native/**/gen
 .next
 package-lock.json
 playwright-report
 test-results
+spikes/**/gen
+spikes/**/target
+native/**/target

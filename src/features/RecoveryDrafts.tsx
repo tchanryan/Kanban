@@ -4,6 +4,7 @@ import {
   getDrafts,
   subscribeDrafts,
   withDiscardedDrafts,
+  recoveryDescription,
 } from '../services/drafts';
 import type { Run } from '../services/operations';
 export function RecoveryDrafts({ run }: { run: Run }) {
@@ -12,11 +13,7 @@ export function RecoveryDrafts({ run }: { run: Run }) {
   return (
     <section className="settings-section recovery-drafts">
       <h2>Recovery drafts</h2>
-      <p>
-        These edits have not been saved. They are retained in this tab until you
-        save or discard them. Download the text before closing the browser if
-        you cannot resolve a save error.
-      </p>
+      <p>{recoveryDescription}</p>
       {drafts.map(([id, draft]) => (
         <div className="draft-recovery" key={id}>
           <h3>{draft.label}</h3>

@@ -1,12 +1,15 @@
 import { useState } from 'react';
-import { useLiveQuery } from 'dexie-react-hooks';
-import { workspace } from '../repositories/workspace';
+import { useWorkspaceQuery } from '../components/useWorkspaceQuery';
+import { QueryStatus } from '../components/QueryStatus';
+import { workspace } from '../app/services';
 import { Autosave, Markdown } from '../components/ui';
 export function Scratchpad() {
-  const result = useLiveQuery(() => workspace.editorScratch(), []);
+  const scratchQuery = useWorkspaceQuery('editorScratch');
+  const result = scratchQuery.data;
   const scratch = result?.scratch;
   const [notesPreview, setNotesPreview] = useState(false);
-  if (!result) return <p role="status">Loading notes…</p>;
+  if (!result || scratchQuery.status !== 'ready')
+    return <QueryStatus queries={[scratchQuery]} label="notes" />;
   return (
     <section className="scratchpad">
       <div className="section-heading">
@@ -22,6 +25,7 @@ export function Scratchpad() {
         <Autosave
           label="Scratchpad"
           draftKey="scratchpad-global"
+          generation={result.generation}
           value={scratch?.content || ''}
           save={(text, expected) =>
             workspace.saveScratch(text, expected, result.generation)

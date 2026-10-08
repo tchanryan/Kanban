@@ -41,7 +41,9 @@ yarn-error.log*
 next-env.d.ts
 
 /dist/
+/dist-desktop/
 /playwright-report/
 /test-results/
+/artifacts/native/
 *.backup.json
 kanban-calendar-backup-*.json

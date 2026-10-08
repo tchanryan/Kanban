@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useLiveQuery } from 'dexie-react-hooks';
-import { workspace } from '../repositories/workspace';
+import { useWorkspaceQuery } from '../components/useWorkspaceQuery';
+import { QueryStatus } from '../components/QueryStatus';
 import { Modal } from '../components/ui';
 import type { Item } from '../domain/model';
 export function SearchDialog({
@@ -17,11 +17,8 @@ export function SearchDialog({
     const timer = setTimeout(() => setDebounced(q), 250);
     return () => clearTimeout(timer);
   }, [q]);
-  const items =
-    useLiveQuery(
-      async () => workspace.search(debounced, archived),
-      [debounced, archived],
-    ) || [];
+  const searchQuery = useWorkspaceQuery('search', debounced, archived);
+  const items = searchQuery.status === 'ready' ? searchQuery.data : [];
   return (
     <Modal title="Search your work" onClose={onClose}>
       <input
@@ -41,6 +38,7 @@ export function SearchDialog({
         Include archived work
       </label>
       <div className="search-results">
+        <QueryStatus queries={[searchQuery]} label="search results" />
         {items.map((i) => (
           <button
             key={i.id}
@@ -56,7 +54,7 @@ export function SearchDialog({
             <strong>{i.title}</strong>
           </button>
         ))}
-        {!items.length && (
+        {searchQuery.status === 'ready' && !items.length && (
           <p className="muted">
             {q ? 'No matching work.' : 'Type to search your local workspace.'}
           </p>

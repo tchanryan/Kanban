@@ -1,0 +1,14 @@
+{
+  "productName": "Kanban Installer Acceptance",
+  "identifier": "io.github.tchanryan.kanban.installtest",
+  "bundle": {
+    "active": true,
+    "targets": ["nsis"],
+    "useLocalToolsDir": true,
+    "windows": {
+      "allowDowngrades": false,
+      "webviewInstallMode": { "type": "downloadBootstrapper", "silent": true },
+      "nsis": { "installMode": "currentUser", "languages": ["English"] }
+    }
+  }
+}

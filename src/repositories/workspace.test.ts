@@ -5,7 +5,7 @@ import {
   exportBackup,
   replaceBackup,
   validateBackup,
-} from '../services/backups';
+} from '../test/backupHelpers';
 import { overdue, range, type Column } from '../domain/model';
 let db: Database;
 let repo: WorkspaceRepository;

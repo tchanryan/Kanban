@@ -1,0 +1,33 @@
+name: Native storage
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  sqlite:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: native/workspace
+    steps:
+      - uses: actions/checkout@v6
+      - run: rustup toolchain install 1.98.1 --profile minimal --component rustfmt --component clippy
+      - run: cargo fmt --check
+      - run: cargo test --locked
+      - run: cargo clippy --locked --all-targets -- -D warnings
+  desktop-build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build:desktop
+      - run: rustup toolchain install 1.98.1 --profile minimal --component rustfmt --component clippy
+      - run: cargo fmt --manifest-path native/desktop/Cargo.toml --check
+      - run: cargo build --locked --manifest-path native/desktop/Cargo.toml
+      - run: cargo test --locked --manifest-path native/desktop/Cargo.toml
+      - run: cargo clippy --locked --manifest-path native/desktop/Cargo.toml --all-targets -- -D warnings

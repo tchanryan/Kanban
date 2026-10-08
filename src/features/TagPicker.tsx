@@ -1,19 +1,25 @@
 import { useState } from 'react';
-import { useLiveQuery } from 'dexie-react-hooks';
-import { workspace } from '../repositories/workspace';
+import { useWorkspaceQuery } from '../components/useWorkspaceQuery';
+import { QueryStatus } from '../components/QueryStatus';
+import { workspace } from '../app/services';
 import type { Tag } from '../domain/model';
 import { ColorPicker } from '../components/ColorPicker';
 import { AsyncCheckbox } from '../components/AsyncCheckbox';
 import type { Run } from '../services/operations';
 
 export function TagPicker({ itemId, run }: { itemId: string; run: Run }) {
-  const tags = useLiveQuery(() => workspace.tags(), []) || [];
-  const relations =
-    useLiveQuery(() => workspace.itemTags(itemId), [itemId]) || [];
+  const tagsQuery = useWorkspaceQuery('tags');
+  const relationsQuery = useWorkspaceQuery('itemTags', itemId);
+  const tags = tagsQuery.data ?? [];
+  const relations = relationsQuery.data ?? [];
   const [query, setQuery] = useState('');
   const [expanded, setExpanded] = useState(false);
   const [color, setColor] = useState<Tag['colorToken']>('violet');
   const [creating, setCreating] = useState(false);
+  if (tagsQuery.status !== 'ready' || relationsQuery.status !== 'ready')
+    return (
+      <QueryStatus queries={[tagsQuery, relationsQuery]} label="item tags" />
+    );
   const normalized = query.trim().toLocaleLowerCase();
   const matches = tags.filter((tag) =>
     tag.name.toLocaleLowerCase().includes(normalized),

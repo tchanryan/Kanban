@@ -6,7 +6,7 @@ import {
   type Column,
   type Board,
 } from '../src/domain/model';
-import type { Backup } from '../src/services/backups';
+import type { Backup } from '../src/domain/backup';
 export function scaleFixture(): Backup {
   const root: Board = {
     ...newMeta(),

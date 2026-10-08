@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { workspace } from '../../repositories/workspace';
+import { workspace } from '../../app/services';
 import type { Column } from '../../domain/model';
 import type { Run } from '../../services/operations';
 import { Modal } from '../../components/ui';

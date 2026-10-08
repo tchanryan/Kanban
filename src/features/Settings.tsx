@@ -1,28 +1,50 @@
 import { TagManager } from './TagManager';
 import { confirmAction } from '../services/confirm';
 import { useState } from 'react';
-import { useLiveQuery } from 'dexie-react-hooks';
-import { workspace } from '../repositories/workspace';
+import { useWorkspaceQuery } from '../components/useWorkspaceQuery';
+import { QueryStatus } from '../components/QueryStatus';
+import { services } from '../app/services';
 import {
-  download,
-  exportBackup,
   encryptBackup,
   readBackup,
-  replaceBackup,
   type Backup,
-} from '../services/backups';
+} from '../services/backupCodec';
 import { Modal } from '../components/ui';
 import type { Run } from '../services/operations';
 import { RecoveryDrafts } from './RecoveryDrafts';
+import { NativeRecovery } from './NativeRecovery';
+import type { BackupReview } from '../contracts/backups';
 export function SettingsPage({ run }: { run: Run }) {
-  const counts = useLiveQuery(async () => workspace.counts(), []);
-  const snapshots = useLiveQuery(async () => workspace.snapshots(), []) || [];
+  const exportBackup = (): Promise<Backup> => services.backups.exportBackup();
+  const replaceBackup = (
+    input: unknown,
+    confirmed: boolean,
+    ticket?: string,
+  ): Promise<void> => services.backups.replaceBackup(input, confirmed, ticket);
+  const download = async (data: unknown, encrypted = false): Promise<void> =>
+    services.platform.files.download(data, encrypted);
+  const countsQuery = useWorkspaceQuery('counts');
+  const snapshotsQuery = useWorkspaceQuery('snapshots');
+  const counts = countsQuery.status === 'ready' ? countsQuery.data : undefined;
+  const snapshots =
+    snapshotsQuery.status === 'ready' ? snapshotsQuery.data : [];
   const [pass, setPass] = useState('');
-  const [backup, setBackup] = useState<Backup | null>(null);
+  const [review, setReview] = useState<BackupReview | null>(null);
+  const backup = review?.backup;
+  const reviewBackup = async (input: Backup): Promise<void> => {
+    setReview(await services.backups.reviewBackup(input));
+  };
   const [storage, setStorage] = useState('');
   return (
     <div className="settings-page">
+      <QueryStatus
+        queries={[countsQuery, snapshotsQuery]}
+        label="storage summary"
+      />
       <RecoveryDrafts run={run} />
+      {services.platform.recovery && (
+        <NativeRecovery service={services.platform.recovery} />
+      )}
       <section className="settings-section">
         <span className="eyebrow">Your data, your device</span>
         <h2>Data & Backups</h2>
@@ -39,21 +61,25 @@ export function SettingsPage({ run }: { run: Run }) {
               </div>
             ))}
         </div>
-        <button
-          onClick={() =>
-            run(async () => {
-              const persisted = await navigator.storage?.persist?.();
-              const estimate = await navigator.storage?.estimate?.();
-              setStorage(
-                `${persisted ? 'Persistent storage granted' : 'Browser-managed storage'} · ${((estimate?.usage || 0) / 1048576).toFixed(1)} MB used of ${((estimate?.quota || 0) / 1048576).toFixed(0)} MB available`,
-              );
-            })
-          }
-        >
-          Check / request persistent storage
-        </button>
+        {!services.platform.recovery && (
+          <button
+            onClick={() =>
+              run(async () => {
+                const estimate =
+                  await services.platform.storage.requestPersistence();
+                const persisted = estimate.persisted;
+                setStorage(
+                  `${persisted ? 'Persistent storage granted' : 'Browser-managed storage'} · ${((estimate?.usage || 0) / 1048576).toFixed(1)} MB used of ${((estimate?.quota || 0) / 1048576).toFixed(0)} MB available`,
+                );
+              })
+            }
+          >
+            Check / request persistent storage
+          </button>
+        )}
         <p className="muted">
           {storage ||
+            services.platform.storageDescription ||
             'IndexedDB local storage. Clearing browser site data removes your work.'}
         </p>
         <hr />
@@ -86,7 +112,10 @@ export function SettingsPage({ run }: { run: Run }) {
           <button
             onClick={() =>
               run(async () => {
-                download(await encryptBackup(await exportBackup(), pass), true);
+                await download(
+                  await encryptBackup(await exportBackup(), pass),
+                  true,
+                );
                 setPass('');
               }, 'Encrypted backup exported')
             }
@@ -95,6 +124,14 @@ export function SettingsPage({ run }: { run: Run }) {
           </button>
         </div>
         <h3>Import / replace</h3>
+        {services.platform.recovery && (
+          <p>
+            To move a browser workspace here, open Settings in its original
+            browser profile, resolve any recovery drafts and export JSON or an
+            encrypted backup. Select that file below and review it before
+            confirming. Keep the original export for rollback.
+          </p>
+        )}
         <p className="muted">
           Choose a JSON or encrypted backup. For encrypted files enter its
           passphrase above. Review the contents before replacing. A local
@@ -112,35 +149,46 @@ export function SettingsPage({ run }: { run: Run }) {
                 run(async () => {
                   if (file.size > 100000000)
                     throw Error('Backup exceeds 100 MB');
-                  setBackup(await readBackup(await file.text(), pass));
+                  setReview(null);
+                  await reviewBackup(await readBackup(await file.text(), pass));
                   setPass('');
                 });
             }}
           />
         </label>
-        <h3>Local recovery snapshots</h3>
-        <p className="muted">
-          Last five pre-replacement snapshots. These do not protect against
-          device loss or browser-data deletion.
-        </p>
-        {snapshots.length ? (
-          snapshots.map((s) => (
-            <div className="snapshot" key={s.id}>
-              <span>{new Date(s.createdAt).toLocaleString()}</span>
-              <button
-                onClick={() =>
-                  run(async () => setBackup(await readBackup(s.payload, '')))
-                }
-              >
-                Review restore
-              </button>
-              <button onClick={() => download(JSON.parse(s.payload))}>
-                Download
-              </button>
-            </div>
-          ))
-        ) : (
-          <p className="muted">No snapshots yet.</p>
+        {!services.platform.recovery && (
+          <>
+            <h3>Local recovery snapshots</h3>
+            <p className="muted">
+              Last five pre-replacement snapshots. These do not protect against
+              device loss or browser-data deletion.
+            </p>
+            {snapshotsQuery.status !== 'ready' ? null : snapshots.length ? (
+              snapshots.map((s) => (
+                <div className="snapshot" key={s.id}>
+                  <span>{new Date(s.createdAt).toLocaleString()}</span>
+                  <button
+                    onClick={() =>
+                      run(async () =>
+                        reviewBackup(await readBackup(s.payload, '')),
+                      )
+                    }
+                  >
+                    Review restore
+                  </button>
+                  <button
+                    onClick={() =>
+                      run(async () => download(JSON.parse(s.payload)))
+                    }
+                  >
+                    Download
+                  </button>
+                </div>
+              ))
+            ) : (
+              <p className="muted">No snapshots yet.</p>
+            )}
+          </>
         )}
         <hr />
         <button
@@ -156,20 +204,18 @@ export function SettingsPage({ run }: { run: Run }) {
                 return;
               const empty = await exportBackup();
               const root = empty.boards.find((x) => x.kind === 'root')!;
-              await replaceBackup(
-                {
-                  ...empty,
-                  boards: [root],
-                  columns: [],
-                  items: [],
-                  events: [],
-                  tags: [],
-                  relations: [],
-                  scratchpads: [],
-                  settings: [],
-                },
-                true,
-              );
+              const cleared = await services.backups.reviewBackup({
+                ...empty,
+                boards: [root],
+                columns: [],
+                items: [],
+                events: [],
+                tags: [],
+                relations: [],
+                scratchpads: [],
+                settings: [],
+              });
+              await replaceBackup(cleared.backup, true, cleared.ticket);
             }, 'Live data cleared; recovery snapshot retained')
           }
         >
@@ -180,26 +226,36 @@ export function SettingsPage({ run }: { run: Run }) {
       {backup && (
         <Modal
           title="Review replacement backup"
-          onClose={() => setBackup(null)}
+          onClose={() => setReview(null)}
         >
           <p>Exported {new Date(backup.exportedAt).toLocaleString()}</p>
           <p>
             {backup.boards.length} boards · {backup.columns.length} columns ·{' '}
             {backup.items.length} items · {backup.events.length} history events
-            · {backup.tags.length} tags
+            · {backup.tags.length} tags · {backup.relations.length} tag links ·{' '}
+            {backup.scratchpads.length} notes · {backup.settings.length}{' '}
+            settings records
           </p>
           <p className="warning">
             Replace ALL current live data with this backup? A recovery snapshot
             of your current dataset will be retained on this device.
           </p>
+          {services.platform.recovery && (
+            <p>
+              The source browser and backup file stay unchanged. Browser and
+              desktop edits remain independent. Recovery drafts and internal
+              snapshots are not transferred. If desktop data changes after this
+              review, select the file again.
+            </p>
+          )}
           <div className="button-row">
-            <button onClick={() => setBackup(null)}>Cancel</button>
+            <button onClick={() => setReview(null)}>Cancel</button>
             <button
               className="danger"
               onClick={() =>
                 run(async () => {
-                  await replaceBackup(backup, true);
-                  setBackup(null);
+                  await replaceBackup(backup, true, review?.ticket);
+                  setReview(null);
                 }, 'Import completed')
               }
             >
